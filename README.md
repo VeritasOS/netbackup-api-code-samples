@@ -1,2 +1,2 @@
 # netbackup-api-code-samples
-Contains code samples that demonstrate the use of NetBackup REST API
+This repository contains code samples that demonstrate the use of NetBackup REST API.
