@@ -23,3 +23,9 @@ Pre-requisites:
 Use the following commands to run the python samples.
 - `python -W ignore get_nb_images.py -nbmaster <masterServer> -username <username> -password <password>`
 - `python -W ignore get_nb_jobs.py -nbmaster <masterServer> -username <username> -password <password>`
+
+#### Executing the snippets in Perl
+Pre-requisites:
+- NetBackup 8.1.1 or higher
+- See script README for perl requirements and usage
+
