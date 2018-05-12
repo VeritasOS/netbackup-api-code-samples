@@ -17,7 +17,7 @@ The NetBackup REST API will authenticate any valid user account provided to the 
 has permissions to do anything in NetBackup, however, and this script simply dumps the payload of the 
 token returned by NetBackup.  The token is a JSON Web Token (jwt - see RFC7519) and the "payload" here
 refers to the payload section of the jwt. The payload contains some standard JWT "claims" as well as some
-NetBackup-specific claims.  Of particular interest is teh contents of the claim "authz_context" which 
+NetBackup-specific claims.  Of particular interest is the contents of the claim "authz_context" which 
 represents the permissions "granted" to this user.
 
 Setup:
@@ -39,7 +39,7 @@ a user, but the resulting token results in http 401 Not Authorized responses to 
 
 The cause is nearly always that the user is not a known NetBackup administrator.  Valid known NetBackup
 administrators are "root" on unix, "administrator" on windows, or any user account configured for Enhanced
-Auditing. For non-root users Enhanced Auditing is generally the answer and a helper script makeEAadmi.pl is
+Auditing. For non-root users Enhanced Auditing is generally the answer and a helper script makeEAadmin.pl is
 also provided.
 
 
