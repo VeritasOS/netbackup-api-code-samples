@@ -5,7 +5,7 @@ use LWP::Protocol::https;
 print "LWP::UserAgent: ".LWP::UserAgent->VERSION,"\n";
 print "LWP::Protocol::https: ".LWP::Protocol::https->VERSION,"\n";
 use JSON;
-
+require 'api_requests.pl';
 
 #
 # The token is the key to the NetBackup AuthN/AuthZ scheme.  You must login and get a token
@@ -35,7 +35,8 @@ sub print_disclaimer {
 
 # subroutine to process user input
 sub user_input {
-
+    customtest();
+    perform_login("https://localhost:1556/netbackup");
 }
 
 print_disclaimer();
