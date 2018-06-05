@@ -39,7 +39,7 @@ sub print_disclaimer {
     print("--------------------------------------------------------\n");
     print("--       This script requires Perl 5.20.2 or later    --\n");
     print("--------------------------------------------------------\n");
-    print("Executing this library requires some additional libraries like \n\t'LWP'\n\n");
+    print("Executing this library requires some additional libraries like \n\t'LWP' \n\t'JSON'\ \n\t'Getopt'\ \n\n");
     print("You can specify the 'nbmaster', 'username' and 'password' as command-line parameters\n");
     print_usage();
 }
