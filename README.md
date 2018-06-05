@@ -31,7 +31,7 @@ Pre-requisites:
 
 #### Executing the recipes in Perl
 Pre-requisites:
-- NetBackup 8.1.1 or higher
+- NetBackup 8.1.2 or higher
 - Perl 5.20.2 or higher
 
 Use the following commands to run the perl samples.
