@@ -29,3 +29,10 @@ Pre-requisites:
 - NetBackup 8.1.1 or higher
 - See script README for perl requirements and usage
 
+#### Executing the recipes in Perl
+Pre-requisites:
+- NetBackup 8.1.1 or higher
+- Perl 5.20.2 or higher
+
+Use the following commands to run the perl samples.
+- `perl create_policy_with_defaults.pl -nbmaster localhost -username testuser -password testpass -domainName test -domainType vx`
