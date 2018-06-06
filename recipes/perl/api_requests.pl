@@ -54,7 +54,7 @@ sub perform_login {
     }
 }
 
-# create VMWare policy with the name veritas_policy1
+# create VMWare policy with the name veritas_policy1 with default values
 sub create_policy_with_defaults {
 
     my $url = "$base_url/config/policies";
@@ -66,6 +66,50 @@ sub create_policy_with_defaults {
 
     my $post_data = qq({ "data": { "type": "policy", "id": "$policy_name", "attributes": {
     "policy": { "policyName": "$policy_name", "policyType": "VMware" } } } });
+    $req->content($post_data);
+
+    print "\n\n**************************************************************";
+    print "\n\n Making POST Request to create VMWare policy with defaults \n\n";
+
+    my $resp = $ua->request($req);
+    if ($resp->is_success) {
+        print "Policy [$policy_name] with default values is create with status code: ", $resp->code, "\n";
+    }
+    else {
+        print "HTTP POST error code: ", $resp->code, "\n";
+        print "HTTP POST error message: ", $resp->message, "\n";
+    }
+}
+
+# create VMWare policy with the name veritas_policy1
+sub create_policy {
+
+    my $url = "$base_url/config/policies";
+    my $policy_name = "veritas_policy1";
+
+    my $req = HTTP::Request->new(POST => $url);
+    $req->header('content-type' => $content_type_v2);
+    $req->header('Authorization' => $token);
+
+    my $backupSelections = qq("backupSelections": {  
+    "selections": [ "vmware:/?filter=Displayname Equal \\\"Redacted-Test\\\"" ] });
+    my $clients = qq("clients": [
+    { "hardware": "VMware", "OS": "VMware", "hostName": "MEDIA_SERVER" } ]);
+    my $schedules = qq("schedules": [ {"acceleratorForcedRescan": false, "backupType": "Full Backup", "backupCopies": {
+    "priority": 9999, "copies": [ { "mediaOwner": "owner1", "storage": null, "retentionPeriod": { 
+    "value": 9, "unit": "WEEKS" }, "volumePool": "NetBackup", "failStrategy": "Continue"}]},
+    "excludeDates": { "lastDayOfMonth": true, "recurringDaysOfWeek": [ "4:6", "2:5" ], "recurringDaysOfMonth": [ 10 ],
+    "specificDates": [ "2000-1-1", "2016-2-30" ] }, "frequencySeconds": 4800, "includeDates": { 
+    "lastDayOfMonth": true, "recurringDaysOfWeek": [ "2:3", "3:4" ], "recurringDaysOfMonth": [ 10,13], "specificDates": [
+    "2016-12-31" ] }, "mediaMultiplexing":2, "retriesAllowedAfterRunDay": true, "scheduleType": "Calendar", "snapshotOnly": false,
+    "startWindow": [ { "dayOfWeek": 1, "startSeconds": 14600, "durationSeconds": 24600 }, { "dayOfWeek": 2, "startSeconds": 14600, "durationSeconds": 24600 },
+    { "dayOfWeek": 3, "startSeconds": 14600, "durationSeconds": 24600 }, { "dayOfWeek": 4, "startSeconds": 14600, "durationSeconds": 24600 },
+    { "dayOfWeek": 5, "startSeconds": 14600, "durationSeconds": 24600 }, { "dayOfWeek": 6, "startSeconds": 14600, "durationSeconds": 24600 },
+    { "dayOfWeek": 7, "startSeconds": 14600, "durationSeconds": 24600 } ], "syntheticBackup": false, "storageIsSLP": false, "scheduleName": "sched-9-weeks" } ]);
+    my $policy_attributes = qq("policyAttributes": { "active": true, "snapshotMethodArgs": "skipnodisk=0", "jobLimit": 10} );
+
+    my $post_data = qq({ "data": { "type": "policy", "id": "$policy_name", "attributes": {
+    "policy": { "policyName": "$policy_name", "policyType": "VMware", $policy_attributes, $clients, $backupSelections, $schedules } } } });
     $req->content($post_data);
 
     print "\n\n**************************************************************";

@@ -36,3 +36,4 @@ Pre-requisites:
 
 Use the following commands to run the perl samples.
 - `perl create_policy_with_defaults.pl -nbmaster <masterServer> -username <username> -password <password> -domainName <domainName> -domainType <domainType>`
+- `perl create_policy_without_defaults.pl -nbmaster <masterServer> -username <username> -password <password> -domainName <domainName> -domainType <domainType>`
