@@ -23,7 +23,7 @@ showHelp()
 	echo ""
 	echo "Invalid command parameters"
 	echo "Usage:"
-	echo "./nb_jobs.sh -master <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
+	echo "./get_nb_jobs.sh -master <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
 	echo ""
 	exit 1
 }

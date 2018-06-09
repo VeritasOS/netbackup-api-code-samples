@@ -21,7 +21,7 @@ showHelp()
 	echo ""
 	echo "Invalid command parameters"
 	echo "Usage:"
-	echo "./nb_images.sh -master <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
+	echo "./get_nb_images.sh -master <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
 	echo ""
 	exit 1
 }
