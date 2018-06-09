@@ -15,6 +15,8 @@ port=1556
 master_server=""
 username=""
 password=""
+domainname=""
+domaintype=""
 
 showHelp()
 {
