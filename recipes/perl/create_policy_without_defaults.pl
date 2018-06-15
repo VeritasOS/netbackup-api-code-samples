@@ -40,7 +40,7 @@ sub print_disclaimer {
     print("--       This script requires Perl 5.20.2 or later    --\n");
     print("--------------------------------------------------------\n");
     print("Executing this library requires some additional libraries like \n\t'LWP' \n\t'JSON'\ \n\t'Getopt'\ \n\n");
-    print("You can specify the 'nbmaster', 'username' and 'password' as command-line parameters\n");
+    print("You can specify the 'nbmaster', 'username', 'password', 'domainName' and 'domainType' as command-line parameters\n");
     print_usage();
 }
 
@@ -57,19 +57,16 @@ sub user_input {
 
     if ($nbmaster eq "") {
         print("Please provide the value for 'nbmaster', 'username' and 'password'");
-        print_usage();
         exit;
     }
 
     if ($username eq "") {
         print("Please provide the value for 'nbmaster', 'username' and 'password'");
-        print_usage();
         exit;
     }
 
     if ($password eq "") {
         print("Please provide the value for 'nbmaster', 'username' and 'password'");
-        print_usage();
         exit;
     }
 
