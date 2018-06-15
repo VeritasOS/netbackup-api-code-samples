@@ -56,17 +56,17 @@ sub user_input {
     ) or die print_usage();
 
     if ($nbmaster eq "") {
-        print("Please provide the value for 'nbmaster', 'username' and 'password'");
+        print("Please provide the value for 'nbmaster'");
         exit;
     }
 
     if ($username eq "") {
-        print("Please provide the value for 'nbmaster', 'username' and 'password'");
+        print("Please provide the value for 'username'");
         exit;
     }
 
     if ($password eq "") {
-        print("Please provide the value for 'nbmaster', 'username' and 'password'");
+        print("Please provide the value for 'password'");
         exit;
     }
 
