@@ -23,7 +23,8 @@ Param (
 ####################
 
 $port = 1556
-$basePath = "https://" + $MasterServer + ":" + $port + "/netbackup"
+$baseUri = "https://" + $MasterServer + ":" + $port + "/netbackup/"
+$policiesUri = "config/policies/";
 $contentType = "application/vnd.netbackup+json;version=2.0"
 $testPolicyName = "vmware_test_policy"
 $testClientName = "MEDIA_SERVER"
@@ -32,14 +33,12 @@ $testScheduleName = "vmware_test_schedule"
 ###############################################################
 # Setup to allow self-signed certificates and enable TLS v1.2
 ###############################################################
-
 Function Setup()
 {
     # Allow self-signed certificates
     if ([System.Net.ServicePointManager]::CertificatePolicy -notlike 'TrustAllCertsPolicy')
     {
-        Add-Type -TypeDefinition
-@"
+        Add-Type -TypeDefinition @"
         using System.Net;
         using System.Security.Cryptography.X509Certificates;
         public class TrustAllCertsPolicy : ICertificatePolicy {
@@ -56,7 +55,7 @@ Function Setup()
     # Force TLS v1.2
     try {
         if ([Net.ServicePointManager]::SecurityProtocol -notcontains 'Tls12') {
-            [Net.ServicePointManager]::SecurityProtocol += [Net.SecurityProtocolType]::Tls12
+            [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
         }
     }
     catch {
@@ -70,7 +69,7 @@ Function Setup()
 
 Function Login()
 {
-    $uri = $basepath + "/login"
+    $uri = $baseUri + "login"
 
     $body = @{
         userName=$UserName
@@ -106,7 +105,7 @@ Function Login()
 #################################################
 Function CreatePolicyWithDefaults()
 {
-    $uri = $basepath + "/config/policies"
+    $uri = $baseUri + $policiesUri
 
     $policy = @{
         policyName=$testPolicyName
@@ -147,7 +146,7 @@ Function CreatePolicyWithDefaults()
 #####################
 Function ListPolicies()
 {
-    $uri = $basepath + "/config/policies"
+    $uri = $baseUri + $policiesUri
 
     Write-Host "`nSending a GET request to list all policies...`n"
     $response = Invoke-WebRequest `
@@ -169,7 +168,7 @@ Function ListPolicies()
 #################
 Function ReadPolicy()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName
+    $uri = $baseUri + $policiesUri + $testPolicyName
 
     Write-Host "`nSending a GET request to read policy $testPolicyName...`n"
     $response = Invoke-WebRequest `
@@ -191,7 +190,7 @@ Function ReadPolicy()
 ###################
 Function DeletePolicy()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName
+    $uri = $baseUri + $policiesUri + $testPolicyName
 
     Write-Host "`nSending a DELETE request to delete policy $testPolicyName..."
 
@@ -214,7 +213,7 @@ Function DeletePolicy()
 ############################
 Function AddClient()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName + "/clients/" + $testClientName
+    $uri = $baseUri + $policiesUri + $testPolicyName + "/clients/" + $testClientName
 
     $data = @{
         type="client"
@@ -248,7 +247,7 @@ Function AddClient()
 #################################
 Function DeleteClient()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName + "/clients/" +  $testClientName
+    $uri = $baseUri + $policiesUri + $testPolicyName + "/clients/" +  $testClientName
 
     Write-Host "`nSending a DELETE request to delete client $testClientName from policy $testPolicyName..."
 
@@ -271,7 +270,7 @@ Function DeleteClient()
 ######################################
 Function AddBackupSelection()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName + "/backupselections"
+    $uri = $baseUri + $policiesUri + $testPolicyName + "/backupselections"
 
     $data = @{
         type="backupSelection"
@@ -303,7 +302,7 @@ Function AddBackupSelection()
 ############################
 Function AddSchedule()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName + "/schedules/" + $testScheduleName
+    $uri = $baseUri + $policiesUri + $testPolicyName + "/schedules/" + $testScheduleName
 
     $data = @{
         type="schedule"
@@ -370,7 +369,6 @@ Function AddSchedule()
     }
 
     $body = @{data=$data} | ConvertTo-Json -Depth 6
-    Write-Host $body
 
     Write-Host "`nSending a PUT request to add schedule $testScheduleName to policy $testPolicyName..."
     $response = Invoke-WebRequest `
@@ -393,7 +391,7 @@ Function AddSchedule()
 ###################################
 Function DeleteSchedule()
 {
-    $uri = $basepath + "/config/policies/" + $testPolicyName + "/schedules/" +  $testScheduleName
+    $uri = $baseUri + $policiesUri + $testPolicyName + "/schedules/" +  $testScheduleName
 
     Write-Host "`nSending a DELETE request to delete schedule $testScheduleName from policy $testPolicyName..."
 
