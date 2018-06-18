@@ -54,11 +54,11 @@ sub perform_login {
     }
 }
 
-# create VMWare policy with the name veritas_policy1 with default values
+# create VMWare policy with the name vmware_test_policy with default values
 sub create_policy_with_defaults {
 
     my $url = "$base_url/config/policies";
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
 
     my $req = HTTP::Request->new(POST => $url);
     $req->header('content-type' => $content_type_v2);
@@ -81,11 +81,11 @@ sub create_policy_with_defaults {
     }
 }
 
-# create VMWare policy with the name veritas_policy1
+# create VMWare policy with the name vmware_test_policy
 sub create_policy {
 
     my $url = "$base_url/config/policies";
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
 
     my $req = HTTP::Request->new(POST => $url);
     $req->header('content-type' => $content_type_v2);
@@ -113,11 +113,11 @@ sub create_policy {
     $req->content($post_data);
 
     print "\n\n**************************************************************";
-    print "\n\n Making POST Request to create VMWare policy with defaults \n\n";
+    print "\n\n Making POST Request to create VMWare policy without defaults \n\n";
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
-        print "Policy [$policy_name] with default values is create with status code: ", $resp->code, "\n";
+        print "Policy [$policy_name] without default values is created with status code: ", $resp->code, "\n";
     }
     else {
         print "HTTP POST error code: ", $resp->code, "\n";
@@ -150,7 +150,7 @@ sub list_policies {
 
 # subroutine to read policy
 sub read_policy {
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name";
 
     my $req = HTTP::Request->new(GET => $url);
@@ -175,7 +175,7 @@ sub read_policy {
 # subroutine to create client. For VIP query, we expect
 # hostName to be MEDIA_SERVER, OS and hardware to be VMWare.
 sub add_clients {
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name/clients/MEDIA_SERVER";
 
     my $req = HTTP::Request->new(PUT => $url);
@@ -201,7 +201,7 @@ sub add_clients {
 
 # subroutine to add backupSelections to a policy
 sub add_backupselections {
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name/backupselections";
 
     my $req = HTTP::Request->new(PUT => $url);
@@ -227,7 +227,7 @@ sub add_backupselections {
 
 # subroutine to add schedule to a policy
 sub add_schedule {
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $schedule_name = "schedule1";
     my $url = "$base_url/config/policies/$policy_name/schedules/$schedule_name";
 
@@ -264,7 +264,7 @@ sub add_schedule {
 
 # subroutine to delete client from a policy
 sub delete_client {
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name/clients/MEDIA_SERVER";
 
     my $req = HTTP::Request->new(DELETE => $url);
@@ -286,7 +286,7 @@ sub delete_client {
 
 # subroutine to delete schedule from a policy
 sub delete_schedule {
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $schedule_name = "schedule1";
     my $url = "$base_url/config/policies/$policy_name/schedules/$schedule_name";
 
@@ -310,7 +310,7 @@ sub delete_schedule {
 # subroutine to delete policy
 sub delete_policy {
 
-    my $policy_name = "veritas_policy1";
+    my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name";
 
     my $req = HTTP::Request->new(DELETE => $url);
