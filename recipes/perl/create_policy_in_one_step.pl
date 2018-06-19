@@ -32,7 +32,7 @@ $fqdn_hostname = "localhost";
 # subroutines for printing usage and library information required to run the script.
 sub print_usage {
     print("\n\nUsage:");
-    print("\nperl create_policy_with_defaults -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]\n\n\n");
+    print("\nperl create_policy_in_one_step -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]\n\n\n");
 }
 
 sub print_disclaimer {
