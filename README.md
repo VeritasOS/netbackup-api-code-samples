@@ -13,6 +13,7 @@ Pre-requisites:
 Use the following commands to run the powershell samples.
 - `.\Get-NB-Images.ps1 -nbmaster <masterServer> -username <username> -password <password>`
 - `.\Get-NB-Jobs.ps1 -nbmaster <masterServer> -username <username> -password <password>`
+- `.\New-Policy-StepByStep.ps1 -nbmaster <masterServer> -username <username> -password <password>`
 
 #### Executing the snippets in Python
 Pre-requisites:
@@ -38,3 +39,11 @@ Pre-requisites:
 Use the following commands to run the curl samples.
 - `./get_nb_jobs.sh -master <master_server> -username <username> -password <password>`
 - `./get_nb_images.sh -master <master_server> -username <username> -password <password>`
+
+#### Executing the snippets using go
+Pre-requisites:
+- NetBackup 8.1.1 or higher
+- go1.10.2 or higher
+
+Use the following commands to run the go samples.
+- `go run ./create_policy_step_by_step.go -nbmaster <master_server> -username <username> -password <password>`
