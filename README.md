@@ -26,7 +26,7 @@ Use the following commands to run the python samples.
 
 #### Executing the recipes in Python
 Pre-requisites:
-- NetBackup 8.1.1 or higher
+- NetBackup 8.1.2 or higher
 - python 3.5 or higher
 - python modules: `requests`
 
