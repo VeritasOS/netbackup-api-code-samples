@@ -42,7 +42,7 @@ Use the following commands to run the curl samples.
 
 #### Executing the snippets using go
 Pre-requisites:
-- NetBackup 8.1.1 or higher
+- NetBackup 8.1.2 or higher
 - go1.10.2 or higher
 
 Use the following commands to run the go samples.
