@@ -25,7 +25,7 @@ def print_disclaimer():
 	
 def print_usage():
 	print("Example:")
-	print("python -W ignore create_policy_with_defaults.py -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]\n\n\n")
+	print("python -W ignore create_policy_in_one_step.py -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]\n\n\n")
 	
 def read_command_line_arguments():
 	if len(sys.argv)%2 == 0:
