@@ -24,6 +24,16 @@ Use the following commands to run the python samples.
 - `python -W ignore get_nb_images.py -nbmaster <masterServer> -username <username> -password <password>`
 - `python -W ignore get_nb_jobs.py -nbmaster <masterServer> -username <username> -password <password>`
 
+#### Executing the recipes in Python
+Pre-requisites:
+- NetBackup 8.1.1 or higher
+- python 3.5 or higher
+- python modules: `requests`
+
+Use the following commands to run the python samples.
+- `python -W ignore create_policy_with_defaults.py -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
+- `python -W ignore create_policy_without_defaults.py -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
+
 #### Executing the snippets in Perl
 Pre-requisites:
 - NetBackup 8.1.1 or higher
