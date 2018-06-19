@@ -450,4 +450,3 @@ def put_netbackup_schedule(jwt, base_url):
 		raise Exception('PUT Schedule API failed with status code {} and {}'.format(resp.status_code, resp.json()))
 	
 	print("\n{} is added to {} with status code : {}\n".format(testScheduleName, testPolicyName, resp.status_code))
-	
