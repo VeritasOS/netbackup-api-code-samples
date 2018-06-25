@@ -32,12 +32,6 @@ system q[echo y|"/usr/openv/netbackup/bin/admincmd/bpnbaz" -SetupExAudit];
 print "Granting VxSS user administrator privileges...\n\n";
 system q["/usr/openv/netbackup/bin/admincmd/bpnbaz" -AddUser vx:vx:testuser];
 
-print "Add the new user to the EA user list...\n\n";
-my $auth_file = '/usr/openv/java/auth.conf';
-open(my $fh, '>>', $auth_file) or die "Could not open auth.conf";
-	say $fh "testuser ADMIN=All JBP=ALL";
-close $fh;
-
 print "Restarting services...";
 system q["/usr/openv/netbackup/bin/bp.kill_all"];
 system q["/usr/openv/netbackup/bin/bp.start_all"];
@@ -85,7 +79,7 @@ my $response = $ua->request($catalog_req);
 print "**************************************************************";
 print "\n\n Making Get Request to Catalog/FrontendData with token \n\n";
 if ($response->is_success) {
-    	print "/Catalog/frontenddata request was succesful \n\n";
+    	print "/Catalog/frontenddata request was successful \n\n";
     
     	$data = decode_json($response->content);
     	my $pretty = JSON->new->pretty->encode($data);
@@ -109,7 +103,7 @@ my $response = $ua->request($jobs_req);
 print "**************************************************************";
 print "\n\n Making Get Request to list all jobs \n\n";
 if ($response->is_success) {
-        print "List jobs request was succesful \n\n";
+        print "List jobs request was successful \n\n";
 
         $data = decode_json($response->content);
         my $pretty = JSON->new->pretty->encode($data);
