@@ -46,7 +46,6 @@ sub perform_login {
     if ($resp->is_success) {
         my $message = decode_json($resp->content);
         $token = $message->{"token"};
-        print "Received token: $token\n";
     }
     else {
         print "HTTP POST error code: ", $resp->code, "\n";
@@ -165,6 +164,28 @@ sub read_policy {
         my $message = $resp->decoded_content;
         print "Get policy on [$policy_name] succeeded with status code: ", $resp->code, "\n";
         print "Compact Json body for list policy: \n", $message, "\n\n";
+        # Etag (integer): The current generation ID of the policy.
+        print "Respnse headers: \n", $resp->headers()->as_string, "\n\n";
+    }
+    else {
+        print "HTTP GET error code: ", $resp->code, "\n";
+        print "HTTP GET error message: ", $resp->message, "\n";
+    }
+}
+
+# subroutine to read policy and extract generation number from response
+my $genertion;
+sub read_policy_extract_Generation_Number_From_Response {
+    my $policy_name = "vmware_test_policy";
+    my $url = "$base_url/config/policies/$policy_name";
+
+    my $req = HTTP::Request->new(GET => $url);
+    $req->header('content-type' => $content_type_v2);
+    $req->header('Authorization' => $token);
+
+    my $resp = $ua->request($req);
+    if ($resp->is_success) {
+        $generation = $resp->header('ETag');
     }
     else {
         print "HTTP GET error code: ", $resp->code, "\n";
@@ -178,9 +199,14 @@ sub add_clients {
     my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name/clients/MEDIA_SERVER";
 
+    read_policy_extract_Generation_Number_From_Response();
+
     my $req = HTTP::Request->new(PUT => $url);
     $req->header('content-type' => $content_type_v2);
     $req->header('Authorization' => $token);
+    # The audit reason for chaning the policy (this header is optional)
+    $req->header('X-NetBackup-Audit-Reason' => "adding client to the policy $policy_name");
+    $req->header('If-Match' => $generation);
 
     my $post_data = qq({ "data": { "type": "client", "id": "MEDIA_SERVER", "attributes": {
     "hardware": "VMware", "OS": "VMware", "hostName": "MEDIA_SERVER" } } } );
@@ -188,6 +214,8 @@ sub add_clients {
 
     print "\n\n**************************************************************";
     print "\n\n Making PUT Request to add clients to policy \n\n";
+
+    print "Using ETag : [", $generation, "] in the request If-Match to update the policy", "\n\n";
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
@@ -204,9 +232,14 @@ sub add_backupselections {
     my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name/backupselections";
 
+    read_policy_extract_Generation_Number_From_Response();
+
     my $req = HTTP::Request->new(PUT => $url);
     $req->header('content-type' => $content_type_v2);
     $req->header('Authorization' => $token);
+    # The audit reason for chaning the policy (this header is optional)
+    $req->header('X-NetBackup-Audit-Reason' => "adding backupSelection to the policy [$policy_name]");
+    $req->header('If-Match' => $generation);
 
     my $post_data = qq({ "data": { "type": "backupSelection", "attributes": {
     "selections": [ "vmware:/?filter=Displayname Equal \\\"Redacted-Test\\\"" ] } } } );
@@ -214,6 +247,8 @@ sub add_backupselections {
 
     print "\n\n**************************************************************";
     print "\n\n Making PUT Request to add backupselection to policy \n\n";
+
+    print "Using ETag : [", $generation, "] in the request If-Match to update the policy", "\n\n";
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
@@ -231,9 +266,14 @@ sub add_schedule {
     my $schedule_name = "schedule1";
     my $url = "$base_url/config/policies/$policy_name/schedules/$schedule_name";
 
+    read_policy_extract_Generation_Number_From_Response();
+
     my $req = HTTP::Request->new(PUT => $url);
     $req->header('content-type' => $content_type_v2);
     $req->header('Authorization' => $token);
+    # The audit reason for chaning the policy (this header is optional)
+    $req->header('X-NetBackup-Audit-Reason' => "adding schedule [$schedule_name] to the policy [$policy_name]");
+    $req->header('If-Match' => $generation);
 
     my $post_data = qq({ "data": { "type": "schedule", "id": "$schedule_name", "attributes": {
     "acceleratorForcedRescan": false, "backupType": "Full Backup", "backupCopies": {
@@ -252,6 +292,8 @@ sub add_schedule {
     print "\n\n**************************************************************";
     print "\n\n Making PUT Request to add schedule to policy \n\n";
 
+    print "Using ETag : [", $generation, "] in the request If-Match to update the policy", "\n\n";
+
     my $resp = $ua->request($req);
     if ($resp->is_success) {
         print "Schedule [$schedule_name] is added to policy [$policy_name] with status code: ", $resp->code, "\n";
@@ -267,12 +309,19 @@ sub delete_client {
     my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name/clients/MEDIA_SERVER";
 
+    read_policy_extract_Generation_Number_From_Response();
+
     my $req = HTTP::Request->new(DELETE => $url);
     $req->header('content-type' => $content_type_v2);
     $req->header('Authorization' => $token);
+    # The audit reason for chaning the policy (this header is optional)
+    $req->header('X-NetBackup-Audit-Reason' => "deleting client from the policy [$policy_name]");
+    $req->header('If-Match' => $generation);
 
     print "\n\n**************************************************************";
     print "\n\n Making DELETE Request to remove clients from the policy \n\n";
+
+    print "Using ETag : [", $generation, "] in the request If-Match to update the policy", "\n\n";
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
@@ -290,12 +339,19 @@ sub delete_schedule {
     my $schedule_name = "schedule1";
     my $url = "$base_url/config/policies/$policy_name/schedules/$schedule_name";
 
+    read_policy_extract_Generation_Number_From_Response();
+
     my $req = HTTP::Request->new(DELETE => $url);
     $req->header('content-type' => $content_type_v2);
     $req->header('Authorization' => $token);
+    # The audit reason for chaning the policy (this header is optional)
+    $req->header('X-NetBackup-Audit-Reason' => "deleting schedule [$schedule_name] from the policy [$policy_name]");
+    $req->header('If-Match' => $generation);
 
     print "\n\n**************************************************************";
     print "\n\n Making DELETE Request to remove schedule from the policy \n\n";
+
+    print "Using ETag : [", $generation, "] in the request If-Match to update the policy", "\n\n";
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
