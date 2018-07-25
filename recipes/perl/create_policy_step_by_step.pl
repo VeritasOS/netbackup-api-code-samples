@@ -25,10 +25,6 @@ my $domainName;
 my $domainType;
 my $base_url;
 
-
-#change this as per your host name
-$fqdn_hostname = "localhost";
-
 # subroutines for printing usage and library information required to run the script.
 sub print_usage {
     print("\n\nUsage:");

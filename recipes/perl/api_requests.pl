@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 use LWP::UserAgent;
+use JSON;
 
 my $content_type_v2 = "application/vnd.netbackup+json; version=2.0";
 
@@ -46,11 +47,13 @@ sub perform_login {
     if ($resp->is_success) {
         my $message = decode_json($resp->content);
         $token = $message->{"token"};
+        print "Login succeeded with status code: ", $resp->code, "\n";
     }
     else {
         print "HTTP POST error code: ", $resp->code, "\n";
         print "HTTP POST error message: ", $resp->message, "\n";
     }
+    return $token;
 }
 
 # create VMWare policy with the name vmware_test_policy with default values
@@ -174,7 +177,7 @@ sub read_policy {
 }
 
 # subroutine to read policy and extract generation number from response
-my $genertion;
+my $generation;
 sub read_policy_extract_Generation_Number_From_Response {
     my $policy_name = "vmware_test_policy";
     my $url = "$base_url/config/policies/$policy_name";
@@ -366,7 +369,21 @@ sub delete_schedule {
 # subroutine to delete policy
 sub delete_policy {
 
-    my $policy_name = "vmware_test_policy";
+    my @argument_list = @_;
+    my $policy_name = $argument_list[0];
+
+    # check if the user provides the token to use otherwise
+    # use the default token created from the perform_login subroutine.
+    if ($argument_list[1] ne "") {
+        $token = $argument_list[1];
+    }
+
+    # if the user provides the policyname use that to delete otherwise
+    # delete the policy named "vmware_test_policy".
+    if ($policy_name eq "") {
+        $policy_name = "vmware_test_policy";
+    }
+
     my $url = "$base_url/config/policies/$policy_name";
 
     my $req = HTTP::Request->new(DELETE => $url);
@@ -378,7 +395,7 @@ sub delete_policy {
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
-        print "Policy is deleted with status code: ", $resp->code, "\n";
+        print "Policy [$policy_name] is deleted with status code: ", $resp->code, "\n";
     }
     else {
         print "HTTP DELETE error code: ", $resp->code, "\n";
