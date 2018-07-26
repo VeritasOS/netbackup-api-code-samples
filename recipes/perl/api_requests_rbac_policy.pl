@@ -123,7 +123,7 @@ sub delete_rbac_access_rule {
     $req->header('Authorization' => $token);
 
     print "\n\n**************************************************************";
-    print "\n\n Making DELETE Request to remove the object group \n\n";
+    print "\n\n Making DELETE Request to remove the access rule \n\n";
 
     my $resp = $ua->request($req);
     if ($resp->is_success) {
@@ -148,11 +148,13 @@ sub create_bpnbat_user {
 
     if ( $^O =~ /MSWin32/ ) {
         my $path = 'C:/\"Program Files\"/Veritas/NetBackup/bin/bpnbat.exe';
-        my $rc = system(qq($path -AddUser $username $domainName $password)); # returns exit status values
+        my $cmd = qq($path -AddUser $username $password $domainName);
+        my $rc = system($cmd); # returns exit status values
         die "system() failed with status $rc" unless $rc == 0;
     } else {
         my $path = '/usr/openv/netbackup/bin/bpnbat';
-        my $rc = system(qq($path -AddUser $username $domainName $password)); # returns exit status values
+        my $cmd = qq($path -AddUser $username $password $domainName);
+        my $rc = system($cmd); # returns exit status values
         die "system() failed with status $rc" unless $rc == 0;
     }
     print "\n\n";
