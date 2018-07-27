@@ -87,6 +87,6 @@ updatePolicy = policy_api_requests.put_netbackup_policy(jwt, base_url)
 
 readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
 
-deletePolicy = policy_api_requests.delete_netbackup_policy(jwt, base_url)
+deletePolicy = policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
 
 listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)

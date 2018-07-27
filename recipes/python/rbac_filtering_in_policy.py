@@ -1,14 +1,14 @@
 import sys
 import policy_api_requests
+import rbac_policy_api_requests
 import json
 
 protocol = "https"
-nbmaster = ""
-username = ""
-password = ""
-domainName = ""
-domainType = ""
 port = 1556
+new_rbac_user = "testuser"
+new_rbac_domain = "rmnus"
+new_rbac_pass = "testpass"
+new_rbac_domainType = "vx"
 
 def print_disclaimer():
 	print("-------------------------------------------------------------------------------------------------")
@@ -25,7 +25,7 @@ def print_disclaimer():
 	
 def print_usage():
 	print("Example:")
-	print("python -W ignore create_policy_step_by_step.py -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]\n\n\n")
+	print("python -W ignore rbac_filtering_in_policy.py -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]\n\n\n")
 	
 def read_command_line_arguments():
 	if len(sys.argv)%2 == 0:
@@ -77,26 +77,21 @@ base_url = protocol + "://" + nbmaster + ":" + str(port) + "/netbackup"
 
 jwt = policy_api_requests.perform_login(username, password, domainName, domainType, base_url)
 
-createPolicy = policy_api_requests.post_netbackup_VMwarePolicy_defaults(jwt, base_url)
+rbac_policy_api_requests.post_rbac_object_group_for_VMware_policy(jwt, base_url)
+rbac_policy_api_requests.create_bpnbat_user(new_rbac_user, new_rbac_domain, new_rbac_pass)
 
-listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)
+policy_api_requests.post_netbackup_VMwarePolicy_defaults(jwt, base_url)
+policy_api_requests.post_netbackup_OraclePolicy_defaults(jwt, base_url)
 
-readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
+new_rbac_jwt = policy_api_requests.perform_login(new_rbac_user, new_rbac_pass, new_rbac_domain, new_rbac_domainType, base_url)
 
-updatePolicy = policy_api_requests.put_netbackup_policy(jwt, base_url)
+policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
+policy_api_requests.post_netbackup_VMwarePolicy_defaults(new_rbac_jwt, base_url)
+policy_api_requests.post_netbackup_OraclePolicy_defaults(new_rbac_jwt, base_url)
 
-addClient = policy_api_requests.put_netbackup_client(jwt, base_url)
+policy_api_requests.delete_VMware_netbackup_policy(new_rbac_jwt, base_url)
+policy_api_requests.delete_Oracle_netbackup_policy(jwt, base_url)
 
-addBackupSelection = policy_api_requests.put_netbackup_backupselections(jwt, base_url)
+rbac_policy_api_requests.delete_rbac_object_group_for_VMware_policy(jwt, base_url)
 
-addSchedule = policy_api_requests.put_netbackup_schedule(jwt, base_url)
-
-readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
-
-deleteClient = policy_api_requests.delete_netbackup_client(jwt, base_url)
-
-deleteSchedule = policy_api_requests.delete_netbackup_schedule(jwt, base_url)
-
-deletePolicy = policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
-
-listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)
+policy_api_requests.get_netbackup_policies(jwt, base_url)
