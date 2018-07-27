@@ -77,16 +77,16 @@ base_url = protocol + "://" + nbmaster + ":" + str(port) + "/netbackup"
 
 jwt = policy_api_requests.perform_login(username, password, domainName, domainType, base_url)
 
-createPolicy = policy_api_requests.post_netbackup_VMwarePolicy(jwt, base_url)
+policy_api_requests.post_netbackup_VMwarePolicy(jwt, base_url)
 
-listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)
+policy_api_requests.get_netbackup_policies(jwt, base_url)
 
-readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
+policy_api_requests.get_netbackup_policy(jwt, base_url)
 
-updatePolicy = policy_api_requests.put_netbackup_policy(jwt, base_url)
+policy_api_requests.put_netbackup_policy(jwt, base_url)
 
-readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
+policy_api_requests.get_netbackup_policy(jwt, base_url)
 
-deletePolicy = policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
+policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
 
-listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)
+policy_api_requests.get_netbackup_policies(jwt, base_url)

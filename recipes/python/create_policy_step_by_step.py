@@ -77,26 +77,26 @@ base_url = protocol + "://" + nbmaster + ":" + str(port) + "/netbackup"
 
 jwt = policy_api_requests.perform_login(username, password, domainName, domainType, base_url)
 
-createPolicy = policy_api_requests.post_netbackup_VMwarePolicy_defaults(jwt, base_url)
+policy_api_requests.post_netbackup_VMwarePolicy_defaults(jwt, base_url)
 
-listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)
+policy_api_requests.get_netbackup_policies(jwt, base_url)
 
-readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
+policy_api_requests.get_netbackup_policy(jwt, base_url)
 
-updatePolicy = policy_api_requests.put_netbackup_policy(jwt, base_url)
+policy_api_requests.put_netbackup_policy(jwt, base_url)
 
-addClient = policy_api_requests.put_netbackup_client(jwt, base_url)
+policy_api_requests.put_netbackup_client(jwt, base_url)
 
-addBackupSelection = policy_api_requests.put_netbackup_backupselections(jwt, base_url)
+policy_api_requests.put_netbackup_backupselections(jwt, base_url)
 
-addSchedule = policy_api_requests.put_netbackup_schedule(jwt, base_url)
+policy_api_requests.put_netbackup_schedule(jwt, base_url)
 
-readPolicy = policy_api_requests.get_netbackup_policy(jwt, base_url)
+policy_api_requests.get_netbackup_policy(jwt, base_url)
 
-deleteClient = policy_api_requests.delete_netbackup_client(jwt, base_url)
+policy_api_requests.delete_netbackup_client(jwt, base_url)
 
-deleteSchedule = policy_api_requests.delete_netbackup_schedule(jwt, base_url)
+policy_api_requests.delete_netbackup_schedule(jwt, base_url)
 
-deletePolicy = policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
+policy_api_requests.delete_VMware_netbackup_policy(jwt, base_url)
 
-listPolicies = policy_api_requests.get_netbackup_policies(jwt, base_url)
+policy_api_requests.get_netbackup_policies(jwt, base_url)

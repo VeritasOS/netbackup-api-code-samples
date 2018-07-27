@@ -31,10 +31,52 @@ def post_rbac_object_group_for_VMware_policy(jwt, base_url):
 	resp = requests.post(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 201:
-		raise Exception('Create object group API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('Create object group API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
 	object_group_id = resp.json()['data']['id']
 	print("\n The object group is created with status code : {}\n".format(resp.status_code))
+	
+def post_rbac_access_rules(jwt, base_url):
+	global access_rule_id
+	url = base_url + "/rbac/access-rules"
+	req_body = {
+					"data": {
+						"type": "access-rule",
+						"attributes": {
+							"description": "adding VMwarePolicy object group"
+						},
+						"relationships": {
+							"userPrincipal": {
+								"data": {
+									"type": "user-principal",
+									"id": "rmnus:testuser:vx:testuser"
+								}
+							},
+							"objectGroup": {
+								"data": {
+									"type": "object-group",
+									"id": object_group_id
+								}
+							},
+							"role": {
+								"data": {
+									"type": "role",
+									"id": "3"
+								}
+							}
+						}
+					}
+				}
+	headers = {'Content-Type': content_type, 'Authorization': jwt}
+	
+	print("\n Making POST Request to create access rule \n")
+	
+	resp = requests.post(url, headers=headers, json=req_body, verify=False)
+	
+	if resp.status_code != 201:
+		print('Create object group API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
+	
+	access_rule_id = resp.json()['data']['id']
 	
 def delete_rbac_object_group_for_VMware_policy(jwt, base_url):
 	url = base_url + "/rbac/object-groups/" + object_group_id
@@ -45,7 +87,7 @@ def delete_rbac_object_group_for_VMware_policy(jwt, base_url):
 	resp = requests.delete(url, headers=headers, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('DELETE object group API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('DELETE object group API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
 	print("\n The object group is deleted with status code: {}\n".format(resp.status_code))
 	
@@ -58,7 +100,7 @@ def delete_rbac_access_rule(jwt, base_url):
 	resp = requests.delete(url, headers=headers, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('DELETE access rule API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('DELETE access rule API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
 	print("\n The access rule is deleted with status code: {}\n".format(resp.status_code))
 	
