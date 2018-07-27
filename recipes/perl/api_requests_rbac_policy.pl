@@ -109,7 +109,7 @@ sub delete_rbac_object_group_for_VMware_policy {
     }
 }
 
-# subroutine to delete the object group
+# subroutine to delete the access rule
 sub delete_rbac_access_rule {
 
     my @argument_list = @_;
@@ -135,7 +135,6 @@ sub delete_rbac_access_rule {
     }
 }
 
-# create VMWare policy with the name vmware_test_policy with default values
 sub create_bpnbat_user {
 
     my @argument_list = @_;
@@ -160,7 +159,7 @@ sub create_bpnbat_user {
     print "\n\n";
 }
 
-# create VMWare policy with the name vmware_test_policy with default values
+# create Oracle policy with the name vmware_test_policy with default values
 sub create_oracle_policy_with_defaults {
 
     my @argument_list = @_;
