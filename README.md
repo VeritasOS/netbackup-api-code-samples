@@ -36,3 +36,4 @@ Pre-requisites:
 
 Use the following commands to run the PowerShell samples.
 - `.\create_policy_in_one_step.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
+- `.\rbac_filtering_in_policy.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
