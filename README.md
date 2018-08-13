@@ -13,6 +13,7 @@ Pre-requisites:
 Use the following commands to run the powershell samples.
 - `.\Get-NB-Images.ps1 -nbmaster <masterServer> -username <username> -password <password>`
 - `.\Get-NB-Jobs.ps1 -nbmaster <masterServer> -username <username> -password <password>`
+- `.\Get-NB-Alerts.ps1 -nbmaster <masterServer> -username <username> -password <password>`
 
 #### Executing the snippets in Python
 Pre-requisites:
@@ -23,6 +24,7 @@ Pre-requisites:
 Use the following commands to run the python samples.
 - `python -W ignore get_nb_images.py -nbmaster <masterServer> -username <username> -password <password>`
 - `python -W ignore get_nb_jobs.py -nbmaster <masterServer> -username <username> -password <password>`
+- `python -W ignore get_nb_alerts.py -nbmaster <masterServer> -username <username> -password <password>`
 
 #### Executing the snippets in Perl
 Pre-requisites:
