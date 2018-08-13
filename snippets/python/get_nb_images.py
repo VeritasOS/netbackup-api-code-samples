@@ -7,6 +7,8 @@ protocol = "https"
 nbmaster = ""
 username = ""
 password = ""
+domainname = ""
+domaintype = ""
 port = 1556
 
 
@@ -14,13 +16,13 @@ def print_image_details(data):
 	tab = tt.Texttable()
 	headings = ['Image ID','Policy','Client','Backup Time']
 	tab.header(headings)
-	
+
 	for data_item in data:
 		tuple_value = (data_item['id'], data_item['attributes']['policyName'], data_item['attributes']['clientName'], data_item['attributes']['backupTime'])
 		tab.add_row(tuple_value)
-	
+
 	print(tab.draw())
-	
+
 
 def print_disclaimer():
 	print("-------------------------------------------------------------------------------------------------")
@@ -35,20 +37,22 @@ def print_disclaimer():
 	print("-------------------------------------------------------------------------------------------------\n\n\n")
 	print("You can specify the 'nbmaster', 'username' and 'password' as command-line parameters\n")
 	print_usage()
-	
+
 def print_usage():
 	print("Example:")
-	print("python -W ignore get_nb_images.py -nbmaster <masterServer> -username <username> -password <password>\n\n\n")
-	
+	print("python -W ignore get_nb_images.py -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n\n")
+
 def read_command_line_arguments():
 	if len(sys.argv)%2 == 0:
 		print_usage()
 		exit()
-		
+
 	global nbmaster
 	global username
 	global password
-	
+	global domainname
+	global domaintype
+
 	for i in range(1, len(sys.argv), 2):
 		if sys.argv[i] == "-nbmaster":
 			nbmaster = sys.argv[i + 1]
@@ -56,10 +60,14 @@ def read_command_line_arguments():
 			username = sys.argv[i + 1]
 		elif sys.argv[i] == "-password":
 			password = sys.argv[i + 1]
+		elif sys.argv[i] == "-domainname":
+			domainname = sys.argv[i + 1]
+		elif sys.argv[i] == "-domaintype":
+			domaintype = sys.argv[i + 1]
 		else:
 			print_usage()
 			exit()
-			
+
 	if nbmaster == "":
 		print("Please provide the value for 'nbmaster'")
 		exit()
@@ -69,14 +77,14 @@ def read_command_line_arguments():
 	elif password == "":
 		print("Please provide the value for 'password'")
 		exit()
-	
+
 print_disclaimer()
 
 read_command_line_arguments()
 
 base_url = protocol + "://" + nbmaster + ":" + str(port) + "/netbackup"
 
-jwt = api_requests.perform_login(username, password, base_url)
+jwt = api_requests.perform_login(username, password, base_url, domainname, domaintype)
 
 images = api_requests.get_netbackup_images(jwt, base_url)
 
@@ -84,4 +92,3 @@ data = images['data']
 
 if len(data) > 0:
 	print_image_details(data)
-	
