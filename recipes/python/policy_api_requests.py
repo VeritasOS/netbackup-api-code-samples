@@ -2,7 +2,8 @@ import requests
 import json
 
 content_type = "application/vnd.netbackup+json; version=2.0"
-testPolicyName = "VMware_test_policy"
+testVMwarePolicyName = "VMware_test_policy"
+testOraclePolicyName = "Oracle_test_policy"
 testClientName = "MEDIA_SERVER"
 testScheduleName = "VMware_test_schedule"
 etag = ""
@@ -17,7 +18,7 @@ def perform_login(username, password, domainName, domainType, base_url):
 	resp = requests.post(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 201:
-		raise Exception('Login API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('Login API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	 
 	print("\nThe response code of the Login API: {}\n".format(resp.status_code))
 	
@@ -28,10 +29,10 @@ def post_netbackup_VMwarePolicy_defaults(jwt, base_url):
 	req_body = {
 					"data": {
 						"type": "policy",
-						"id": testPolicyName,
+						"id": testVMwarePolicyName,
 						"attributes": {
 							"policy": {
-								"policyName": testPolicyName,
+								"policyName": testVMwarePolicyName,
 								"policyType": "VMware",
 								"policyAttributes": {},
 								"clients": [],
@@ -50,19 +51,50 @@ def post_netbackup_VMwarePolicy_defaults(jwt, base_url):
 	resp = requests.post(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('Create Policy API with defaults failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('Create Policy API with defaults failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
-	print("\n {} with defaults is created with status code : {}\n".format(testPolicyName,resp.status_code))
+	print("\n {} with defaults is created with status code : {}\n".format(testVMwarePolicyName,resp.status_code))
+	
+def post_netbackup_OraclePolicy_defaults(jwt, base_url):
+	url = base_url + "/config/policies/"
+	req_body = {
+					"data": {
+						"type": "policy",
+						"id": testOraclePolicyName,
+						"attributes": {
+							"policy": {
+								"policyName": testOraclePolicyName,
+								"policyType": "Oracle",
+								"policyAttributes": {},
+								"clients": [],
+								"schedules": [],
+								"backupSelections": {
+									"selections": []
+								}
+							}
+						}
+					}
+				}
+	headers = {'Content-Type': content_type, 'Authorization': jwt}
+	
+	print("\nMaking POST Request to create Oracle Policy with defaults \n")
+	
+	resp = requests.post(url, headers=headers, json=req_body, verify=False)
+	
+	if resp.status_code != 204:
+		print('Create Policy API with defaults failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
+	
+	print("\n {} with defaults is created with status code : {}\n".format(testVMwarePolicyName,resp.status_code))
 	
 def post_netbackup_VMwarePolicy(jwt, base_url):
 	url = base_url + "/config/policies/"
 	req_body = {
 					"data": {
 						"type": "policy",
-						"id": testPolicyName,
+						"id": testVMwarePolicyName,
 						"attributes": {
 							"policy": {
-								"policyName": testPolicyName,
+								"policyName": testVMwarePolicyName,
 								"policyType": "VMware",
 								"policyAttributes": {
 									"active": True,
@@ -190,9 +222,9 @@ def post_netbackup_VMwarePolicy(jwt, base_url):
 	resp = requests.post(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('Create Policy API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('Create Policy API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
-	print("\n {} with out defaults is created with status code : {}\n".format(testPolicyName,resp.status_code))
+	print("\n {} with out defaults is created with status code : {}\n".format(testVMwarePolicyName,resp.status_code))
 	
 def get_netbackup_policies(jwt, base_url):
 	url = base_url + "/config/policies"
@@ -203,14 +235,14 @@ def get_netbackup_policies(jwt, base_url):
 	resp = requests.get(url, headers=headers, verify=False)
 	
 	if resp.status_code != 200:
-		raise Exception('List Policies API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('List Policies API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
 	print("\nList policy succeeded with status code: {}\n".format(resp.status_code))
 	print("\n Json Response body for List policies  : \n{}\n".format(json.loads(resp.content)))
 	
 	
 def get_netbackup_policy(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName
+	url = base_url + "/config/policies/" + testVMwarePolicyName
 	global etag
 	headers = {'Content-Type': content_type, 'Authorization': jwt}
 	
@@ -219,37 +251,50 @@ def get_netbackup_policy(jwt, base_url):
 	resp = requests.get(url, headers=headers, verify=False)
 	
 	if resp.status_code != 200:
-		raise Exception('GET Policy API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('GET Policy API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
-	print("\nGet policy details on {} succeeded with status code: {}\n".format(testPolicyName, resp.status_code))
+	print("\nGet policy details on {} succeeded with status code: {}\n".format(testVMwarePolicyName, resp.status_code))
 	print("\n The E-tag for the get policy : {}\n".format(resp.headers['ETag']))
 	etag = resp.headers['ETag']
 	print("\n Json Response body for get policy : \n{}\n".format(json.loads(resp.content)))
 	
 	
-def delete_netbackup_policy(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName
+def delete_VMware_netbackup_policy(jwt, base_url):
+	url = base_url + "/config/policies/" + testVMwarePolicyName
 	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
 	
-	print("\n Making policy DELETE Request on {}".format(testPolicyName))
+	print("\n Making policy DELETE Request on {}".format(testVMwarePolicyName))
 	
 	resp = requests.delete(url, headers=headers, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('DELETE Policy API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('DELETE Policy API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
+	
+	print("\nThe policy is deleted with status code: {}\n".format(resp.status_code))
+	
+def delete_Oracle_netbackup_policy(jwt, base_url):
+	url = base_url + "/config/policies/" + testOraclePolicyName
+	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
+	
+	print("\n Making policy DELETE Request on {}".format(testOraclePolicyName))
+	
+	resp = requests.delete(url, headers=headers, verify=False)
+	
+	if resp.status_code != 204:
+		print('DELETE Policy API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
 	print("\nThe policy is deleted with status code: {}\n".format(resp.status_code))
 	
 def put_netbackup_policy(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName
+	url = base_url + "/config/policies/" + testVMwarePolicyName
 	global etag
 	req_body = {
 					"data": {
 						"type": "policy",
-						"id": testPolicyName,
+						"id": testVMwarePolicyName,
 						"attributes": {
 							"policy": {
-								"policyName": testPolicyName,
+								"policyName": testVMwarePolicyName,
 								"policyType": "VMware",
 								"policyAttributes": {
 									"keyword": "test"
@@ -265,17 +310,17 @@ def put_netbackup_policy(jwt, base_url):
 				}
 	headers = {'Content-Type': content_type, 'Authorization': jwt ,'If-Match': etag}
 	
-	print("\n Making Update Request on {} by changing few attributes of the policy".format(testPolicyName))
+	print("\n Making Update Request on {} by changing few attributes of the policy".format(testVMwarePolicyName))
 	
 	resp = requests.put(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('PUT Policy API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('PUT Policy API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	etag = resp.headers['ETag']
-	print("\n{} Updated with status code : {}\n".format(testPolicyName, resp.status_code))
+	print("\n{} Updated with status code : {}\n".format(testVMwarePolicyName, resp.status_code))
 	
 def put_netbackup_client(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName + "/clients/" + testClientName
+	url = base_url + "/config/policies/" + testVMwarePolicyName + "/clients/" + testClientName
 	global etag
 	req_body = {
 					"data": {
@@ -289,17 +334,17 @@ def put_netbackup_client(jwt, base_url):
 				}
 	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
 	
-	print("\n Making PUT Request to add client to {}".format(testPolicyName))
+	print("\n Making PUT Request to add client to {}".format(testVMwarePolicyName))
 	
 	resp = requests.put(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 201:
-		raise Exception('PUT Client API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('PUT Client API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	etag = resp.headers['ETag']
-	print("\n{} is added to {} with status code : {}\n".format(testClientName, testPolicyName, resp.status_code))
+	print("\n{} is added to {} with status code : {}\n".format(testClientName, testVMwarePolicyName, resp.status_code))
 	
 def delete_netbackup_client(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName + "/clients/" + testClientName
+	url = base_url + "/config/policies/" + testVMwarePolicyName + "/clients/" + testClientName
 	global etag
 	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
 	
@@ -308,12 +353,12 @@ def delete_netbackup_client(jwt, base_url):
 	resp = requests.delete(url, headers=headers, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('DELETE Client API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('DELETE Client API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	etag = resp.headers['ETag']
-	print("\nClient {} is deleted from {} with status code: {}\n".format(testClientName, testPolicyName, resp.status_code))
+	print("\nClient {} is deleted from {} with status code: {}\n".format(testClientName, testVMwarePolicyName, resp.status_code))
 	
 def delete_netbackup_schedule(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName + "/schedules/" + testScheduleName
+	url = base_url + "/config/policies/" + testVMwarePolicyName + "/schedules/" + testScheduleName
 	global etag
 	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
 	
@@ -322,12 +367,12 @@ def delete_netbackup_schedule(jwt, base_url):
 	resp = requests.delete(url, headers=headers, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('DELETE schedule API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('DELETE schedule API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	etag = resp.headers['ETag']
-	print("\n {} is deleted from the {} with status code: {}\n".format(testScheduleName, testPolicyName, resp.status_code))
+	print("\n {} is deleted from the {} with status code: {}\n".format(testScheduleName, testVMwarePolicyName, resp.status_code))
 	
 def delete_netbackup_backupselections(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName + "/backupselections"
+	url = base_url + "/config/policies/" + testVMwarePolicyName + "/backupselections"
 	headers = {'Content-Type': content_type, 'Authorization': jwt}
 	
 	print("Making DELETE Request to remove Backupselections from the policy\n")
@@ -335,12 +380,12 @@ def delete_netbackup_backupselections(jwt, base_url):
 	resp = requests.delete(url, headers=headers, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('DELETE Backupselections API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('DELETE Backupselections API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	
-	print("\n BackupSelections is deleted for the {}  with status code : {}\n".format(testPolicyName, resp.status_code))
+	print("\n BackupSelections is deleted for the {}  with status code : {}\n".format(testVMwarePolicyName, resp.status_code))
 	
 def put_netbackup_backupselections(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName + "/backupselections"
+	url = base_url + "/config/policies/" + testVMwarePolicyName + "/backupselections"
 	global etag
 	req_body = {
 				"data": {
@@ -354,17 +399,17 @@ def put_netbackup_backupselections(jwt, base_url):
 				}
 	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
 	
-	print("\nMaking PUT Request to add BackupSelections to {}\n".format(testPolicyName))
+	print("\nMaking PUT Request to add BackupSelections to {}\n".format(testVMwarePolicyName))
 	
 	resp = requests.put(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 204:
-		raise Exception('PUT Backupselections API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('PUT Backupselections API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	etag = resp.headers['ETag']
-	print("\n Backupselections added to {} with status code: {}\n".format(testPolicyName, resp.status_code))
+	print("\n Backupselections added to {} with status code: {}\n".format(testVMwarePolicyName, resp.status_code))
 	
 def put_netbackup_schedule(jwt, base_url):
-	url = base_url + "/config/policies/" + testPolicyName + "/schedules/" + testScheduleName
+	url = base_url + "/config/policies/" + testVMwarePolicyName + "/schedules/" + testScheduleName
 	global etag
 	req_body = {
 					"data": {
@@ -451,11 +496,11 @@ def put_netbackup_schedule(jwt, base_url):
 				}
 	headers = {'Content-Type': content_type, 'Authorization': jwt, 'If-Match': etag}
 	
-	print("\nMaking PUT Request to add schedule to {}\n".format(testPolicyName))
+	print("\nMaking PUT Request to add schedule to {}\n".format(testVMwarePolicyName))
 	
 	resp = requests.put(url, headers=headers, json=req_body, verify=False)
 	
 	if resp.status_code != 201:
-		raise Exception('PUT Schedule API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+		print('PUT Schedule API failed with status code {} and {}\n'.format(resp.status_code, resp.json()))
 	etag = resp.headers['ETag']
-	print("\n{} is added to {} with status code : {}\n".format(testScheduleName, testPolicyName, resp.status_code))
+	print("\n{} is added to {} with status code : {}\n".format(testScheduleName, testVMwarePolicyName, resp.status_code))
