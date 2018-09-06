@@ -116,3 +116,4 @@ def create_bpnbat_user(username, domainName, password):
 		os.system(cmd)
 	
 	print("\n\n")
+	
