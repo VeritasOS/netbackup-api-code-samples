@@ -2,10 +2,10 @@
 
 #####################n#####################################################
 
-# This script demonstrates the usage of netbackup REST API for listing 
+# This script demonstrates the usage of netbackup REST API for listing
 # the backup images
 
-# This script requires jq command-line JSON parser 
+# This script requires jq command-line JSON parser
 # if your system does not have jq installed, this will not work
 # jq can be downloaded from here: https://github.com/stedolan/jq/releases
 
@@ -23,7 +23,7 @@ showHelp()
 	echo ""
 	echo "Invalid command parameters"
 	echo "Usage:"
-	echo "./get_nb_images.sh -master <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
+	echo "./get_nb_images.sh -nbmaster <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
 	echo ""
 	exit 1
 }
@@ -33,10 +33,10 @@ parseArguments()
 	if [ $# -lt 6 ]; then
 		showHelp
 	fi
-	
+
 	while [ "$1" != "" ]; do
 		case $1 in
-			-master)
+			-nbmaster)
 				master_server=$2
 				;;
 			-username)
@@ -57,7 +57,7 @@ parseArguments()
 		esac
 		shift 2
 	done
-	
+
 	if [ -z "$master_server" ] || [ -z "$username" ] || [ -z "$password" ] || [ -z "$domainname" ] || [ -z "$domaintype" ]; then
 		showhelp
 	fi
@@ -98,4 +98,3 @@ curl --insecure --request  GET --globoff --get $uri  -H $content_header -H $auth
 	jq '[.data[]|{IMAGE_ID: .id, POLICY: .attributes.policyName, CLIENT: .attributes.clientName, BACKUP_TIME: .attributes.backupTime}]'
 
 exit 0
-
