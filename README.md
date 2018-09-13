@@ -39,3 +39,8 @@ Pre-requisites:
 Use the following commands to run the go samples.
 - `go run ./create_policy_step_by_step.go -nbmaster <master_server> -username <username> -password <password>`
 - `go run ./create_policy_in_one_step.go -nbmaster <master_server> -username <username> -password <password>`
+
+#### Tools
+The `tools` folder contains utilities that have proven useful in the development of projects using
+NetBackup REST APIs, but do not provide any API usage examples.  Again, these tools are not for
+production use, but they may be of some use in your work.
