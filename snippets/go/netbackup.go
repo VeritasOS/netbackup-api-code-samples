@@ -9,6 +9,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 // NetBackup structure to directly call raw APIs
@@ -97,9 +98,9 @@ func Ping(server string) string {
 }
 
 //Login function
-func Login(username string, password string, server string) string {
+func Login(username string, password string, domain string, domainType string, server string) string {
 	url := GetBaseURLString(server) + "/login"
-	reqData := map[string]string{"userName": username, "password": password}
+	reqData := map[string]string{"userName": username, "password": password, "domainName": domain, "domainType": domainType}
 	reqValue, _ := json.Marshal(reqData)
 
 	jsonData, code, err := Post("", url, reqValue)
@@ -131,6 +132,99 @@ func MappingList(jwt string, server string) {
 		}
 	}
 	fmt.Println(jsonData)
+}
+
+// ImagesList API Returns list of catalog images
+func ImagesList(jwt string, server string) {
+
+	url := GetBaseURLString(server) + "/catalog/images"
+
+	client := getHTTPClient()
+	req, err := http.NewRequest("GET", url, nil)
+	if jwt != "" {
+		req.Header.Add("Authorization", jwt)
+	}
+	req.Header.Add("ContentType", "application/vnd.netbackup+json; version=1.0")
+
+	//Adding filters in query string
+	q := req.URL.Query()
+	q.Add("filter", "policyType eq 'Standard'")
+	q.Add("page[limit]", "10")
+	req.URL.RawQuery = q.Encode()
+
+	var jsonData map[string]interface{}
+
+	response, err := client.Do(req)
+	if err == nil {
+		if response.StatusCode >= 200 && response.StatusCode <= 299 {
+			data, _ := ioutil.ReadAll(response.Body)
+			if err := json.Unmarshal(data, &jsonData); err != nil {
+				panic(err)
+			}
+		}
+	}
+	defer response.Body.Close()
+
+	if err != nil {
+		fmt.Printf("Request Failed %s \n", err)
+	} else {
+		if response.StatusCode != 200 {
+			fmt.Printf("Request returned wrong code %d \n", response.StatusCode)
+			return
+		}
+	}
+
+	b, err := json.MarshalIndent(jsonData, "", "    ")
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	os.Stdout.Write(b)
+}
+
+// JobList API Returns list of backup jobs
+func JobList(jwt string, server string) {
+	url := GetBaseURLString(server) + "/admin/jobs"
+
+	client := getHTTPClient()
+	req, err := http.NewRequest("GET", url, nil)
+	if jwt != "" {
+		req.Header.Add("Authorization", jwt)
+	}
+	req.Header.Add("ContentType", "application/vnd.netbackup+json; version=1.0")
+
+	//Adding filters in query string
+	q := req.URL.Query()
+	q.Add("filter", "jobType eq 'BACKUP'")
+	q.Add("page[limit]", "10")
+	req.URL.RawQuery = q.Encode()
+
+	var jsonData map[string]interface{}
+
+	response, err := client.Do(req)
+	if err == nil {
+		if response.StatusCode >= 200 && response.StatusCode <= 299 {
+			data, _ := ioutil.ReadAll(response.Body)
+			if err := json.Unmarshal(data, &jsonData); err != nil {
+				panic(err)
+			}
+		}
+	}
+	defer response.Body.Close()
+
+	if err != nil {
+		fmt.Printf("Request Failed %s \n", err)
+	} else {
+		if response.StatusCode != 200 {
+			fmt.Printf("Request returned wrong code %d \n", response.StatusCode)
+			return
+		}
+	}
+
+	b, err := json.MarshalIndent(jsonData, "", "    ")
+	if err != nil {
+		fmt.Println("error:", err)
+	}
+	os.Stdout.Write(b)
 }
 
 // GetBaseURLString This returns the base URL for netbackup

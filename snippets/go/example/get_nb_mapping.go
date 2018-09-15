@@ -1,13 +1,11 @@
 package main
-
-import (
+ import (
 	"bufio"
 	"fmt"
 	"netbackup"
 	"os"
 )
-
-func main() {
+ func main() {
 	fmt.Printf("Welcome to sample Go program to call NetBackup APIs\n")
 	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Printf("Enter the server to connect: ")
@@ -23,11 +21,16 @@ func main() {
 	fmt.Printf("Enter password for server:")
 	scanner.Scan()
 	password := scanner.Text()
+	fmt.Printf("Enter domain name for server:")
+	scanner.Scan()
+	domain := scanner.Text()
+	fmt.Printf("Enter domain type <unixpwd/nt>:")
+	scanner.Scan()
+	domainType := scanner.Text()
 	fmt.Printf("Calling NetBackup Login\n")
 	fmt.Printf("-----------------------\n")
-	jwt := netbackup.Login(username, password, server)
+	jwt := netbackup.Login(username, password, domain, domainType, server)
 	fmt.Printf("-----------------------\n")
-	//    fmt.Printf(netbackup.MappingList(jwt , "V-067223A"))
 	fmt.Printf("Mapping List using jwt\n")
 	fmt.Printf("-----------------------\n")
 	netbackup.MappingList(jwt, server)
