@@ -14,9 +14,15 @@ Pre-requisites:
 Use the following commands to build and execute the sample program
 ```sh
 $ cd netbackup
-$ # Build sample program
-$ go build example/sample.go
-$ # execute sample program
-$ ./sample
+$ # Build sample program for fetching server mappings
+$ go build example/get_nb_mapping.go
+$ ./get_nb_mapping
+
+$ # Build sample program for fetching catalog images
+$ go build example/get_nb_images.go
+$ ./get_nb_images
+
+$ # Build sample program for fetching backup jobs
+$ go build example/get_nb_jobs.go
+$ ./get_nb_jobs
 ```
-To use in your own Go program just import the package and use it as shown in the sample.go
