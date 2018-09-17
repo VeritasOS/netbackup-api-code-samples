@@ -5,7 +5,7 @@ This sample script demonstrates the use of NetBackup REST API for listing the al
 
 .DESCRIPTION
 This script will get a list of netbackup alerts and print the details of the latest 10 alerts in a tabular format.
-Alerts will be generated for job failures for VMWare workload, job failures due to storage, network issues of any workload.
+NetBackup supports alerts for VMWare job failures. For more information check help document.
 
 .EXAMPLE
 ./Get-NB-Alerts.ps1 -nbmaster "nb-master.example.com" -username "administrator" -password "secret"
