@@ -9,7 +9,8 @@ use LWP::UserAgent;
 use LWP::Protocol::https;
 
 $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
-$CONTENT_TYPE = "application/vnd.netbackup+json; version=1.0";
+$CONTENT_TYPE_V1 = "application/vnd.netbackup+json; version=1.0";
+$CONTENT_TYPE_V2 = "application/vnd.netbackup+json; version=2.0";
 $NB_PORT = 1556;
 
 
@@ -48,7 +49,7 @@ sub login {
   }
 
   my $req = HTTP::Request->new(POST => $token_url);
-  $req->header('content-type' => "$CONTENT_TYPE");
+  $req->header('content-type' => "$CONTENT_TYPE_V1");
   $req->content($post_data);
 
   my $ua = LWP::UserAgent->new(
@@ -61,7 +62,7 @@ sub login {
   if ($resp->is_success) {
   	my $message = decode_json($resp->content);
   	my $token = $message->{"token"};
-    print "Successfully completed Login Request.\n";
+    print "Successfully completed Login Request.\n\n";
     return $token;
   }
   else {
@@ -100,7 +101,7 @@ sub logout {
   	ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
   );
 
-  print "Performing Logout Request on $logout_url\n";
+  print "\n\nPerforming Logout Request on $logout_url\n";
   my $resp = $ua->request($logout_req);
   if ($resp->is_success) {
       print "Successfully completed Logout Request.\n";
@@ -133,7 +134,7 @@ sub getJobs {
   my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/admin/jobs";
   my $jobs_req = HTTP::Request->new(GET => $url);
   $jobs_req->header('Authorization' => $token);
-  $jobs_req->header('content-type' => "$CONTENT_TYPE");
+  $jobs_req->header('content-type' => "$CONTENT_TYPE_V1");
 
   my $ua = LWP::UserAgent->new(
   	timeout => 500,
@@ -177,7 +178,7 @@ sub getCatalogImages {
   my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/catalog/images";
   my $catalog_req = HTTP::Request->new(GET => $url);
   $catalog_req->header('Authorization' => $token);
-  $catalog_req->header('content-type' => "$CONTENT_TYPE");
+  $catalog_req->header('content-type' => "$CONTENT_TYPE_V1");
 
   my $ua = LWP::UserAgent->new(
   	timeout => 500,
@@ -316,5 +317,182 @@ sub displayCatalogImages {
 
 }
 
+#
+# This function returns a list of Asset based on
+# a filter parameter
+#
+
+sub getAssetsByFilter {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 3) {
+    print "ERROR :: Incorrect number of arguments passed to getAssetsByFilter()\n";
+    print "Usage : getAssetsByFilter( <Asset filter> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+  my $filter = $_[2];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/assets?filter=$filter";
+  my $assets_req = HTTP::Request->new(GET => $url);
+  $assets_req->header('Authorization' => $token);
+  $assets_req->header('content-type' => "$CONTENT_TYPE_V1");
+
+  my $ua = LWP::UserAgent->new(
+        timeout => 1000,
+        ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing Get Assets Request on $url\n";
+  my $response = $ua->request($assets_req);
+  if ($response->is_success) {
+    print "Successfully completed Get Assets by filter Request.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: Get Assets Request Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+  }
+
+}
+
+#
+## This function displays the JSON content returned from Asset API
+## using query filter in a tabular format
+##
+sub displayAssets {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+     print "ERROR :: Incorrect number of arguments passed to displayAssets()\n";
+     print "Usage : displayAssets( <JSON content returned from Assets API> ) \n";
+     return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+  my @assets = @{$json->{'data'}};
+
+  my @tablerows;
+
+  foreach (@assets) {
+     my $asset = $_;
+
+     my $assetId = $asset->{'id'};
+     my $assetType = $asset->{'attributes'}->{'assetType'};
+     my $workloadType = $asset->{'attributes'}->{'workloadType'};
+     my $displayName = $asset->{'attributes'}->{'displayName'};
+     my $version = $asset->{'attributes'}->{'version'};
+
+     my @tablerow = ($assetId, $assetType, $workloadType, $displayName, $version);
+            push @tablerows, \@tablerow;
+  }
+
+  my @title = ("Asset ID", "Asset Type", "Workload Type", "Display Name", "Version");
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+#
+## This function create the Json payload for the Asset Cleanup API
+## It receives 2 paramters, the Json response from the GetAssetByFilter
+## and the cleanupTime. The response of this function is a proper payload
+## with all Assets from the filter.
+##
+sub createAssetCleanupPayload {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 2) {
+     print "ERROR :: Incorrect number of arguments passed to createAssetCleanupPayload()\n";
+     print "Usage : createAssetCleanupPayload( <Json content returned from Assets API>, <cleanupTime> ) \n";
+     return;
+  }
+
+  my $jsonstring = $_[0];
+  my $cleanupTime = $_[1];
+  my $valid_input = "false"; 
+  my $json = decode_json($jsonstring);
+  my @assets = @{$json->{'data'}};
+
+  my $payload = "{ \"data\":{ \"type\":\"assetCleanup\", \"id\":\"cleanupId\",";
+  $payload = "$payload  \"attributes\": { \"cleanupTime\":\"$cleanupTime\",";
+  $payload = "$payload \"assetIds\":[";
+
+  foreach (@assets) {
+    my $asset = $_;
+
+    my $assetId = $asset->{'id'};
+    $payload = " $payload \"$assetId\",";
+    $valid_input = "true"; 
+  }
+
+  $payload = substr($payload, 0,  (length $payload) - 1);
+  $payload = " $payload ] } } }";
+
+  if ($valid_input eq "false"){ 
+     return $valid_input;
+  } else {
+     return $payload;
+  }
+
+}
+
+#
+## This function makes the call to the Asset Cleanup API.
+## If the web service goes successfully a HTTP 204 code is returned.
+## Any other HTTP response code will be considered a error in the Asset Cleanup API.
+##
+sub cleanAssets {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 4) {
+      print "ERROR :: Incorrect number of arguments passed to cleanAssets()\n";
+      print "Usage : cleanAssets( <Host Name>, <Authorization Token>, <Json content returned from Assets API>, <Cleanup Time> ) \n";
+      return;
+   }
+
+  my $hostname = $_[0];
+  my $myToken = $_[1];
+  my $jsonstring = $_[2];
+  my $cleanuptime = $_[3];
+
+  my $payload = createAssetCleanupPayload($jsonstring, $cleanuptime);
+
+  if ($payload ne "false"){
+
+  	my $asset_cleanup_url = "https://$hostname:$NB_PORT/netbackup/assets/asset-cleanup";
+  	my $asset_cleanup_req = HTTP::Request->new(POST => $asset_cleanup_url);
+  	$asset_cleanup_req->header('Authorization' => $myToken);
+  	$asset_cleanup_req->header('content-type' => "$CONTENT_TYPE_V2");
+  	$asset_cleanup_req->content($payload);
+
+  	my $ua = LWP::UserAgent->new(
+        	timeout => 1000,
+        	ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  	);
+
+  	print "\n\nPerforming Asset Cleanup Request on $asset_cleanup_url\n";
+  	my $resp = $ua->request($asset_cleanup_req);
+  	if ($resp->is_success) {
+      		print "Successfully completed Asset Cleanup Request.\n";
+  	}
+  	else {
+      		print "ERROR :: Asset Cleanup Request Failed!\n";
+      		print "HTTP POST error code: ", $resp->code, "\n";
+      		print "HTTP POST error message: ", $resp->message, "\n";
+     	}
+    } else {
+	print "There is no asset to be clean\n";
+   
+    }
+}
 
 1;

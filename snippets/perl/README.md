@@ -70,3 +70,13 @@ Catalog Image Details:
 
 - Use the following command to obtain the catalog image details from your NetBackup Master server:
   - `perl get_nb_images.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+
+Asset Cleanup Details:
+- Use the following command to query Assets by a user given specified filter, and cleanup time to delete all Assets returned by the filter. The cleanupTime field is an 
+ISO 8601 formatted UTC timestamp.
+- Keep in mind that those Assets returned by the filter will be only delete if, the last discovered time of the Asset is older than the given cleanupTime and there is 
+no a subscription associated with this asset.
+
+  - Example: perl post_nb_asset_cleanup.pl -nbmaster <master_server> -username <username> -password <pass> -filter "workloadType eq 'VMware'" -cleanuptime 2018-06-29T15:58:45.678Z
+
