@@ -9,6 +9,8 @@ protocol = "https"
 nbmaster = ""
 username = ""
 password = ""
+domainname = ""
+domaintype = ""
 port = 1556
 
 def print_alert_details(data):
@@ -46,7 +48,7 @@ def print_disclaimer():
 	
 def print_usage():
 	print("Example:")
-	print("python -W ignore get_nb_alerts.py -nbmaster <masterServer> -username <username> -password <password>\n\n\n")
+	print("python -W ignore get_nb_alerts.py -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n\n")
 	
 def read_command_line_arguments():
 	if len(sys.argv)%2 == 0:
@@ -56,7 +58,9 @@ def read_command_line_arguments():
 	global nbmaster
 	global username
 	global password
-	
+	global domainname
+	global domaintype
+
 	for i in range(1, len(sys.argv), 2):
 		if sys.argv[i] == "-nbmaster":
 			nbmaster = sys.argv[i + 1]
@@ -64,6 +68,10 @@ def read_command_line_arguments():
 			username = sys.argv[i + 1]
 		elif sys.argv[i] == "-password":
 			password = sys.argv[i + 1]
+		elif sys.argv[i] == "-domainname":
+			domainname = sys.argv[i + 1]
+		elif sys.argv[i] == "-domaintype":
+			domaintype = sys.argv[i + 1]
 		else:
 			print_usage()
 			exit()
@@ -84,7 +92,7 @@ read_command_line_arguments()
 
 base_url = protocol + "://" + nbmaster + ":" + str(port) + "/netbackup"
 
-jwt = api_requests.perform_login(username, password, base_url)
+jwt = api_requests.perform_login(username, password, base_url, domainname, domaintype)
 
 alerts = api_requests.get_netbackup_alerts(jwt, base_url)
 
