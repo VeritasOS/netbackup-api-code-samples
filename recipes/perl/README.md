@@ -19,3 +19,13 @@ Use the following commands to run the perl samples.
 - `perl rbac_filtering_in_policy.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 - `perl api_requests_images.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 - `perl api_requests_image_contents.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
+
+#### Pre-requisites:
+
+- NetBackup 8.2 or higher
+- Perl 5.20.2 or higher
+
+#### Executing the recipes in perl
+
+Use the following commands to run the perl samples.
+- `perl api_requests_get_service_and_services.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
