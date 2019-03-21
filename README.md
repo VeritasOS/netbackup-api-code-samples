@@ -17,7 +17,7 @@ Pre-requisites:
 
 #### Executing the recipes for different programming languages
 
-The `recipes` folder contains code samples to invoke NetBackup REST API using different programming languages. These are usually examples of usage of multiple APIs covering a specific workflow/use-case.
+The `recipes` folder contains code samples to invoke NetBackup REST API using different programming languages. These are usually examples of usage of multiple APIs/functions covering specific use-cases.
 
 Pre-requisites:
 
