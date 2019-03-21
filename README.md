@@ -7,7 +7,7 @@ These scripts are only meant to be used as a reference. Please do not use these 
 
 #### Executing the snippets for different programming languages
 
-The `snippets` folder contains code samples to invoke NetBackup REST API using different programming languages. These are usually examples of single API usage.
+The `snippets` folder contains code samples to invoke NetBackup REST API using different programming languages. These are usually examples of single API usage in a script.
 
 Pre-requisites:
 
