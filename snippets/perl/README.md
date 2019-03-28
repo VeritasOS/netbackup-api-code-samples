@@ -79,4 +79,66 @@ ISO 8601 formatted UTC timestamp.
 no a subscription associated with this asset.
 
   - Example: perl post_nb_asset_cleanup.pl -nbmaster <master_server> -username <username> -password <pass> -filter "workloadType eq 'VMware'" -cleanuptime 2018-06-29T15:58:45.678Z
+  
+Create Storage Server:
+
+Use the following command to create the storage server on NetBackup Master server:
+  - perl storageAPI/post_storage_server.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Update Storage Server:
+
+Use the following command to create the storage server on NetBackup Master server:
+  - perl storageAPI/patch_storage_server.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> -stsid <Storage server id> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Get Storage Server:
+
+Use the following command to create the storage server on NetBackup Master server:
+  - perl storageAPI/get_storage_server.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Delete Storage Server:
+
+Use the following command to create the storage server on NetBackup Master server:
+  - perl storageAPI/delete_storage_server.pl -nbmaster <master_server> -username <username> -password <password> -stsid <Storage server id> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Create Storage unit:
+
+Use the following command to create the storage unit on NetBackup Master server:
+  - perl storageAPI/post_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Update Storage unit:
+
+Use the following command to create the storage unit on NetBackup Master server:
+  - perl storageAPI/patch_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> -stuname <stu name>[-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Get Storage unit:
+
+Use the following command to create the storage unit on NetBackup Master server:
+  - perl storageAPI/get_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Delete Storage Unit:
+
+Use the following command to create the storage unit on NetBackup Master server:
+  - perl storageAPI/delete_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> -stu_name <Storage unit name> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+ 
+Create Disk Pool:
+
+Use the following command to create the disk pool on NetBackup Master server:
+  - perl storageAPI/post_disk_pool.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Update Disk pool:
+
+Use the following command to create the disk pool on NetBackup Master server:
+  - perl storageAPI/patch_disk_pool.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Get Disk Pool:
+
+Use the following command to create the disk pool on NetBackup Master server:
+  - perl storageAPI/get_disk_pool.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>]
+  
+Delete Disk Pool:
+
+Use the following command to create the disk pool on NetBackup Master server:
+  - perl storageAPI/delete_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]
+
 

@@ -9,9 +9,10 @@ These scripts are only meant to be used as a reference. If you intend to use the
 #### Executing the recipes in PowerShell
 
 Pre-requisites:
-- NetBackup 8.1.2 or higher
+- NetBackup 8.2 or higher
 - PowerShell 4.0 or higher
 
 Use the following commands to run the PowerShell samples.
 - `.\create_policy_in_one_step.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 - `.\rbac_filtering_in_policy.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
+- `.\configure_storage_unit_end_to_end.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName> -domainType <domainType>]`
