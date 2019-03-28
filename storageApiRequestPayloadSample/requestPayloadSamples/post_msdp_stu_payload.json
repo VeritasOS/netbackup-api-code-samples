@@ -1,0 +1,20 @@
+{
+  "data": {
+    "type": "storageUnit",
+    "attributes": {
+      "name": "STORAGE_UNIT",
+      "useAnyAvailableMediaServer": true,
+      "maxFragmentSizeMegabytes": 50000,
+      "maxConcurrentJobs": 10,
+      "onDemandOnly": true
+    },
+    "relationships": {
+      "diskPool": {
+        "data": {
+          "type": "diskPool",
+          "id": "DISK_POOL_ID"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "data": {
+    "type": "diskPool",
+    "attributes": {
+        "maximumIoStreams": {
+          "limitIoStreams": true,
+          "streamsPerVolume": 100
+        },
+      "diskPoolState": "DP_STATE"
+    }
+  }
+}

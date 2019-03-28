@@ -1,0 +1,27 @@
+{
+    "data": {
+        "type": "diskPool",
+        "attributes": {
+            "name": "disk-pool1",
+            "diskVolumes": [
+                {
+                    "name": "VOLUME_NAME"
+                }
+            ],
+            "maximumIoStreams": {
+                "limitIoStreams": true,
+                "streamsPerVolume": 4
+            }
+        },
+        "relationships": {
+            "storageServers": {
+                "data": [
+                    {
+                        "type": "storageServer",
+                        "id": "STORAGE_SERVER_ID"
+                    }
+                ]
+            }
+        }
+    }
+}

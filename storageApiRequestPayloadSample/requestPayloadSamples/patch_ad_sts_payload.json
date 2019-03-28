@@ -1,0 +1,13 @@
+{
+"data": {
+    "type": "storageServer",
+    "attributes": {
+      "advancedDiskAttributes": {
+        "isPreferredForRestore": false,
+        "isRequiredForRestore": false,
+        "isRequiredForDuplication": false
+      }
+      
+    }
+  }
+}
