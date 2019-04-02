@@ -9,7 +9,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 #### Executing the recipes in Python
 
 Pre-requisites:
-- NetBackup 8.1.2 or higher
+- NetBackup 8.2 or higher
 - python 3.5 or higher
 - python modules: `requests`
 

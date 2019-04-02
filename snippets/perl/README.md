@@ -9,6 +9,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 #### Pre-requisites:
 
 - NetBackup 8.1.1 or higher
+- NetBackup 8.2 or higher is required for configuring storage API
 - Perl v5.18.2
 - Perl modules Text::Table, JSON and LWP
 
