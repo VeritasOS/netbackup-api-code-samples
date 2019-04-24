@@ -3,6 +3,12 @@ import storage
 import json
 import texttable as tt
 
+# This script consists of the helper functions to excute NetBackup APIs to create storage unit.
+# 1) Login to Netbackup
+# 2) Create storage server
+# 3) Create disk Pool
+# 4) Create storage unit
+
 protocol = "https"
 nbmaster = ""
 username = ""

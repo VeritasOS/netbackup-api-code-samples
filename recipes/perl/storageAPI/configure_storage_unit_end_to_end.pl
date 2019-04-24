@@ -8,6 +8,12 @@ use JSON;
 use Getopt::Long qw(GetOptions);
 use storage;
 
+# This script consists of the helper functions to excute NetBackup APIs to create storage unit.
+# 1) Login to Netbackup
+# 2) Create storage server
+# 3) Create disk Pool
+# 4) Create storage unit
+
 #
 # The token is the key to the NetBackup AuthN/AuthZ scheme.  You must login and get a token
 # and use this token in your Authorization header for all subsequent requests.  Token validity

@@ -1,11 +1,11 @@
 #Load module netbackup.pm from current directory
-use lib".";
+use lib"../.";
 
 use gateway;
 use storage;
 use Getopt::Long qw(GetOptions);
 sub printUsage {
-  print "\nUsage : perl storageAPI/delete_disk_pool.pl -nbmaster <master_server> -username <username> -password <password> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";
+  print "\nUsage : perl delete_disk_pool.pl -nbmaster <master_server> -username <username> -password <password> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";
   die;
 }
 
