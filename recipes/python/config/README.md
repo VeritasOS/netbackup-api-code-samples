@@ -15,5 +15,7 @@ Pre-requisites:
 
 
 Use the following command to run the script. The command should be run from the parent directory of this 'config' directory.
-- `python -W ignore -m config.hosts_exclude_list -hostName <hostName> -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]
-Note: hostName is the name of the NetBackup host to set the exclude configuration. The exclude list is specified in the config/exclude_list file.`
+
+`python -W ignore -m config.hosts_exclude_list -hostName <hostName> -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
+
+`Note: hostName is the name of the NetBackup host to set the exclude configuration. The exclude list is specified in the config/exclude_list file.`
