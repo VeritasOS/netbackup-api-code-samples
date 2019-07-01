@@ -2,7 +2,7 @@
 .SYNOPSIS
 This sample script demonstrates the use of NetBackup processes REST API.
 .DESCRIPTION
-This script can be run using NetBackup 8.1.4 and higher.
+This script can be run using NetBackup 8.2 or higher version.
 .EXAMPLE
 ./get_processes.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -Client <client> [-DomainName <domainName> -DomainType <domainType>]
 #>
