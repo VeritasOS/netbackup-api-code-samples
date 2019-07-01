@@ -1,6 +1,6 @@
 ### NetBackup API Code Samples for PowerShell
 
-This directory contains code samples to invoke NetBackup REST APIs using PowerShell.
+This directory contains code samples to invoke NetBackup Policy APIs using PowerShell.
 
 #### Disclaimer
 
