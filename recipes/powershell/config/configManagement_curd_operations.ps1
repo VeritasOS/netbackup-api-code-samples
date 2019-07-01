@@ -1,9 +1,9 @@
 <#
 .SYNOPSIS
-This sample script demonstrates the use of NetBackup Services REST APIs.
+This sample script demonstrates the use of NetBackup Hosts Configuration APIs.
 .DESCRIPTION
-This script can be run using NetBackup 8.2 or higher.
-We can get all the NB services or individual service along with their status.
+The script can be run using NetBackup 8.2 or higher.
+It updates the exclude list configuration on the specified client. The exclude list is specified within the script below.
 .EXAMPLE
 ./configManagement_curd_operations.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -Client <client> [-DomainName <domainName> -DomainType <domainType>]
 #>
