@@ -2,8 +2,8 @@
 .SYNOPSIS
 This sample script demonstrates the use of NetBackup Services REST APIs.
 .DESCRIPTION
-This script can be run using NetBackup 8.2 and higher.
-We can get all the NB services or the indiviadual service along with their status.
+This script can be run using NetBackup 8.2 or higher.
+We can get all the NB services or individual service along with their status.
 .EXAMPLE
 ./configManagement_curd_operations.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -Client <client> [-DomainName <domainName> -DomainType <domainType>]
 #>
