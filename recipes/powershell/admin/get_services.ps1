@@ -3,7 +3,7 @@
 This sample script demonstrates the use of NetBackup Services REST APIs.
 .DESCRIPTION
 This script can be run using NetBackup 8.2 and higher.
-We can get all the NB services or the indiviadual service along with their status.
+We can get all the NB services or individual service along with their status.
 .EXAMPLE
 ./get_services.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -Client <client> [-DomainName <domainName> -DomainType <domainType>]
 #>
