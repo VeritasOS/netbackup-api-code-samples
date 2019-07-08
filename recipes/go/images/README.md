@@ -1,6 +1,6 @@
 ### NetBackup API Code Samples for go (often referred to as golang)
 
-This directory contains code samples to invoke NetBackup REST APIs using go.
+This directory contains code samples to invoke NetBackup Catalog (Image) APIs using go.
 
 #### Disclaimer
 
@@ -8,8 +8,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 
 #### Pre-requisites:
 
-- NetBackup 8.1.2 or higher
-- Image update related API samples will work on NetBackup 8.1.4 or higher.
+- Image update related API samples will work on NetBackup 8.2 or higher.
 - go1.10.2 or higher
 
 #### Executing the recipes using go
