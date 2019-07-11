@@ -2,10 +2,10 @@
 use lib"../.";
 
 use gateway;
-use storageAPI::storage;
+use storage::storage;
 use Getopt::Long qw(GetOptions);
 sub printUsage {
-  print "\nUsage : perl get_storage_server.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";
+  print "\nUsage : perl get_disk_pool.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";
   die;
 }
 
@@ -29,7 +29,7 @@ if (!$master_server || !$username || !$password) {
 
 my $token = gateway::perform_login($master_server, $username, $password, $domain_name, $domain_type);
 
-my $jsonString = storage::get_storage_server($master_server, $token);
+my $jsonString = storage::get_disk_pool($master_server, $token);
 print "$jsonString\n";
 
 gateway::perform_logout($master_server, $token);
