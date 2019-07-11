@@ -80,3 +80,35 @@ no a subscription associated with this asset.
 
   - Example: perl post_nb_asset_cleanup.pl -nbmaster <master_server> -username <username> -password <pass> -filter "workloadType eq 'VMware'" -cleanuptime 2018-06-29T15:58:45.678Z
 
+
+#### Scripts for NetBackup 8.2 or higher
+
+VM Servers Details:
+
+- Use the following command to obtain the list of all VM servers details from your NetBackup Master server:
+  - `perl get_vm_servers.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+VM Server Details:
+
+- Use the following command to obtain the VM server details from your NetBackup Master server:
+  - `perl get_vm_server.pl -nbmaster <master_server> -username <username> -password <password> -servername <servername> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup All Resource Limits:
+
+- Use the following command to obtain the list of all NetBackup resource limits from your NetBackup Master server:
+  - `perl get_all_resource_limits.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup Resource Limits:
+
+- Use the following command to obtain the NetBackup resource limits from your NetBackup Master server:
+  - `perl get_resource_limits.pl -nbmaster <master_server> -username <username> -password <password> -workloadtype <workloadtype> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup All Resource Limits Templates:
+
+- Use the following command to obtain the list of all NetBackup resource limits templates from your NetBackup Master server:
+  - `perl get_all_resource_limits_templates.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup Resource Limits Template:
+
+- Use the following command to obtain the NetBackup resource limits template from your NetBackup Master server:
+  - `perl get_resource_limits_template.pl -nbmaster <master_server> -username <username> -password <password> -workloadtype <workloadtype> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
