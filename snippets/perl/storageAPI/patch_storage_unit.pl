@@ -2,7 +2,7 @@
 use lib"../.";
 
 use gateway;
-use storage;
+use storageAPI::storage;
 use Getopt::Long qw(GetOptions);
 sub printUsage {
   print "\nUsage : perl patch_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> -payload <payload file path> -stu_name <stu name>[-domainname <domain_name>] [-domaintype <domain_type>]\n\n";

@@ -2,7 +2,7 @@
 use lib"../.";
 
 use gateway;
-use storage;
+use storageAPI::storage;
 use Getopt::Long qw(GetOptions);
 sub printUsage {
   print "\nUsage : perl delete_storage_server.pl -nbmaster <master_server> -username <username> -password <password> -stsid <Storage server id> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";

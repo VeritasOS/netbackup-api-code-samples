@@ -2,7 +2,7 @@
 use lib"../.";
 
 use gateway;
-use storage;
+use storageAPI::storage;
 use Getopt::Long qw(GetOptions);
 sub printUsage {
   print "\nUsage : perl get_disk_pool_by_id.pl -nbmaster <master_server> -username <username> -password <password> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";

@@ -1,8 +1,8 @@
 #Load module netbackup.pm from current directory
-use lib"../.";
 
+use lib"../.";
 use gateway;
-use storage;
+use storageAPI::storage;
 use Getopt::Long qw(GetOptions);
 sub printUsage {
   print "\nUsage : perl get_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>]\n\n";
