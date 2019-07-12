@@ -14,6 +14,4 @@ Pre-requisites:
 - NetBackup 8.2 or higher is required for configuring storage API 
 
 Use the following commands to run the PowerShell samples.
-- `.\create_policy_in_one_step.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
-- `.\rbac_filtering_in_policy.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 - `.\configure_storage_unit_end_to_end.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName> -domainType <domainType>]`
