@@ -12,7 +12,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 - python 3.5 or higher
 - python modules: `requests, texttable`
 
-#### NOTE - Sample payloads from the snippets\sample-payloads\storage-samples location can be used as input when to run the scripts.
+#### NOTE - Sample payloads from the snippets\sample-payloads\storage-samples location can be used as input to run the scripts.
 
 #### Executing the snippets in Python
 

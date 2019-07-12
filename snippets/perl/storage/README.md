@@ -14,7 +14,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 
 #### Executing the snippets in Perl
 
-#### NOTE - Sample payloads from the snippets\sample-payloads\storage-samples location can be used as input when to run the scripts.
+#### NOTE - Sample payloads from the snippets\sample-payloads\storage-samples location can be used as input to run the scripts.
 
 Create Storage Server:
 
