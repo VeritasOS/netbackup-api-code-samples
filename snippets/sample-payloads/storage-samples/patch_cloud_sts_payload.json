@@ -1,0 +1,22 @@
+{
+  "data": {
+    "type": "storageServer",
+    "attributes": {
+      "cloudAttributes": {
+        "proxyServerEnabled": false,
+        "serverSideEncryptionEnabled": true,
+        "readBufferSizeBytes": 419430401,
+        "writeBufferSizeBytes": 419430401,
+        "curlDetails": {
+          "curlLoggingEnabled": true,
+          "curlTimeOutSeconds": 1200,
+          "curlConnectionTimeOutSeconds": 600
+        },
+        "sslDetails": {
+          "useSSLMode": "NONE",
+          "checkCertificateRevocation": false
+        }
+      }
+    }
+  }
+}

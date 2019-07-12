@@ -1,0 +1,22 @@
+{
+"data": {
+    "type": "storageServer",
+    "attributes": {
+      "name": "STORAGE_SERVER",
+      "storageCategory": "MSDP",
+      "mediaServerDetails": {
+        "name": "MEDIA_SERVER"
+      },
+      "encryptionEnabled": true,
+      "msdpAttributes": {
+        "storagePath": "STORAGE_PATH",
+        "credentials": {
+          "userName": "MSDP_USERID",
+          "password": "MSDP_PASSWORD"
+        }
+      }
+    }
+  }
+  
+}
+

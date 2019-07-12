@@ -1,0 +1,31 @@
+{
+   "data": {
+      "type": "storageServer",
+      "attributes": {
+         "name": "amazonstss.com",
+         "storageCategory": "CLOUD",
+         "mediaServerDetails": {
+            "name": "MEDIA_SERVER"
+         },
+         "cloudAttributes": {
+            "providerId": "amazon",
+			"compressionEnabled": true,
+            "s3RegionDetails": [
+               {
+                  "serviceHost": "SERVICE-HOST",
+                  "regionName": "REGION_NAME",
+                  "regionId": "REGION_ID"
+               }
+            ],
+            "cloudCredentials": {
+               "authType": "ACCESS_KEY",
+               "accessKeyDetails": {
+                  "userName": "USER_ID",
+                  "password": "PASSWORD"
+               }
+            }
+         }
+      }
+   }
+}
+

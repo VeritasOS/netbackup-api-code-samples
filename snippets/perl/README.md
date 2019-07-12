@@ -80,7 +80,6 @@ no a subscription associated with this asset.
 
   - Example: perl post_nb_asset_cleanup.pl -nbmaster <master_server> -username <username> -password <pass> -filter "workloadType eq 'VMware'" -cleanuptime 2018-06-29T15:58:45.678Z
 
-
 #### Scripts for NetBackup 8.2 or higher
 
 VM Servers Details:

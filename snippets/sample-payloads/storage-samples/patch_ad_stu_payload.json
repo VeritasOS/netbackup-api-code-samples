@@ -1,0 +1,10 @@
+{
+  "data": {
+    "type": "storageUnit",
+    "attributes": {
+      "maxFragmentSizeMegabytes": 50100,
+      "maxConcurrentJobs": 8,
+      "onDemandOnly": true
+    }
+  }
+}
