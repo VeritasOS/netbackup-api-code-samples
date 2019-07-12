@@ -1,8 +1,10 @@
 #!/usr/bin/env perl
 use LWP::UserAgent;
 use JSON;
+use Try::Tiny;
 
 my $content_type_v2 = "application/vnd.netbackup+json; version=2.0";
+my $content_type_v3 = "application/vnd.netbackup+json; version=3.0";
 
 #We will get this token using login api and the token will be used
 #in subsequent api requests of policy
@@ -50,8 +52,7 @@ sub perform_login {
         print "Login succeeded with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP POST error code: ", $resp->code, "\n";
-        print "HTTP POST error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
     return $token;
 }
@@ -78,8 +79,7 @@ sub create_policy_with_defaults {
         print "Policy [$policy_name] with default values is create with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP POST error code: ", $resp->code, "\n";
-        print "HTTP POST error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -122,8 +122,7 @@ sub create_policy {
         print "Policy [$policy_name] without default values is created with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP POST error code: ", $resp->code, "\n";
-        print "HTTP POST error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -145,8 +144,7 @@ sub list_policies {
         print "Compact Json body for list policy: \n", $message, "\n\n";
     }
     else {
-        print "HTTP GET error code: ", $resp->code, "\n";
-        print "HTTP GET error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -171,8 +169,7 @@ sub read_policy {
         print "Respnse headers: \n", $resp->headers()->as_string, "\n\n";
     }
     else {
-        print "HTTP GET error code: ", $resp->code, "\n";
-        print "HTTP GET error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -191,8 +188,7 @@ sub read_policy_extract_Generation_Number_From_Response {
         $generation = $resp->header('ETag');
     }
     else {
-        print "HTTP GET error code: ", $resp->code, "\n";
-        print "HTTP GET error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -225,8 +221,7 @@ sub add_clients {
         print "Client is added to policy [$policy_name] with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP PUT error code: ", $resp->code, "\n";
-        print "HTTP PUT error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -258,8 +253,7 @@ sub add_backupselections {
         print "BackupSelection is added to policy [$policy_name] with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP PUT error code: ", $resp->code, "\n";
-        print "HTTP PUT error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -302,8 +296,7 @@ sub add_schedule {
         print "Schedule [$schedule_name] is added to policy [$policy_name] with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP PUT error code: ", $resp->code, "\n";
-        print "HTTP PUT error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -331,8 +324,7 @@ sub delete_client {
         print "Client [MEDIA_SERVER] is deleted from policy [$policy_name] with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP DELETE error code: ", $resp->code, "\n";
-        print "HTTP DELETE error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -361,8 +353,7 @@ sub delete_schedule {
         print "Schedule [$schedule_name] is deleted from policy [$policy_name] with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP DELETE error code: ", $resp->code, "\n";
-        print "HTTP DELETE error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
 }
 
@@ -398,9 +389,135 @@ sub delete_policy {
         print "Policy [$policy_name] is deleted with status code: ", $resp->code, "\n";
     }
     else {
-        print "HTTP DELETE error code: ", $resp->code, "\n";
-        print "HTTP DELETE error message: ", $resp->message, "\n";
+        printErrorResponse($resp);
     }
+}
+
+sub get_host_uuid {
+
+    my @argument_list = @_;
+    $host = $argument_list[0];
+    my $host_url = "$base_url/config/hosts?filter=hostName eq '$host'";
+
+    print "\n\n**************************************************************";
+    print "\n\n Get the UUID for host ", $host, "\n\n";
+
+    my $req = HTTP::Request->new(GET => $host_url);
+    $req->header('Authorization' => $token);
+    $req->header('Accept' => $content_type_v3);
+
+    my $resp = $ua->request($req);
+    if ($resp->is_success) {
+        my $payload = decode_json($resp->content);
+        $host_uuid = $payload->{"hosts"}->[0]->{"uuid"};
+        print "Host UUID: ", $host_uuid, "\n";
+    }
+    else {
+        printErrorResponse($resp);
+    }
+
+    return $host_uuid;
+}
+
+sub get_exclude_list {
+
+    my @argument_list = @_;
+    $hostuuid = $argument_list[0];
+    my $exclude_url = "$base_url/config/hosts/$hostuuid/configurations/exclude";
+
+    print "\n\n**************************************************************";
+    print "\n\n Get exclude list for the host ", $hostuuid, "\n\n";
+
+    my $req = HTTP::Request->new(GET => $exclude_url);
+    $req->header('Authorization' => $token);
+
+    my $resp = $ua->request($req);
+    if ($resp->is_success) {
+        my $payload = decode_json($resp->content);
+        my $exclude_list= $payload->{"data"}->{"attributes"}->{"value"};
+
+        for my $item( @{$exclude_list} ){
+            print $item. "\n";
+        };
+    }
+    else {
+        printErrorResponse($resp);
+    }
+
+    return $exclude_list;
+}
+
+sub set_exclude_list {
+
+    my @argument_list = @_;
+    $hostuuid = $argument_list[0];
+    my $exclude_url = "$base_url/config/hosts/$hostuuid/configurations/exclude";
+
+    print "\n\n**************************************************************";
+    print "\n\n Set exclude list for the host ", $hostuuid, "\n\n";
+
+    my $exclude_list = qq({ "data": {
+                                "type": "hostConfiguration",
+                                "attributes": {
+                                    "name": "exclude",
+                                    "value": ["C:\\\\Program Files\\\\Veritas\\\\NetBackup\\\\bin\\\\*.lock",
+                                              "C:\\\\Program Files\\\\Veritas\\\\NetBackup\\\\bin\\\\bprd.d\\\\*.lock",
+                                              "C:\\\\Program Files\\\\Veritas\\\\NetBackup\\\\bin\\\\bpsched.d\\\\*.lock",
+                                              "C:\\\\Program Files\\\\Veritas\\\\Volmgr\\\\misc\\\\*",
+                                              "C:\\\\Program Files\\\\Veritas\\\\NetBackupDB\\\\data\\\\*",
+                                              "C:\\\\tmp"]
+                                }
+                            }
+                        });
+    $req = HTTP::Request->new(PUT => $exclude_url);
+    $req->header('Authorization' => $token);
+    $req->header('content-type' => $content_type_v3);
+    $req->content($exclude_list);
+
+    $resp = $ua->request($req);
+    if ($resp->is_success) {
+        print "Exclude list was configured successfully. \n";
+    }
+    else {
+        if ($resp->code == 404) {
+            my $config_url = "$base_url/config/hosts/$hostuuid/configurations";
+
+            $req = HTTP::Request->new(POST => $config_url);
+            $req->header('Authorization' => $token);
+            $req->header('content-type' => $content_type_v3);
+            $req->content($exclude_list);
+
+            $resp = $ua->request($req);
+            if ($resp->is_success) {
+                print "Exclude list was configured successfully. \n";
+            }
+            else {
+                printErrorResponse($resp);
+            }
+        }
+        else {
+            printErrorResponse($resp);
+        }
+    }
+}
+
+sub printErrorResponse {
+    my @argument_list = @_;
+    $resp = $argument_list[0];
+
+    print "Request failed with status code: ", $resp->code, "\n";
+
+    try {
+        my $message = decode_json($resp->content);
+
+        my $errorCode = $message->{"errorCode"};
+        print "error code: ", $errorCode, "\n";
+        my $errorMessage = $message->{"errorMessage"};
+        print "error mesage: ", $errorMessage, "\n";
+    } catch {
+        print $resp->message;
+    }
+
 }
 
 1;

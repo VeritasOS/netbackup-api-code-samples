@@ -11,6 +11,8 @@ use LWP::Protocol::https;
 $ENV{PERL_LWP_SSL_VERIFY_HOSTNAME} = 0;
 $CONTENT_TYPE_V1 = "application/vnd.netbackup+json; version=1.0";
 $CONTENT_TYPE_V2 = "application/vnd.netbackup+json; version=2.0";
+$CONTENT_TYPE_V3 = "application/vnd.netbackup+json; version=3.0";
+$HYPERV = "Hyper-V";
 $NB_PORT = 1556;
 
 
@@ -205,6 +207,272 @@ sub getCatalogImages {
 
 
 #
+# This function returns requested VM server.
+#
+sub getVM_Server {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 3) {
+    print "ERROR :: Incorrect number of arguments passed to getVM_Server()\n";
+    print "Usage : getVM_Server( <FQDN Hostname>, <Token>, <ServerName> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+  my $servername = $_[2];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/config/servers/vmservers/";
+  $url .= $servername;
+  my $vmserver_req = HTTP::Request->new(GET => $url);
+  $vmserver_req->header('Authorization' => $token);
+  $vmserver_req->header('content-type' => "$CONTENT_TYPE_V2");
+
+  my $ua = LWP::UserAgent->new(
+    timeout => 500,
+    ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing GET VM server request on $url\n";
+  my $response = $ua->request($vmserver_req);
+  if ($response->is_success) {
+    print "Successfully completed GET VM server request.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: Get VM server request Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+    #die;  let this fall through to cleanup code
+  }
+
+}
+
+#
+# This function returns a list of VM servers
+#
+sub getVM_Servers {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 2) {
+    print "ERROR :: Incorrect number of arguments passed to getVM_Servers()\n";
+    print "Usage : getVM_Servers( <FQDN Hostname>, <Token> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/config/servers/vmservers/";
+  my $vmservers_req = HTTP::Request->new(GET => $url);
+  $vmservers_req->header('Authorization' => $token);
+  $vmservers_req->header('content-type' => "$CONTENT_TYPE_V2");
+
+  my $ua = LWP::UserAgent->new(
+    timeout => 500,
+    ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing GET VM servers request on $url\n";
+  my $response = $ua->request($vmservers_req);
+  if ($response->is_success) {
+    print "Successfully completed GET VM servers request.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: GET VM servers request Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+    #die;  let this fall through to cleanup code
+  }
+
+}
+
+
+#
+# This function returns a list of all NetBackup resource limits
+#
+sub getAllResourceLimits {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 2) {
+    print "ERROR :: Incorrect number of arguments passed to getAllResourceLimits()\n";
+    print "Usage : getAllResourceLimits( <FQDN Hostname>, <Token> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/config/resource-limits";
+  my $allResourceLimits_req = HTTP::Request->new(GET => $url);
+  $allResourceLimits_req->header('Authorization' => $token);
+  $allResourceLimits_req->header('content-type' => "$CONTENT_TYPE_V3");
+
+  my $ua = LWP::UserAgent->new(
+    timeout => 500,
+    ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing GET all NetBackup resource limits request on $url\n";
+  my $response = $ua->request($allResourceLimits_req);
+  if ($response->is_success) {
+    print "Successfully completed GET all NetBackup resource limits request.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: GET all NetBackup resource limits request Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+    #die;  let this fall through to cleanup code
+  }
+
+}
+
+#
+# This function returns a list of resource limits for a given workload type.
+#
+sub getResourceLimits {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 3) {
+    print "ERROR :: Incorrect number of arguments passed to getResourceLimits()\n";
+    print "Usage : getResourceLimits( <FQDN Hostname>, <Token>, <Workload Type> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+  my $workloadtype = $_[2];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/config/resource-limits/";
+  $url .= $workloadtype;
+  my $resourceLimits_req = HTTP::Request->new(GET => $url);
+  $resourceLimits_req->header('Authorization' => $token);
+  $resourceLimits_req->header('content-type' => "$CONTENT_TYPE_V3");
+
+  my $ua = LWP::UserAgent->new(
+    timeout => 500,
+    ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing GET resource limits for a given workload type request on $url\n";
+  my $response = $ua->request($resourceLimits_req);
+  if ($response->is_success) {
+    print "Successfully completed GET resource limits for a given workload type.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: GET resource limits for a given workload type request Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+    #die;  let this fall through to cleanup code
+  }
+
+}
+
+#
+# This function returns a list of all NetBackup resource limits templates.
+#
+sub getAllResourceLimitsTemplates {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 2) {
+    print "ERROR :: Incorrect number of arguments passed to getAllResourceLimitsTemplates()\n";
+    print "Usage : getAllResourceLimitsTemplates( <FQDN Hostname>, <Token> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/config/resource-limit-templates";
+  my $allResourceLimitsTemplates_req = HTTP::Request->new(GET => $url);
+  $allResourceLimitsTemplates_req->header('Authorization' => $token);
+  $allResourceLimitsTemplates_req->header('content-type' => "$CONTENT_TYPE_V3");
+
+  my $ua = LWP::UserAgent->new(
+    timeout => 500,
+    ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing Get all resource limits templates request on $url\n";
+  my $response = $ua->request($allResourceLimitsTemplates_req);
+  if ($response->is_success) {
+    print "Successfully completed Get all resource limits templates request.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: Get all resource limits templates Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+    #die;  let this fall through to cleanup code
+  }
+
+}
+
+#
+# This function returns NetBackup resource limits template for a given workload type. 
+#
+sub getResourceLimitsTemplate {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 3) {
+    print "ERROR :: Incorrect number of arguments passed to getResourceLimitsTemplate()\n";
+    print "Usage : getResourceLimitsTemplate( <FQDN Hostname>, <Token>, <Workload Type> ) \n";
+    return;
+  }
+
+  my $fqdn_hostname = $_[0];
+  my $token = $_[1];
+  my $workloadtype = $_[2];
+
+  my $url = "https://$fqdn_hostname:$NB_PORT/netbackup/config/resource-limit-templates/";
+  $url .= $workloadtype;
+  my $resourceLimitsTemplate_req = HTTP::Request->new(GET => $url);
+  $resourceLimitsTemplate_req->header('Authorization' => $token);
+  $resourceLimitsTemplate_req->header('content-type' => "$CONTENT_TYPE_V3");
+
+  my $ua = LWP::UserAgent->new(
+    timeout => 500,
+    ssl_opts => { verify_hostname => 0, SSL_verify_mode => IO::Socket::SSL::SSL_VERIFY_NONE },
+  );
+
+  print "Performing GET resource limits template for a given workload type request on $url\n";
+  my $response = $ua->request($resourceLimitsTemplate_req);
+  if ($response->is_success) {
+    print "Successfully completed GET resource limits template for a given workload type request.\n";
+
+    $data = decode_json($response->content);
+    my $pretty = JSON->new->pretty->encode($data);
+    return $pretty;
+  }
+  else {
+    print "ERROR :: GET resource limits template for a given workload type Failed!\n";
+    print "HTTP GET error code: ", $response->code, "\n";
+    print "HTTP GET error message: ", $response->message, "\n";
+    #die;  let this fall through to cleanup code
+  }
+
+}
+
+
+#
 # This function displays data in a tabular form. It takes table title array and
 # table data (2-d matrix) as inputs and renders it in a tabular form with border
 #
@@ -311,6 +579,241 @@ sub displayCatalogImages {
   }
 
   my @title = ('Image ID','Policy','Client','Backup Time');
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+#
+# This function displays the Json content returned from VM Servers API
+# in a tabular format
+#
+sub displayVM_Servers {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+    print "ERROR :: Incorrect number of arguments passed to displayVM_Servers()\n";
+    print "Usage : displayVM_Servers( <Json content returned from Jobs API> ) \n";
+    return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+  my @vm_servers = @{$json->{'data'}};
+
+  my @tablerows;
+
+  foreach (@vm_servers) {
+    my $vm_server = $_;
+
+    my $serverName = $vm_server->{'attributes'}->{'vmServer'}->{'serverName'};
+    my $vmType = $vm_server->{'attributes'}->{'vmServer'}->{'vmType'};
+    my $userId = $vm_server->{'attributes'}->{'vmServer'}->{'userId'};
+    my $port = $vm_server->{'attributes'}->{'vmServer'}->{'port'};
+
+    my @tablerow = ($serverName, $vmType, $userId, $port);
+    push @tablerows, \@tablerow;
+  }
+
+  my @title = ("Server Name", "VM Type", "User ID", "Port");
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+#
+# This function displays the Json content returned from VM Server API
+# in a tabular format
+#
+sub displayVM_Server {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+    print "ERROR :: Incorrect number of arguments passed to displayVM_Servers()\n";
+    print "Usage : displayVM_Servers( <Json content returned from Jobs API> ) \n";
+    return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+
+  my $serverName = $json->{'vmServer'}->{'serverName'};
+  my $vmType = $json->{'vmServer'}->{'vmType'};
+  my $userId = $json->{'vmServer'}->{'userId'};
+  my $port = $json->{'vmServer'}->{'port'};
+
+  my @tablerow = ($serverName, $vmType, $userId, $port);
+  push @tablerows, \@tablerow;
+
+  my @title = ("Server Name", "VM Type", "User ID", "Port");
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+
+#
+# This function displays the Json content returned from GET all resource limits API
+# in a tabular format
+#
+sub displayAllResourceLimits {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+    print "ERROR :: Incorrect number of arguments passed to displayAllResourceLimits()\n";
+    print "Usage : displayAllResourceLimits( <Json content returned from all resource limits API> ) \n";
+    return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+  my @allResourceLimits = @{$json->{'data'}};
+
+  my @tablerows;
+
+  foreach (@allResourceLimits) {
+    my $allResourceLimitsElement = $_;
+    my @resourceLimits = @{$allResourceLimitsElement->{'attributes'}->{'resources'}};
+    my $workloadType = $allResourceLimitsElement->{'attributes'}->{'workloadType'};
+
+    foreach(@resourceLimits) {
+      my $resourceLimit = $_;
+
+      my $resourceType = $resourceLimit->{'resourceType'};
+      my $resourceName = $resourceLimit->{'resourceName'};
+      my $resourceLimitValue = $resourceLimit->{'resourceLimit'};
+      my @tablerow = ($workloadType, $resourceType, $resourceName, $resourceLimitValue);
+      push @tablerows, \@tablerow;
+    }
+  }
+
+  my @title = ("Workload Type", "Resource Type", "Resource Name", "Resource Limit");
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+#
+# This function displays the Json content returned from GET resource limits for a given workload type API.
+# in a tabular format
+#
+sub displayResourceLimits {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+    print "ERROR :: Incorrect number of arguments passed to displayResourceLimits()\n";
+    print "Usage : displayResourceLimits( <Json content returned from resource limits API> ) \n";
+    return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+  my @resourceLimits = @{$json->{'data'}->{'attributes'}->{'resources'}};
+  my $workloadType = $json->{'data'}->{'attributes'}->{'workloadType'};
+
+  foreach(@resourceLimits) {
+    my $resourceLimit = $_;
+
+    my $resourceType = $resourceLimit->{'resourceType'};
+    my $resourceName = $resourceLimit->{'resourceName'};
+    my $resourceLimitValue = $resourceLimit->{'resourceLimit'};
+    my @tablerow = ($workloadType, $resourceType, $resourceName, $resourceLimitValue);
+    push @tablerows, \@tablerow;
+  }
+
+  my @title = ("Workload Type", "Resource Type", "Resource Name", "Resource Limit");
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+#
+# This function displays the Json content returned from GET all resource limits templates API
+# in a tabular format
+#
+sub displayAllResourceLimitsTemplates {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+    print "ERROR :: Incorrect number of arguments passed to displayAllResourceLimitsTemplates()\n";
+    print "Usage : displayAllResourceLimitsTemplates( <Json content returned from all resource limits templates API> ) \n";
+    return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+  my @allResourceLimits = @{$json->{'data'}};
+
+  my @tablerows;
+
+  foreach (@allResourceLimits) {
+    my $allResourceLimitsElement = $_;
+    my @resourceLimits = @{$allResourceLimitsElement->{'attributes'}->{'resources'}};
+    my $workloadType = $allResourceLimitsElement->{'attributes'}->{'workloadType'};
+
+    foreach(@resourceLimits) {
+      my $resourceLimit = $_;
+
+      my $resourceType = $resourceLimit->{'resourceType'};
+      my $resourceDescription = $resourceLimit->{'resourceDescription'};
+      $resourceDescription = join('',split(/\n/,$resourceDescription));
+      my $backupMethod = "";
+      if($workloadType eq $HYPERV) {
+        $backupMethod = $resourceLimit->{'backupMethod'};
+      }
+
+      my @tablerow = ($workloadType, $resourceType, $backupMethod, $resourceDescription);
+      push @tablerows, \@tablerow;
+    }
+  }
+
+  my @title = ("Workload Type", "Resource Type", "Backup Method", "Resource Description");
+  print "\n";
+  displayDataInTable(\@title, \@tablerows);
+  print "\n";
+
+}
+
+
+#
+# This function displays the Json content returned from GET resource limits template for a given workload type API.
+# in a tabular format
+#
+sub displayResourceLimitsTemplate {
+
+  my $arguments_count = scalar(@_);
+  if ($arguments_count != 1) {
+    print "ERROR :: Incorrect number of arguments passed to displayResourceLimitsTemplate()\n";
+    print "Usage : displayResourceLimitsTemplate( <Json content returned from resource limits template API> ) \n";
+    return;
+  }
+
+  my $jsonstring = $_[0];
+  my $json = decode_json($jsonstring);
+  my @resourceLimits = @{$json->{'data'}->{'attributes'}->{'resources'}};
+  my $workloadType = $json->{'data'}->{'attributes'}->{'workloadType'};
+
+  foreach(@resourceLimits) {
+    my $resourceLimit = $_;
+
+    my $resourceType = $resourceLimit->{'resourceType'};
+    my $resourceDescription = $resourceLimit->{'resourceDescription'};
+    $resourceDescription = join('',split(/\n/,$resourceDescription));
+    my $backupMethod = "";
+    if($workloadType eq $HYPERV) {
+      $backupMethod = $resourceLimit->{'backupMethod'};
+    }
+
+    my @tablerow = ($workloadType, $resourceType, $backupMethod, $resourceDescription);
+    push @tablerows, \@tablerow;
+  }
+
+  my @title = ("Workload Type", "Resource Type", "Backup Method", "Resource Description");
   print "\n";
   displayDataInTable(\@title, \@tablerows);
   print "\n";

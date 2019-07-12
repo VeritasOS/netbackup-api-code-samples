@@ -1,13 +1,14 @@
 ### NetBackup API Code Samples
 
-Contains code samples to invoke NetBackup REST API using different programming languages.
+Contains code samples of using NetBackup REST APIs in different scripting/programming languages.
 
-#### Disclaimer
-These scripts are only meant to be used as a reference. Please do not use these in production.
+##### Disclaimer
+These samples are only meant to be used as a reference. Please do not use these in production.
 
-#### Executing the snippets for different programming languages
+##### Executing the 'snippets'
 
-The `snippets` folder contains code samples to invoke NetBackup REST API using different programming languages. 
+The `snippets` folder contains code samples to invoke NetBackup APIs using different scripting/programming languages. 
+These are usually simple examples that demonstrate specific API. 
 
 Pre-requisites:
 
@@ -15,9 +16,10 @@ Pre-requisites:
 - See the script's README for the corresponding requirements and usage
 
 
-#### Executing the recipes for different programming languages
+##### Executing the 'recipes'
 
-The `recipes` folder contains code samples to invoke NetBackup REST API using different programming languages. 
+The `recipes` folder contains code samples to invoke NetBackup APIs using different scripting/programming languages. 
+These are usually examples of usage of multiple APIs covering specific use-cases.
 
 Pre-requisites:
 
@@ -26,8 +28,6 @@ Pre-requisites:
 
 
 
-#### Tools
-The `tools` folder contains utilities that have proven useful in the development of projects using
-NetBackup REST APIs, but do not provide any API usage examples.  Again, these tools are not for
-production use, but they may be of some use in your work.
+##### Tools
+The `tools` folder contains utilities that have proven useful in the development of projects using NetBackup APIs, but do not provide any API usage examples.  Again, these tools are not for production use, but they may be of some use in your work.
 
