@@ -52,7 +52,7 @@ function InitialSetup()
 	
     # Force TLS v1.2
     try {
-        if ([Net.ServicePointManager]::SecurityProtocol -notcontains 'Tls12') {
+        if ([Net.ServicePointManager]::SecurityProtocol -notmatch 'Tls12') {
            [Net.ServicePointManager]::SecurityProtocol += [Net.SecurityProtocolType]::Tls12
         }
     }
