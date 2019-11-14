@@ -14,3 +14,4 @@ Pre-requisites:
 
 Use the following commands to run the PowerShell samples.
 - `./configManagement_curd_operations.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -Client <client> [-DomainName <domainName> -DomainType <domainType>]`
+- `./Config_trust_management_crud_operation.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -TrustedMasterServerName <Trusted master Server Name> [-DomainName <domainName> -DomainType <domainType>]`
