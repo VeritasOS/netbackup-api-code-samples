@@ -69,6 +69,7 @@ def read_command_line_arguments():
 	elif trusted_master_server_name == "":
 		print("Please provide the value for 'trusted_master_server_name'")
 		exit()
+		
 
 print_usage()
 

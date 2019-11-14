@@ -36,7 +36,7 @@ def get_trusted_master_server_by_name(jwt, base_url, trustedmasterservername):
     resp = requests.get(url, headers=headers, params=query_params, verify=False)
 
     if resp.status_code != 200:
-        raise Exception('GET trusted master server with specific name failed with status code {} and {}'.format(resp.status_code, resp.json()))
+        raise Exception('GET Trusted master server with specific name failed with status code {} and {}'.format(resp.status_code, resp.json()))
 
     return resp.json()
 

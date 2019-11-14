@@ -57,6 +57,7 @@ elif trustedmasterservername == "":
     print("Please provide the value for 'trustedmasterservername'")
     exit()
 
+
 print_usage()
 
 read_command_line_arguments()

@@ -56,7 +56,6 @@ function InitialSetup()
 }
 
 InitialSetup
-
 #####################################################################
 # Global Variables
 #####################################################################
@@ -117,7 +116,6 @@ $json = '{
   }
 }
 '
-
 $response_create_trust = Invoke-WebRequest             `
                     -Uri $base_uri                `
                     -Method POST                 `

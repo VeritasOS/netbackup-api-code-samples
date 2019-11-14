@@ -1,9 +1,11 @@
 <#
 .SYNOPSIS
 This sample script demonstrates the use of NetBackup Trust Management APIs.
+
 .DESCRIPTION
 The script can be run using NetBackup 8.2 or higher.
 It updates the exclude list configuration on the specified client. The exclude list is specified within the script below.
+
 .EXAMPLE
 ./Config_trust_management_crud_operation.ps1 -MasterServer <masterServer> -UserName <username> -Password <password> -TrustedMasterServerName <Trusted master Server Name> [-DomainName <domainName> -DomainType <domainType>]
 #>

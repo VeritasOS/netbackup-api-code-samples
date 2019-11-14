@@ -57,6 +57,7 @@ elif remotemasterserver == "":
     print("Please provide the value for 'remotemasterserver'")
     exit()
 
+
 print_usage()
 
 read_command_line_arguments()

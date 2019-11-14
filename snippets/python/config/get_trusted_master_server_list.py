@@ -52,6 +52,7 @@ def read_command_line_arguments():
 		print("Please provide the value for 'password'")
 		exit()
 
+
 print_usage()
 
 read_command_line_arguments()

@@ -57,6 +57,7 @@ elif medianame == "":
     print("Please provide the value for 'medianame'")
     exit()
 
+
 print_usage()
 
 read_command_line_arguments()

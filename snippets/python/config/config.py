@@ -154,5 +154,5 @@ def patch_trusted_master_server(jwt, base_url, file_name, trustedmasterservernam
 
     if resp.status_code != 200:
         raise Exception('Update trust between masters API failed with status code {} and {}'.format(resp.status_code, resp.json()))
-    print("\nThe trust is Upadated with status code: {}\n".format(resp.status_code))
+    print("\nThe Trust is Upadated with status code: {}\n".format(resp.status_code))
     return resp.json()
