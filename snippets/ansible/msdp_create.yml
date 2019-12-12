@@ -1,0 +1,91 @@
+---
+  - name: Create storage server
+    uri:
+      url: "{{baseurl}}storage/storage-servers"
+      method: POST
+      body_format: json
+      status_code: 201, 409
+      headers:
+        authorization: "{{login.json.token}}"
+        content-type: application/vnd.netbackup+json;version=3.0
+      body:
+        data:
+          type: storageServer
+          attributes:
+            name: ams03nbumed01.svc.west.com
+            storageCategory: MSDP
+            mediaServerDetails:
+              name: ams03nbumed01.svc.west.com
+            encryptionEnabled: true
+            msdpAttributes:
+              storagePath: /mnt/msdp/vol0
+              credentials:
+                userName: msdp
+                password: msdp
+      validate_certs: no
+      return_content: yes
+    register: stgsvr_create
+  - name: debug stgsvr_create
+    debug:
+      msg:  "{{stgsvr_create}}"
+
+  - name: Create MSDP Disk Pool
+    uri:
+      url: "{{baseurl}}storage/disk-pools"
+      method: POST
+      body_format: json
+      status_code: 201
+      headers:
+        authorization: "{{login.json.token}}"
+        content-type: application/vnd.netbackup+json;version=3.0
+      body:
+        data:
+          type: diskPool
+          attributes:
+            name: ams03nbumed01_dpm
+            diskVolumes:
+              name: PureDiskVolume
+            maximumIoStreams:
+              limitIoStreams: true
+              streamsPerVolume: 75
+          relationships:
+            storageServers:
+              data:
+                type: storageServer
+                id: PureDisk:ams03nbumed01.svc.west.com
+      validate_certs: no
+      return_content: yes
+    register: dp_create
+  - name: debug dp_Create
+    debug:
+      msg:  "{{dp_create}}"
+
+  - name: Create MSDP Storage Unit
+    uri:
+      url: "{{baseurl}}storage/storage-units"
+      method: POST
+      body_format: json
+      status_code: 201
+      headers:
+        authorization: "{{login.json.token}}"
+        content-type: application/vnd.netbackup+json;version=3.0
+      body:
+        data:
+          type: storageUnit
+          attributes:
+            name: ams03nbumed01_dpm_su
+            useAnyAvailableMediaServer: ture
+            maxFragmentSizeMegabytes: 51200
+            maxConcurrentJobs: 100
+            onDemandOnly: true
+          relationships:
+            diskPool:
+              data:
+                type: diskPool
+                id: "{{dp_create.json.id}"
+      validate_certs: no
+      return_content: yes
+    register: stu_create
+  - name: debug stu_Create
+    debug:
+      msg:  "{{stu_Create}}"
