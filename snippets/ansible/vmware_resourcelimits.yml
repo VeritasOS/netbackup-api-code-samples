@@ -1,22 +1,26 @@
-
-
 ---
-  - name: vmware resource limits - vCenter
+  - name: vmware resource limits
     uri:
       url: "{{baseurl}}config/resource-limits"
       method: POST
       body_format: json
-      status_code: 201
+      status_code: 204
       headers:
         authorization: "{{login.json.token}}"
         content-type: application/vnd.netbackup+json;version=3.0
       body:
         data:
-          type: resource-limits
+        - type: resource-limits
+          id: vmware
           attributes:
             resources:
-              resourceType: vCenter
+            - resourceType: vCenter
               resourceLimit: 50
+            - resourceType: ESXserver
+              resourceLimit: 2
+            - resourceType: Datastore
+              resourceLimit: 2
+
       validate_certs: no
       return_content: yes
     register: vmware_resource
@@ -24,48 +28,3 @@
     debug:
       msg:  "{{vmware_resource}}"
 
-  - name: vmware resource limits - ESXserver
-    uri:
-      url: "{{baseurl}}config/resource-limits"
-      method: POST
-      body_format: json
-      status_code: 201
-      headers:
-        authorization: "{{login.json.token}}"
-        content-type: application/vnd.netbackup+json;version=3.0
-      body:
-        data:
-          type: resource-limits
-          attributes:
-            resources:
-              resourceType: ESXserver
-              resourceLimit: 2
-      validate_certs: no
-      return_content: yes
-    register: vmware_resource
-  - name: debug vmware_resource
-    debug:
-      msg:  "{{vmware_resource}}"
-
-  - name: vmware resource limits - Datastore
-    uri:
-      url: "{{baseurl}}config/resource-limits"
-      method: POST
-      body_format: json
-      status_code: 201
-      headers:
-        authorization: "{{login.json.token}}"
-        content-type: application/vnd.netbackup+json;version=3.0
-      body:
-        data:
-          type: resource-limits
-          attributes:
-            resources:
-              resourceType: Datastore
-              resourceLimit: 2
-      validate_certs: no
-      return_content: yes
-    register: vmware_resource
-  - name: debug vmware_resource
-    debug:
-      msg:  "{{vmware_resource}}"
