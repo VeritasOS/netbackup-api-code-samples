@@ -1,4 +1,5 @@
 ---
+
   - name: Create storage server
     uri:
       url: "{{baseurl}}storage/storage-servers"
@@ -12,11 +13,11 @@
         data:
           type: storageServer
           attributes:
-            name: ams03nbumed01.svc.west.com
+            name: "{{mediaserver}}.{{domain}}"
             storageCategory: MSDP
             mediaServerDetails:
-              name: ams03nbumed01.svc.west.com
-            encryptionEnabled: true
+              name: "{{mediaserver}}.{{domain}}"
+            encryptionEnabled: false
             msdpAttributes:
               storagePath: /mnt/msdp/vol0
               credentials:
@@ -34,7 +35,7 @@
       url: "{{baseurl}}storage/disk-pools"
       method: POST
       body_format: json
-      status_code: 201
+      status_code: 201, 409
       headers:
         authorization: "{{login.json.token}}"
         content-type: application/vnd.netbackup+json;version=3.0
@@ -42,17 +43,17 @@
         data:
           type: diskPool
           attributes:
-            name: ams03nbumed01_dpm
+            name: "{{mediaserver}}"_dpm
             diskVolumes:
-              name: PureDiskVolume
+            - name: PureDiskVolume
             maximumIoStreams:
               limitIoStreams: true
               streamsPerVolume: 75
           relationships:
             storageServers:
               data:
-                type: storageServer
-                id: PureDisk:ams03nbumed01.svc.west.com
+              - type: storageServer
+                id: "PureDisk:{{mediaserver}}.{{domain}}"
       validate_certs: no
       return_content: yes
     register: dp_create
@@ -73,8 +74,8 @@
         data:
           type: storageUnit
           attributes:
-            name: ams03nbumed01_dpm_su
-            useAnyAvailableMediaServer: ture
+            name: "{{mediaserver}}"_dpm_su
+            useAnyAvailableMediaServer: true
             maxFragmentSizeMegabytes: 51200
             maxConcurrentJobs: 100
             onDemandOnly: true
@@ -82,10 +83,11 @@
             diskPool:
               data:
                 type: diskPool
-                id: "{{dp_create.json.id}"
+                id: "PureDisk:"{{mediaserver}}"_dpm"
       validate_certs: no
       return_content: yes
     register: stu_create
   - name: debug stu_Create
     debug:
-      msg:  "{{stu_Create}}"
+      msg:  "{{stu_create}}"
+
