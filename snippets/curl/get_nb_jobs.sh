@@ -77,7 +77,7 @@ uriencode()
 parseArguments "$@"
 
 basepath="https://$master_server:$port/netbackup"
-content_header='content-type:application/json;charset=utf-8'
+content_header='content-type:application/json'
 
 ##############login#############
 
@@ -99,7 +99,7 @@ param2="$(uriencode 'page[limit]')=10" #op: page%5Blimit%5D=10
 auth_header="authorization:$jwt"
 uri="$basepath/admin/jobs"
 
-curl --verbose --insecure --request GET  --get $uri  -H $content_header -H $auth_header \
+curl --insecure --request GET --globoff --get $uri  -H $content_header -H $auth_header \
 	--data-urlencode "$param1" \
 	--data-urlencode "$param2" \
 	| \
