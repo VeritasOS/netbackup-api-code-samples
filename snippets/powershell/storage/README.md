@@ -37,3 +37,8 @@ Use the following commands to run the PowerShell samples.
 - `.\Delete-NB-delete-disk-pool.ps1 -nbmaster <masterServer> -username <username> -password <password> -dpid <disk pool id>`
 - `.\Delete-NB-delete-storage-server.ps1 -nbmaster <masterServer> -username <username> -password <password> -stsid <storage server id>`
 - `.\Delete-NB-delete-storage-unit.ps1 -nbmaster <masterServer> -username <username> -password <password> -stu_name <storage unit name>`
+- `.\Post-NB-add-replication-target-to-disk-volume.ps1 -nbmaster <masterServer> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id>`
+- `.\Post-NB-delete-replication-target-to-disk-volume.ps1 -nbmaster <masterServer> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id>`
+- `.\Get-NB-replication-targets-to-disk-volume.ps1 -nbmaster <masterServer> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id>`
+- `.\Get-NB-replication-targets-to-disk-volume-by-id.ps1 -nbmaster <masterServer> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> -reptargetid <replication target id>`
+

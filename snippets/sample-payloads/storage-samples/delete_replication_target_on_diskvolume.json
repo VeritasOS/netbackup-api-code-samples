@@ -1,0 +1,19 @@
+{
+  "data": {
+    "type": "volumeReplicationTarget",
+    "attributes": {
+      "operationType": "DELETE_REPLICATION",
+      "targetVolumeName": "DISK_VOLUME_NAME",
+      "targetStorageServerDetails": {
+        "masterServerName": "TARGET_MASTER_SERVER",
+        "mediaServerName": "TARGET_MEDIA_SERVER",
+        "storageServerName": "TARGET_STORAGE_SERVER_NAME",
+        "storageServerType": "TARGET_STORAGE_SERVER_TYPE",
+		"credentials": {
+          "userName": "TARGET_USERID",
+          "password": "TARGET_PASSWORD"
+        }
+      }
+    }
+  }
+}

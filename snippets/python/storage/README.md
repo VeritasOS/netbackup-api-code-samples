@@ -31,4 +31,7 @@ Use the following commands to run the python samples.
 - `python -W ignore patch_disk_pool.py -nbmaster <master_server> -username <username> -password <password> -payload <input JSON > -dpid <disk pool id>[-domainname <domain_name>]`
 - `python -W ignore create_storage_server.py -nbmaster <master_server> -username <username> -password <password> -payload <input JSON > -stsid <storage server id>[-domainname <domain_name>] [-domaintype <domain_type>]`
 - `python -W ignore patch_storage_unit.py -nbmaster <master_server> -username <username> -password <password> -payload <input JSON > -stu_name <storage unit name>[-domainname <domain_name>] [-domaintype <domain_type>]`
-
+- `python -W ignore add_replication_target_on_diskvolume.py -nbmaster <master_server> -username <username> -password <password> -payload <input JSON > -stsid <storage server id> -dvid <diskvolume id> [-domainname <domain_name>] [-domaintype <domain_type>]`
+- `python -W ignore get_all_replication_targets_on_diskvolume.py -nbmaster <master_server> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> [-domainname <domain_name>] [-domaintype <domain_type>]`
+- `python -W ignore get_replication_target_by_id_on_diskvolume.py -nbmaster <master_server> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> -reptargetid <replication target id> [-domainname <domain_name>] [-domaintype <domain_type>]`
+- `python -W ignore delete_replication_target_on_diskvolume.py -nbmaster <master_server> -username <username> -password <password> -payload <input JSON > -stsid <storage server id> -dvid <diskvolume id> [-domainname <domain_name>] [-domaintype <domain_type>]`
