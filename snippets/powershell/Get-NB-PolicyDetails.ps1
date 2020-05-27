@@ -12,7 +12,7 @@ param (
     [string]$nbmaster = $(throw "Please specify the name of NetBackup master server using -nbmaster parameter."),    
     [string]$username = $(throw "Please specify the user name using -username parameter."),
     [string]$password = $(throw "Please specify the password using -password parameter."),
-    [string]$nbpolicy = $(throw "Please specify the password using -password parameter.")
+    [string]$nbpolicy = $(throw "Please specify the policy using -nbpolicy parameter.")
 
    )
    
