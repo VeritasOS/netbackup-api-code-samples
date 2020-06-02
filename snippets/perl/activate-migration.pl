@@ -27,7 +27,6 @@ sub printUsage {
   die;
 }
 
-my $content_type_v4 = "application/vnd.netbackup+json;version=4.0";
 my $protocol = "https";
 my $port = 1556;
 my $fqdn_hostname;
@@ -86,10 +85,8 @@ if(!defined $token) {
 
 if (defined $reason) {
     migration::activate_migration($base_url, $token, $reason, $force);
-} elsif ($force == 1) {
-    migration::activate_migration($base_url, $token, $force);
 } else {
-    migration::activate_migration($base_url, $token);
+    migration::activate_migration($base_url, $token, $force);
 }
    
 netbackup::logout($fqdn_hostname, $token);

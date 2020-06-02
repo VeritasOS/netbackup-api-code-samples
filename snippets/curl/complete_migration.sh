@@ -108,7 +108,7 @@ request_body="${request_body}\"data\": {"
 request_body="${request_body}\"type\": \"nbcaMigrationCompleteRequest\","
 request_body="${request_body}\"attributes\": {"
 if [ $force == 1 ]; then
-    request_body="${request_body}\"force\" : \"TRUE\""
+    request_body="${request_body}\"force\" : \"true\""
 fi
 request_body="${request_body}}}}"
 

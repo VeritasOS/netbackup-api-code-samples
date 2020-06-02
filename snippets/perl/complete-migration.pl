@@ -28,7 +28,6 @@ sub printUsage {
   die;
 }
 
-my $content_type_v4 = "application/vnd.netbackup+json;version=4.0";
 my $protocol = "https";
 my $port = 1556;
 my $fqdn_hostname;

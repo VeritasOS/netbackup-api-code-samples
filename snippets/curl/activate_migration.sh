@@ -2,8 +2,8 @@
 
 #####################n#####################################################
 
-# This script demonstrates how to initiate CA migration.
-# To initiate the CA migration, a user needs to have proper permissions.
+# This script demonstrates how to activate the new CA.
+# To activate the CA migration, a user needs to have proper permissions.
 
 # This script requires jq command-line JSON parser
 # if your system does not have jq installed, this will not work.
@@ -109,7 +109,7 @@ request_body="${request_body}\"data\": {"
 request_body="${request_body}\"type\": \"nbcaMigrationActivateRequest\","
 request_body="${request_body}\"attributes\": {"
 if [ $force == 1 ]; then
-    request_body="${request_body}\"force\" : \"TRUE\""
+    request_body="${request_body}\"force\" : \"true\""
 fi
 request_body="${request_body}}}}"
 
