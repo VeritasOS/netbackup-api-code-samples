@@ -72,9 +72,9 @@ content_type = "application/vnd.netbackup+json; version=4.0"
 
 default_sort = "commonAssetAttributes.displayName"
 
-assetTypeFilter = "assetType eq 'vm'";
+assetTypeFilter = "(assetType eq 'vm')";
 if assetsFilter != "":
-    assetsFilter = "(" + assetsFilter + ") and " + assetTypeFilter
+    assetsFilter = assetsFilter + " and " + assetTypeFilter
 else:
     assetsFilter = assetTypeFilter
 
@@ -108,11 +108,11 @@ def print_assets(assets_data):
     for asset in assets_data:
         asset_attrs = asset['attributes']
         asset_common_attrs = asset_attrs['commonAssetAttributes']
-
-        asset_protection_list = asset_common_attrs['activeProtection']['protectionDetailsList']
         asset_protection_plans = []
-        for asset_protection in asset_protection_list:
-            asset_protection_plans.append(asset_protection['protectionPlanName'])
+        if "activeProtection" in asset_common_attrs :
+            asset_protection_list = asset_common_attrs['activeProtection']['protectionDetailsList']
+            for asset_protection in asset_protection_list:
+                asset_protection_plans.append(asset_protection['protectionPlanName'])
             
         print(asset_common_attrs['displayName'], asset_attrs['instanceUuid'], asset_attrs['vCenter'], asset_protection_plans, sep="\t")
 
