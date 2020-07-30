@@ -20,7 +20,8 @@ The following are the commands to run the scripts (should be run from the parent
     `python -Wignore -m assets.get_vmware_assets -nbserver <server> -username <username> -password <password> -domainName <domainName> -domainType <domainType> [-assetsFilter <filter>]`
 
 The script uses the NetBackup Asset Service API to get the VMware workload assets (filtered by the given filter if specified). It prints the details (delimited by tab) such as asset display name, instance Id, vCenter and the plan names that the asset is protected by.
-Note: _assetsFilter option can be used to filter the assets returned. It should be in OData format (refer to the NetBackup API documentation). It is optional, if not specified the script will print all the VM assets. Redirect the script output to a file to avoid printing the details on terminal._
+
+Note: _The assetsFilter option can be used to filter the assets returned. It should be in OData format (refer to the NetBackup API documentation). It is optional. If not specified the script will print all the VM assets. Redirect the script output to a file to avoid printing the details on the terminal._
 
 Examples: `python -Wignore -m assets.get_vmware_assets -nbserver localhost -username user -password password -domainName domain -domainType NT > vm_assets.txt`
 `python -Wignore -m assets.get_vmware_assets -nbserver localhost -username user -password password -domainName domain -domainType NT -assetsFilter "contains(commonAssetAttributes/displayName, 'backup')" > vm_assets.txt`
