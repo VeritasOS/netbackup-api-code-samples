@@ -8,7 +8,7 @@ The samples are provided only for reference and not meant for production use.
 
 #### Executing the script
 
-Pre-requisites:
+Prerequisites:
 - NetBackup 8.3 or higher
 - Python 3.5 or higher (the script has been tested with Python 3.8)
 - Python modules: `requests`.
