@@ -1,6 +1,5 @@
 ## The script can be run with Python 3.5 or higher version. 
 ## The script requires 'requests' library to make the API calls. The library can be installed using the command: pip install requests.
-## No cert setup/verification is done for calling the APIs. Note that the script is only a sample/reference and not for use in any environment.
 
 import sys
 import argparse
@@ -27,40 +26,6 @@ password = args.password
 domainName = args.domainName
 domainType = args.domainType
 assetsFilter = args.assetsFilter
-##
-##for i in range(1, len(sys.argv), 2):
-##    if sys.argv[i] == "-nbserver":
-##            nbserver = sys.argv[i + 1]
-##    elif sys.argv[i] == "-username":
-##            username = sys.argv[i + 1]
-##    elif sys.argv[i] == "-password":
-##            password = sys.argv[i + 1]
-##    elif sys.argv[i] == "-domainName":
-##            domainName = sys.argv[i + 1]
-##    elif sys.argv[i] == "-domainType":
-##            domainType = sys.argv[i + 1]
-##    elif sys.argv[i] == "-assetsFilter":
-##            assetsFilter = sys.argv[i + 1]
-##    else:
-##            print("\nInvalid command!")
-##            print_usage()
-##            exit()
-##
-##if nbserver == "":
-##        print("Please provide the value for 'nbserver'\n")
-##        exit()
-##elif username == "":
-##        print("Please provide the value for 'username'\n")
-##        exit()
-##elif password == "":
-##        print("Please provide the value for 'password'\n")
-##        exit()
-##elif domainName == "":
-##        print("Please provide the value for 'domainName'\n")
-##        exit()
-##elif domainType == "":
-##        print("Please provide the value for 'domainType'\n")
-##        exit()
 
 base_url = "https://" + nbserver + "/netbackup"
 vm_assets_url = base_url + "/asset-service/workloads/vmware/assets"
