@@ -21,4 +21,4 @@ _Note: assetsFilter option can be used to filter the assets returned. It should 
 
 Examples: `go run ./get_vmware_assets.go -nbserver localhost -username user -password password -domainName domain -domainType NT > vm_assets.txt`
 
-`go run ./get_vmware_assets.go -nbserver localhost -username user -password password -assetsFilter "contains(commonAssetAttributes/displayName, 'backup')" > vm_assets.txt
+`go run ./get_vmware_assets.go -nbserver localhost -username user -password password -assetsFilter "contains(commonAssetAttributes/displayName, 'backup')" > vm_assets.txt`
