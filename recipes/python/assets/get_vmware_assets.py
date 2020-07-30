@@ -29,7 +29,6 @@ assetsFilter = args.assetsFilter
 
 base_url = "https://" + nbserver + "/netbackup"
 vm_assets_url = base_url + "/asset-service/workloads/vmware/assets"
-content_type = "application/vnd.netbackup+json; version=4.0"
 
 default_sort = "commonAssetAttributes.displayName"
 
@@ -43,7 +42,7 @@ print("\nExecuting the script...")
 
 jwt = login_api.perform_login(base_url, username, password, domainName, domainType)
 
-headers = {'Content-Type': content_type, 'Authorization': jwt}
+headers = {'Authorization': jwt}
 
 print("\nGetting VMware assets...")
 print("Printing the following asset details: DisplayName, InstanceId, vCenter, ProtectedByPlanNames\n")
