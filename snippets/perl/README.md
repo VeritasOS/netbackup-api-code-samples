@@ -126,3 +126,15 @@ API key Details:
   
 - Use the following command to use API key instead of JWT to trigger a NetBackup REST API on your NetBackup Master server:
   - `perl apikey_usage.pl -nbmaster <master_server> -apikey <apikey> [--verbose]`
+
+CA Migration Details:
+
+- Use the following command to initiate the NetBackup CA migration on your NetBackup Master server:
+  - `perl initiate-migration.pl -nbmaster <master_server> -login_username <login_username> -login_password <login_password> [-login_domainname <login_domain_name> -login_domaintype <domain_type>] -keysize <keysize> [-reason <reason>] [--verbose]`
+
+- Use the following command to activate the new NetBackup CA on your NetBackup Master server:
+  - `perl activate_migration.pl -nbmaster <master_server> -login_username <login_username> -login_password <login_password> [-login_domainname <login_domain_name> -login_domaintype <domain_type>] [-reason <reason>] [--force] [--verbose]`
+
+- Use the following command to complete the NetBackup CA migration on your NetBackup Master server:
+  - `perl complete_migration.pl -nbmaster <master_server> -login_username <login_username> -login_password <login_password> [-login_domainname <login_domain_name> -login_domaintype <domain_type>] [-reason <reason>] [--force] [--verbose]`
+
