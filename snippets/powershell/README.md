@@ -17,6 +17,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 Use the following commands to run the PowerShell samples.
 - `.\Get-NB-Images.ps1 -nbmaster <masterServer> -username <username> -password <password>`
 - `.\Get-NB-Jobs.ps1 -nbmaster <masterServer> -username <username> -password <password>`
+- `.\Get-NB-ReissueToken.ps1 -nbmaster <masterServer> -username <username> -password <password> -nbclient <client_hostname>`
 - `.\Post-NB-Cleanup-Assets.ps1 -nbmaster <masterServer> -username <username> -password <password> -filter <workloadType eq 'VMware'> -cleanupTime 2018-06-29T15:18:45.678Z`
 
 #### Scripts for NetBackup 8.2 or higher
