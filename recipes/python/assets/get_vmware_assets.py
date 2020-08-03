@@ -1,22 +1,25 @@
 ## The script can be run with Python 3.5 or higher version. 
 ## The script requires 'requests' library to make the API calls. The library can be installed using the command: pip install requests.
 
-import sys
 import argparse
 import requests
 import login.login_api as login_api
 
-def print_usage():
+def get_usage():
     return ("\nThe command should be run from the parent directory of the 'assets' directory:\n"
-            "\tpython -Wignore -m assets.get_vmware_assets -nbserver <server> -username <username> -password <password> "
-            "-domainName <domainName> -domainType <domainType> [-assetsFilter <filter criteria>]\n")
+            "python -Wignore -m assets.get_vmware_assets -nbserver <server> -username <username> -password <password> "
+            "-domainName <domainName> -domainType <domainType> [-assetType <vm|vmGroup>] [-assetsFilter <filter criteria>]\n"
+            "Optional arguments:\n"
+            "assetType - vm or vmGroup. Default is 'vm'.\n"
+            "assetsFilter - OData filter to filter the returned assets (VMs or VM Groups). If not specified, returns all the assets.\n")
 
-parser = argparse.ArgumentParser(usage = print_usage())
+parser = argparse.ArgumentParser(usage = get_usage())
 parser.add_argument('-nbserver', required=True)
 parser.add_argument('-username', required=True)
 parser.add_argument('-password', required=True)
 parser.add_argument('-domainName', required=True)
 parser.add_argument('-domainType', required=True)
+parser.add_argument('-assetType', default="vm", choices=['vm', 'vmGroup'])
 parser.add_argument('-assetsFilter', default="")
 args = parser.parse_args()
 
@@ -25,6 +28,7 @@ username = args.username
 password = args.password
 domainName = args.domainName
 domainType = args.domainType
+assetType = args.assetType
 assetsFilter = args.assetsFilter
 
 base_url = "https://" + nbserver + "/netbackup"
@@ -32,20 +36,24 @@ vm_assets_url = base_url + "/asset-service/workloads/vmware/assets"
 
 default_sort = "commonAssetAttributes.displayName"
 
-assetTypeFilter = "(assetType eq 'vm')";
+print("\nExecuting the script...")
+jwt = login_api.perform_login(base_url, username, password, domainName, domainType)
+
+print("\nGetting VMware {} assets...".format(assetType))
+
+if assetType == "vm":
+    assetTypeFilter = "(assetType eq 'vm')";
+    print("Printing the following VM details: VM Display Name, Instance Id, vCenter, Protection Plan Names\n")
+elif assetType == "vmGroup":
+    assetTypeFilter = "(assetType eq 'vmGroup')";
+    print("Printing the following VM group details: VM Group Name, VM Server, Filter Criteria, Protection Plan Names\n")
+
 if assetsFilter != "":
     assetsFilter = assetsFilter + " and " + assetTypeFilter
 else:
     assetsFilter = assetTypeFilter
 
-print("\nExecuting the script...")
-
-jwt = login_api.perform_login(base_url, username, password, domainName, domainType)
-
 headers = {'Authorization': jwt}
-
-print("\nGetting VMware assets...")
-print("Printing the following asset details: DisplayName, InstanceId, vCenter, ProtectedByPlanNames\n")
 
 def get_vmware_assets():
     offset = 0
@@ -56,8 +64,8 @@ def get_vmware_assets():
         assets = assets_response.json()
 
         if assets_response.status_code != 200:
-            print("VMware Assets API failed with status code {} and {}\n".format(resp.status_code, resp.json()))
-            raise SystemExit("\n\n")
+            print("VMware Assets API returned status code: {}, response: {}\n".format(assets_response.status_code, assets_response.json()))
+            raise SystemExit()
 
         print_assets(assets['data'])
 
@@ -77,9 +85,12 @@ def print_assets(assets_data):
             for asset_protection in asset_protection_list:
                 asset_protection_plans.append(asset_protection['protectionPlanName'])
 
-        print(asset_common_attrs['displayName'], asset_attrs['instanceUuid'], asset_attrs['vCenter'], asset_protection_plans, sep="\t")
+        if assetType == "vm":
+            print(asset_common_attrs['displayName'], asset_attrs['instanceUuid'], asset_attrs['vCenter'], asset_protection_plans, sep="\t")
+        elif assetType == "vmGroup":
+            print(asset_common_attrs['displayName'], asset_attrs['filterConstraint'], asset_attrs['oDataQueryFilter'], asset_protection_plans, sep="\t")
 
 
 get_vmware_assets()
 
-print("\nScript completed successfully!\n")
+print("\nScript completed!\n")
