@@ -108,30 +108,61 @@ Function getAssets()
 
     $default_sort = "sort=commonAssetAttributes.displayName"
 
-    if($assetFilter -eq ""){
+    if($assetsFilter -eq "" -Or $assetsFilter -eq "vm"){
         $assetTypeFilter = "filter=assetType eq 'vm'"
+    }
+    elseif($assetsFilter -eq "vmGroup"){
+         $assetTypeFilter = "filter=assetType eq 'vmGroup'"
     }
     else{
         $assetTypeFilter = $assetFilter
     }
 
-    $uri = $baseUri + $assetServiceUri + $assetTypeFilter + $default_sort
+    $offset = 0
+    $next = $true
 
+    while ($next){
+        $uri = $baseUri + $assetServiceUri + $assetTypeFilter + "&" + $default_sort + "&page[offset]=$offset"
 
-    Write-Host "`nSending a GET request to list all Assets...`n"
+        Write-Host "`nSending a GET request to list all Assets...`n"
 
-    $response = Invoke-WebRequest `
-                -Uri $uri `
-                -Method GET `
-                -ContentType $contentType `
-                -Headers $headers
+        $response = Invoke-WebRequest `
+                    -Uri $uri `
+                    -Method GET `
+                    -ContentType $contentType `
+                    -Headers $headers
 
-    if ($response.StatusCode -ne 200)
-    {
-        throw "Unable to get VMware assets.`n"
+        if ($response.StatusCode -ne 200)
+        {
+            throw "Unable to get VMware assets.`n"
+        }
+
+        $api_response = (ConvertFrom-Json -InputObject $response)
+
+        if($assetsFilter -eq "" -Or $assetsFilter -eq "vm"){
+            $vm_data = 
+                @{Label = "DisplayName"; Expression = { $_.attributes.commonAssetAttributes.displayName}},
+                @{Label = "InstanceUUID"; Expression = { $_.attributes.instanceUuid }},
+                @{Label = "vCenter"; Expression = { $_.attributes.vCenter }},
+                @{Label = "Asset Protection Plans"; Expression = { $_.attributes.commonAssetAttributes.activeProtection.protectionDetailsList }}
+
+           $api_response.data | Format-Table -AutoSize -Property $vm_data
+
+        }
+        elseif($assetsFilter -eq "vmGroup"){
+            $vmGroup_data = 
+                @{Label = "DisplayName"; Expression = { $_.attributes.commonAssetAttributes.displayName}},
+                @{Label = "filterConstraint"; Expression = { $_.attributes.filterConstraint }}, 
+                @{Label = "oDataQueryFilter"; Expression = { $_.attributes.oDataQueryFilter }},
+                @{Label = "Asset Protection Plans"; Expression = { $_.attributes.commonAssetAttributes.activeProtection.protectionDetailsList }}
+
+            $api_response.data | Format-Table -AutoSize -Property $vmGroup_data
+        }
+
+        if($api_response.meta.pagination.hasNext -eq "false"){
+            $next = $false
+        }
     }
-
-    Write-Host $response
 }
 
 Setup
