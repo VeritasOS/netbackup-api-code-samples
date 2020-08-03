@@ -126,3 +126,13 @@ API key Details:
   
 - Use the following command to use API key instead of JWT to trigger a NetBackup REST API on your NetBackup Master server:
   - `perl apikey_usage.pl -nbmaster <master_server> -apikey <apikey> [--verbose]`
+
+#### Scripts for NetBackup 8.3 or higher
+
+NetBackup Event Log Notifications:
+
+- Use the following command to obtain the top 10 NetBackup notifications in descending order of their creation time.  
+  - `perl get_notifications.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [-filter <filter>] [--verbose]`
+
+- Use the following command to post notifications to the event log database.
+  - `perl post_notifications.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [-payload <payload file name>] [--verbose]`
