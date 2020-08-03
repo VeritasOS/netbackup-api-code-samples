@@ -1,4 +1,4 @@
-### NetBackup Assets Service API Code Samples
+### NetBackup Asset Service API Code Samples
 
 This directory contains Python scripts demonstrating the use of NetBackup Asset Service APIs.
 
