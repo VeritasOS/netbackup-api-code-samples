@@ -5,7 +5,7 @@ This sample script demonstrates the use of NetBackup APIs for retieving VMware p
 This script can be run using NetBackup 8.3 and higher.
 It retrieves VMware asset data
 .EXAMPLE
-./get_VMware_Asset_Data.ps1 -MasterServer <masterServer> -username <username> -password <password> [-domainName <domainName> -domainType <domainType>][-assetsFilter <filter>]
+./get_VMware_Asset_Data.ps1 -MasterServer <masterServer> -username <username> -password <password> [-domainName <domainName> -domainType <domainType>][-assetType <vm|vmGroup>][-assetsFilter <filter>]
 #>
 
 #Requires -Version 4.0
@@ -16,6 +16,7 @@ Param (
     [string]$password = $(Throw "Please specify the password using the -password parameter."),
     [string]$domainName,
     [string]$domainType,
+    [string]$assetType,
     [string]$assetsFilter
 )
 
@@ -108,14 +109,20 @@ Function getAssets()
 
     $default_sort = "sort=commonAssetAttributes.displayName"
 
-    if($assetsFilter -eq "" -Or $assetsFilter -eq "vm"){
-        $assetTypeFilter = "filter=assetType eq 'vm'"
+    if($assetType -eq  "vm"){
+        $assetTypeFilter = "filter=assetType eq 'vm'" 
     }
-    elseif($assetsFilter -eq "vmGroup"){
+    elseif($assetType -eq "vmGroup"){
          $assetTypeFilter = "filter=assetType eq 'vmGroup'"
     }
-    else{
-        $assetTypeFilter = $assetFilter
+
+    if(![string]::IsNullOrEmpty($assetsFilter)){
+        if([string]::IsNullOrEmpty($assetTypeFilter)){
+            $assetTypeFilter = "filter=" + $assetsFilter
+        }
+        else{
+            $assetTypeFilter = $assetTypeFilter + " and " + $assetsFilter
+        }
     }
 
     $offset = 0
@@ -139,7 +146,16 @@ Function getAssets()
 
         $api_response = (ConvertFrom-Json -InputObject $response)
 
-        if($assetsFilter -eq "" -Or $assetsFilter -eq "vm"){
+        if($assetType -eq "vmGroup"){
+            $vmGroup_data = 
+                @{Label = "DisplayName"; Expression = { $_.attributes.commonAssetAttributes.displayName}},
+                @{Label = "filterConstraint"; Expression = { $_.attributes.filterConstraint }}, 
+                @{Label = "oDataQueryFilter"; Expression = { $_.attributes.oDataQueryFilter }},
+                @{Label = "Asset Protection Plans"; Expression = { $_.attributes.commonAssetAttributes.activeProtection.protectionDetailsList }}
+
+            $api_response.data | Format-Table -AutoSize -Property $vmGroup_data
+        }
+        else{
             $vm_data = 
                 @{Label = "DisplayName"; Expression = { $_.attributes.commonAssetAttributes.displayName}},
                 @{Label = "InstanceUUID"; Expression = { $_.attributes.instanceUuid }},
@@ -149,19 +165,13 @@ Function getAssets()
            $api_response.data | Format-Table -AutoSize -Property $vm_data
 
         }
-        elseif($assetsFilter -eq "vmGroup"){
-            $vmGroup_data = 
-                @{Label = "DisplayName"; Expression = { $_.attributes.commonAssetAttributes.displayName}},
-                @{Label = "filterConstraint"; Expression = { $_.attributes.filterConstraint }}, 
-                @{Label = "oDataQueryFilter"; Expression = { $_.attributes.oDataQueryFilter }},
-                @{Label = "Asset Protection Plans"; Expression = { $_.attributes.commonAssetAttributes.activeProtection.protectionDetailsList }}
 
-            $api_response.data | Format-Table -AutoSize -Property $vmGroup_data
-        }
+        $offset = $offset + $api_response.meta.pagination.limit
 
-        if($api_response.meta.pagination.hasNext -eq "false"){
+        if($api_response.meta.pagination.hasNext -eq $false){
             $next = $false
         }
+
     }
 }
 

@@ -19,5 +19,5 @@ Note: assetsFilter (should be in OData format, refer to the NetBackup API docume
 It is optional, if not specified the script will print all the VM assets. Redirect the script output to a file to avoid printing the details on terminal.
 
 Use the following command to run the PowerShell sample:
-.\get_vmware_assets.ps1 -MasterServer <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>] [-assetsFilter <filter>]
+.\get_vmware_assets.ps1 -MasterServer <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>] [-assetType <vm|vmGroup>] [-assetsFilter <filter>]
 
