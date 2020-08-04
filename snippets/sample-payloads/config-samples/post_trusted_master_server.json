@@ -1,0 +1,14 @@
+{
+  "data": {
+    "type": "trustedMasterServer",
+    "attributes": {
+      "trustedMasterServerName": "remote.master.com",
+      "rootCAType": "NBCA",
+      "authenticationType": "CREDENTIAL",
+      "domainName": "DOMAIN",
+      "userName": "USER",
+       "password": "PASSWORD",
+       "fingerprint": "FINGERPRINT"
+    }
+  }
+}
