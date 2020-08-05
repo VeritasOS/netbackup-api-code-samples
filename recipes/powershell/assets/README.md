@@ -26,4 +26,3 @@ avoid printing the details on terminal.
 Use the following commands to run the PowerShell sample:
 .\get_vmware_assets.ps1 -MasterServer <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>] [-assetType <vm|vmGroup>] [-assetsFilter <filter>]
 .\create_vmware_asset_group.ps1 -MasterServer <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]
-
