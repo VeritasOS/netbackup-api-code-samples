@@ -119,7 +119,7 @@ Function createAssetGroup()
                        "assetGroup": {
                            "description": "sampleDescription",
                            "assetType": "vmGroup",
-                           "filterConstraint": "rsvlmvc01vm175.rmnus.sen.symantec.com",
+                           "filterConstraint": "sampleMachine",
                             "oDataQueryFilter": "true",
                             "commonAssetAttributes": {
                                 "displayName": "sampleGroup249",
