@@ -53,3 +53,10 @@ See **/recipes/perl/access-control/access_control_api_requests.pl**
 
 Most of the API examples in this repository assume a valid JWT (Json Web Token) or API Key issued by NetBackup and do not incorporate role configuration as part of the script. 
 However, there may be some examples which do configure RBAC as part of the script and have not yet been updated to use the RBAC design.
+
+#### NetBackup 8.3 Asset Service Design Shift
+NetBackup 8.3 introduced a major change in its Asset service design.
+
+The previous AssetDB APIs will no longer function correctly. You must convert them to the new Asset Service APIs.
+For information about Asset Services APIs, refer to the API Reference documentation on SORT or to the YAML files on the master server:
+https://<master_server>/api-docs/index.html
