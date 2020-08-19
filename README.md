@@ -41,9 +41,10 @@ The new RBAC allows more granular permissions, improved flexibility and greater 
 
 The system-defined roles shipped with NetBackup also changed from 8.1.2 to the 8.3 release.  In 8.1.2, there were three system-defined roles available for RBAC configuration.  In the 8.3 release, this was simplified to offer a single “Administrator” role which has all privileges for RBAC.
 
-Due to the significant design shift, automatic upgrade conversion of 8.1.2 RBAC roles to the new 8.3 roles is not feasible.  However, tools are available to migrate the Backup administrator role and create a new Security administrator role for the users that had the old RBAC Security administrator role. Other roles must be reconfigured manually. 
+Due to the significant design shift, automatic upgrade conversion of 8.1.2 RBAC roles to the new 8.3 roles is not feasible.  However, tools are available to migrate the Backup administrator role and create a new Security administrator role for the users that had the old RBAC Security administrator role. 
+Other roles must be reconfigured manually. 
 There is also a script in this repository available to generate templated NetBackup roles.
-See **/recipes/perl/rbac-roles/rbac_role_templates.pl**
+See **/recipes/perl/access-control/rbac_role_templates.pl**
 
 
 Any API keys in use prior to upgrade will still be valid, however, the underlying access granted those API keys must
@@ -51,5 +52,5 @@ Any API keys in use prior to upgrade will still be valid, however, the underlyin
 A utility script exists in this repository to help convert active API keys after upgrade to NetBackup 8.3.  
 See **/recipes/perl/access-control/access_control_api_requests.pl**
 
-Most of the API examples in this repository assume a valid JWT (Json Web Token) or API Key issued by NetBackup and do not incorporate role configuration as part of the script. 
-However, there may be some examples which do configure RBAC as part of the script and have not yet been updated to use the RBAC design.
+Most of the API examples in this repository assume a valid JWT (Json Web Token) or API Key issued by NetBackup and do
+ not incorporate role configuration as part of the script. However, there may be some examples which do configure RBAC as part of the script and have not yet been updated to use the RBAC design.
