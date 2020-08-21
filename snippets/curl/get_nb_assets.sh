@@ -23,7 +23,7 @@ showHelp()
         echo ""
         echo "Invalid command parameters"
         echo "Usage:"
-        echo "./get_nb_vmservers.sh -nbmaster <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
+        echo "./get_nb_assets.sh -nbmaster <master_server> -username <username> -password <password> -domainname <dname> -domaintype <unixpwd/nt>"
         echo ""
         exit 1
 }
