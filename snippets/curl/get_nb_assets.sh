@@ -1,6 +1,6 @@
 !/bin/sh
 
-#####################n#####################################################
+###########################################################################
 
 # This script demonstrates the usage of netbackup REST API for listing
 # the assets
