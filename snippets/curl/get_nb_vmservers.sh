@@ -84,7 +84,7 @@ content_header='content-type:application/json'
 uri="$basepath/login"
 echo $uri
 
-data=$(jq --arg name $username --arg pass $password --arg dname $domainname --arg dtype $domaintype \
+data=$(jq --arg name "$username" --arg pass "$password" --arg dname "$domainname" --arg dtype "$domaintype" \
                 --null-input '{userName: $name, password: $pass}')
 
 jwt=$(curl -k -X POST $uri -H $content_header -d "$data" | jq --raw-output '.token')
