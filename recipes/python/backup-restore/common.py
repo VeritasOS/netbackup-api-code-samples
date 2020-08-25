@@ -92,17 +92,14 @@ def get_storage_units(baseurl, token):
         print(f"Storage unit:[{storage_unit_name}] disable for instant access")
         raise Exception(f"Storage unit:[{storage_unit_name}] disabled for instant access")
 
-# Protection plan
+# Create protection plan
 def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_name):
     print(f"Create protection plan:[{protection_plan_name}]")
     headers.update({'Authorization': token})
-    # Create protection plan
     payload = {}
     url = baseurl + 'servicecatalog/slos?meta=accessControlId'
 
     cur_dir = os.path.dirname(os.path.abspath(__file__))
-    # path = Path(cur_dir)
-    # cur_dir = path.parent
     file_name = os.path.join(cur_dir, "create_protection_plan_template.json")
     f = open(file_name)
     data = json.load(f)
@@ -110,7 +107,6 @@ def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_na
     data['data']['attributes']['policyNamePrefix'] = protection_plan_name
     data['data']['attributes']['schedules'][0]['backupStorageUnit'] = storage_unit_name
     data['data']['attributes']['allowSubscriptionEdit'] = False
-    print(f"Payload is:[{data}]")
 
     status_code, response_text = rest_request('POST', url, headers, data=data)
     validate_response(status_code, 201, response_text)

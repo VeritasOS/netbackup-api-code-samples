@@ -7,9 +7,8 @@ Pre-requisites:
 - Python 3.5 or higher
 - Python modules: `requests`
 
-
 Use the following commands to run the scripts.
-- Single VM backup and restore
+### - Single VM backup and restore
 
 `python single_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --protection_plan_name <protection_plan_name> --clientvm <client_vm_name> --restore_vmname <restore_vm_name>`
 
@@ -66,7 +65,7 @@ Execution flow of single VM backup and restore script:
 - Verify state of instant access recovery VM.
 - Perform the cleanup(e.g. remove instant access VM, subscription, protection plan and vcenter)
 
-- Group VM backup and restore
+### - Group VM backup and restore
 
 `python group_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --protection_plan_name <protection_plan_name> --querystring <Query_string> --vip_group_name <group_name> --restore_vmname_prefix <restore_vmname_prefix>`
 

@@ -114,7 +114,6 @@ def create_instant_access_vm(baseurl, token, workload_type, backup_id, vcenter_n
         }
     }
     url = baseurl + "recovery/workloads/" + workload_type + "/instant-access-vms"
-    print(f"Payload:[{payload}]")
     status_code, response_text = common.rest_request('POST', url, headers, data=payload)
     common.validate_response(status_code, 201, response_text)       
     mount_id = response_text['data']['id']
@@ -147,7 +146,6 @@ def verify_instant_access_vmstate(baseurl, token, workload_type, backup_id, moun
 
     print(f"Verified instant access restore status:[{inst_access_vmstatus}]")
     return mount_id 
-
 
 # Remove instant access VM
 def remove_instantaccess_vm(baseurl, token, mount_id):

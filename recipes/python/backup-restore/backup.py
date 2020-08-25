@@ -8,7 +8,7 @@ import common as common
 
 headers = {"Content-Type" : "application/vnd.netbackup+json;version=4.0"}
 
-# Perform single VM backup
+# Perform VM backup
 def perform_backup(baseurl, token, protection_plan_id, asset_id, is_vm_group = 0):
     headers.update({'Authorization': token})
     url = baseurl + "servicecatalog/slos/" + protection_plan_id + "/backup-now"
