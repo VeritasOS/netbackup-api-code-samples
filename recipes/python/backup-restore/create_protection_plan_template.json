@@ -1,0 +1,66 @@
+{
+  "data": {
+      "type": "slov3",
+      "attributes": {
+        "description": "Protection Plan for VMware workloads",
+        "name": "",
+        "schedules": [
+          {
+            "backupStorageUnit": "",
+            "backupWindows": [
+              {
+                "dayOfWeek": 2,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              },
+              {
+                "dayOfWeek": 3,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              },
+              {  
+                "dayOfWeek": 4,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              },
+              {
+                "dayOfWeek": 5,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              },
+              {
+                "dayOfWeek": 6,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              },
+              {
+                "dayOfWeek": 7,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              },
+              {
+                "dayOfWeek": 1,
+                "startSeconds": 0,
+                "durationSeconds": 86400
+              }
+              ],
+              "frequencySeconds": 86400,
+              "retention": {
+                "value": 2,
+                "unit": "WEEKS"
+              }
+          }
+          ],
+        "allowSubscriptionEdit": "False",
+        "workloadType": "VMware",
+        "policyNamePrefix": "",
+        "policyDefinition": {
+        "policy": {
+          "policyAttributes": {
+          "snapshotMethodArgs":       "snapact=0,trantype=san:hotadd:nbd,rLim=10,rTO=0,rHz=10,enable_quiesce_failover=1,disable_quiesce=0,ignore_irvm=1,multi_org=1,skipnodisk=1,post_events=1,serverlist=,tags_unset=false,drive_selection=0"
+        }
+      }
+    }
+  }
+}
+}
