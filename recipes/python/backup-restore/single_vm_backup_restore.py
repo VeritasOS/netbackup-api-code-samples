@@ -1,69 +1,68 @@
-## This script execute the single VM backup and restore scenario.
+""" This script execute the single VM backup and restore scenario. """
 
 ## The script can be run with Python 3.6 or higher version.
 
-## The script requires 'requests' library to make the API calls. The library can be installed using the command: pip install requests.
+## The script requires 'requests' library to make the API calls.
+## The library can be installed using the command: pip install requests.
 
 import argparse
-import common as common
-import backup as backup
-import restore as restore
+import common
+import vm_backup
+import vm_restore
 
-parser = argparse.ArgumentParser(description="Single VM backup and restore scenario")
-parser.add_argument("--master_server", type=str, help="NetBackup master server name")
-parser.add_argument("--master_server_port", type=int, help="NetBackup master server port", required=False)
-parser.add_argument("--master_username", type=str, help="NetBackup master server user name")
-parser.add_argument("--master_password", type=str, help="NetBackup master server password")
-parser.add_argument("--vcenter_name", type=str, help="Vcenter name")
-parser.add_argument("--vcenter_username", type=str, help="Vcenter username")
-parser.add_argument("--vcenter_password", type=str, help="Vcenter password")
-parser.add_argument("--vcenter_port", type=str, help="Vcenter port", required=False)
-parser.add_argument("--protection_plan_name", type=str, help="Protection plan name")
-parser.add_argument("--clientvm", type=str, help="Client VM name")
-parser.add_argument("--restore_vmname", type=str, help="Restore VM name")
+PARSER = argparse.ArgumentParser(description="Single VM backup and restore scenario")
+PARSER.add_argument("--master_server", type=str, help="NetBackup master server name")
+PARSER.add_argument("--master_server_port", type=int, help="NetBackup master server port", required=False)
+PARSER.add_argument("--master_username", type=str, help="NetBackup master server username")
+PARSER.add_argument("--master_password", type=str, help="NetBackup master server password")
+PARSER.add_argument("--vcenter_name", type=str, help="Vcenter name")
+PARSER.add_argument("--vcenter_username", type=str, help="Vcenter username")
+PARSER.add_argument("--vcenter_password", type=str, help="Vcenter password")
+PARSER.add_argument("--vcenter_port", type=str, help="Vcenter port", required=False)
+PARSER.add_argument("--protection_plan_name", type=str, help="Protection plan name")
+PARSER.add_argument("--clientvm", type=str, help="Client VM name")
+PARSER.add_argument("--restore_vmname", type=str, help="Restore VM name")
 
-args = parser.parse_args()
+ARGS = PARSER.parse_args()
 
 if __name__ == '__main__':
-    workload_type = 'vmware'
-    server_type = 'VMWARE_VIRTUAL_CENTER_SERVER'   
-    headers = {"Content-Type" : "application/vnd.netbackup+json;version=4.0"}
-    protection_plan_id = ''
-    subscription_id = ''
-    mount_id = ''
+    WORKLOAD_TYPE = 'vmware'
+    SERVER_TYPE = 'VMWARE_VIRTUAL_CENTER_SERVER'
+    PROTECTION_PLAN_ID = ''
+    SUBSCRIPTION_ID = ''
+    MOUNT_ID = ''
 
-    baseurl = common.get_nbu_base_url(args.master_server, args.master_server_port)
-    token = common.get_authenticate_token(baseurl, args.master_username, args.master_password)
-    headers['Authorization'] = token
-    print(f"User authentication completed for master server:[{args.master_server}]")
+    BASEURL = common.get_nbu_base_url(ARGS.master_server, ARGS.master_server_port)
+    TOKEN = common.get_authenticate_token(BASEURL, ARGS.master_username, ARGS.master_password)
+    print(f"User authentication completed for master server:[{ARGS.master_server}]")
 
     try:
-        print(f"Setup the VMware environment for vcenter:[{args.vcenter_name}]")
-        common.add_vcenter_credential(baseurl, token, args.vcenter_name, args.vcenter_username, args.vcenter_password, args.vcenter_port, server_type)
-        common.verify_vmware_discovery_status(baseurl, token, workload_type, args.vcenter_name)
-        storage_unit_name = common.get_storage_units(baseurl, token)
-        asset_id, instance_uuid, exsi_host = common.get_asset_info(baseurl, token, workload_type, args.clientvm)
-        protection_plan_id = common.create_protection_plan(baseurl, token, args.protection_plan_name, storage_unit_name)
-        subscription_id = common.subscription_asset_to_slo(baseurl, token, protection_plan_id, asset_id)
+        print(f"Setup the VMware environment for vCenter:[{ARGS.vcenter_name}]")
+        common.add_vcenter_credential(BASEURL, TOKEN, ARGS.vcenter_name, ARGS.vcenter_username, ARGS.vcenter_password, ARGS.vcenter_port, SERVER_TYPE)
+        common.verify_vmware_discovery_status(BASEURL, TOKEN, WORKLOAD_TYPE, ARGS.vcenter_name)
+        STORAGE_UNIT_NAME = common.get_storage_units(BASEURL, TOKEN)
+        ASSET_ID, _, EXSI_HOST = common.get_asset_info(BASEURL, TOKEN, WORKLOAD_TYPE, ARGS.clientvm)
+        PROTECTION_PLAN_ID = common.create_protection_plan(BASEURL, TOKEN, ARGS.protection_plan_name, STORAGE_UNIT_NAME)
+        SUBSCRIPTION_ID = common.subscription_asset_to_slo(BASEURL, TOKEN, PROTECTION_PLAN_ID, ASSET_ID)
 
         # Single VM backup and restore
-        print("Start backup")
-        backup_job_id = backup.perform_backup(baseurl, token, protection_plan_id, asset_id)
-        common.verify_job_state(baseurl, token, backup_job_id, 'DONE')
-        protection_backup_job_id, catalog_backup_job_id = backup.get_backup_job_id(baseurl, token, backup_job_id, args.protection_plan_name)
-        common.verify_job_state(baseurl, token, protection_backup_job_id, 'DONE')
-        common.verify_job_state(baseurl, token, catalog_backup_job_id, 'DONE')
+        print("Start single VM backup")
+        BACKUP_JOB_ID = vm_backup.perform_vm_backup(BASEURL, TOKEN, PROTECTION_PLAN_ID, ASSET_ID)
+        common.verify_job_state(BASEURL, TOKEN, BACKUP_JOB_ID, 'DONE', timeout=300)
+        PROTECTION_BACKUP_JOB_ID, CATALOG_BACKUP_JOB_ID = vm_backup.get_backup_job_id(BASEURL, TOKEN, BACKUP_JOB_ID, ARGS.protection_plan_name)
+        common.verify_job_state(BASEURL, TOKEN, PROTECTION_BACKUP_JOB_ID, 'DONE')
+        common.verify_job_state(BASEURL, TOKEN, CATALOG_BACKUP_JOB_ID, 'DONE')
 
-        print("Perform instant access vm:[{args.restore_vmname}]")
-        backup_id = restore.get_recovery_points(baseurl, token, workload_type, asset_id)
-        resource_pool = restore.get_resource_pool(baseurl, token, workload_type, args.vcenter_name, exsi_host)
-        mount_id = restore.create_instant_access_vm(baseurl, token, workload_type, backup_id, args.vcenter_name, exsi_host, resource_pool, args.restore_vmname)
-        restore.verify_instant_access_vmstate(baseurl, token, workload_type, backup_id, mount_id)
+        print(f"Perform instant access vm:[{ARGS.restore_vmname}]")
+        BACKUP_ID = vm_restore.get_recovery_points(BASEURL, TOKEN, WORKLOAD_TYPE, ASSET_ID)
+        RESOURCE_POOL = vm_restore.get_resource_pool(BASEURL, TOKEN, WORKLOAD_TYPE, ARGS.vcenter_name, EXSI_HOST)
+        MOUNT_ID = vm_restore.create_instant_access_vm(BASEURL, TOKEN, WORKLOAD_TYPE, BACKUP_ID, ARGS.vcenter_name, EXSI_HOST, RESOURCE_POOL, ARGS.restore_vmname)
+        vm_restore.verify_instant_access_vmstate(BASEURL, TOKEN, WORKLOAD_TYPE, BACKUP_ID, MOUNT_ID)
 
     finally:
         print("Start cleanup")
         # Cleanup the created protection plan
-        restore.remove_instantaccess_vm(baseurl, token, mount_id)
-        common.remove_subscription(baseurl, token, protection_plan_id, subscription_id)
-        common.remove_protectionplan(baseurl, token, protection_plan_id)
-        common.remove_vcenter_creds(baseurl, token, args.vcenter_name)
+        vm_restore.remove_instantaccess_vm(BASEURL, TOKEN, MOUNT_ID)
+        common.remove_subscription(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ID)
+        common.remove_protectionplan(BASEURL, TOKEN, PROTECTION_PLAN_ID)
+        common.remove_vcenter_creds(BASEURL, TOKEN, ARGS.vcenter_name)
