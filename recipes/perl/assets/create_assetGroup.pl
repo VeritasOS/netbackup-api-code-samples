@@ -124,15 +124,15 @@ sub create_assetGroup {
       "parameters": {
         "objectList": [
         {
-            "correlationId": "cor1223",
+            "correlationId": "cor-7890",
             "type": "vmwareGroupAsset",
             "assetGroup": {
               "description": "sampleDescription",
               "assetType": "vmGroup",
               "filterConstraint": "sampleFilterConstaint",
-              "oDataQueryFilter": "commonAssetAttributes/displayName eq 'test125478'",
+              "oDataQueryFilter": "commonAssetAttributes/displayName eq 'testing7890'",
               "commonAssetAttributes": {
-                "displayName": "sampleGroup249vbgt",
+                "displayName": "sampleGroup7890",
                 "workloadType": "vmware",
                 "protectionCapabilities": {
                   "isProtectable": "YES",
@@ -184,20 +184,18 @@ sub create_assetGroup {
         print "Create vmware Asset Group query id : ", $resp->code, "\n\n\n";
 
         my $json = decode_json($message);
-        my @response = @{$json->{'data'}};
-        my $response = $_;
-        my @workItem = @{$response->{'attributes'}->{'workItemResponses'}};
-        my $workitem = $_;
-        my $status = $workItem->{'statusDetails'}->{'message'};
-
-        if ($status = created) {
-            print "Create vmware Asset Group : ", $status ,"\n";
+        my @responses = @{$json->{'data'}};
+        for my $response (@responses) {
+            my @workitems = @{$response->{'attributes'}->{'workItemResponses'}};
+            for my $workItem (@workitems) {
+                my $status = $workItem->{'statusDetails'}->{'message'};
+                if ($status eq 'CREATED') {
+                    print "VMware Asset Group : ", $status ,"\n";
+                } else {
+                   print "VMware Asset Group Not Created due to: ", $status ,"\n";
+                }
+            }
         }
-         else {
-           print "HTTP GET error message: ", $status ,"\n";
-        }
-
-    
 }
 
 print_disclaimer();
