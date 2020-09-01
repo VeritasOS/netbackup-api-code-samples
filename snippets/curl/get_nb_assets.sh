@@ -2,8 +2,9 @@
 
 ###########################################################################
 
-# This script demonstrates the usage of NetBackup REST API for listing
-# the assets
+# This script demonstrates the usage of NetBackup (8.3) REST API for listing
+# VMware assets. 
+# The script uses asset service API available from NetBackup 8.3 version.
 
 # This script requires jq command-line JSON parser
 # if your system does not have jq installed, this will not work
