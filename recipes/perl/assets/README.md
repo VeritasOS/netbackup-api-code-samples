@@ -14,10 +14,11 @@ These scripts are only meant to be used as a reference. If you intend to use the
 #### Executing the recipes in perl
 
 Use the following commands to run the perl samples.
-- `perl get_vmware_assets.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>] [-assetsFilter <filter>]`
+
+- `perl get_vmware_assets.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 The script uses the NetBackup Asset Service API to get the VMware workload assets along with Id's configured in the system.
 
-- `perl create_assetGroup.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]
+- `perl create_assetGroup.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 The script creates a VMware Asset Group by using Netabckup Asset Service API.
 
 
