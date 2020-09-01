@@ -1,5 +1,7 @@
 #!/usr/bin/env perl
 
+require 'api_requests.pl';
+
 use LWP::UserAgent;
 use LWP::Protocol::https;
 print "LWP::UserAgent: ".LWP::UserAgent->VERSION,"\n";
@@ -73,45 +75,7 @@ sub user_input {
     $base_url = "$protocol://$nbmaster:$port/netbackup";
 }
 
-sub login {
-
-    my @argument_list = @_;
-    $base_url = $argument_list[0];
-    my $username = $argument_list[1];
-    my $password = $argument_list[2];
-    my $domainName = $argument_list[3];
-    my $domainType = $argument_list[4];
-
-    my $url = "$base_url/login";
-
-    my $req = HTTP::Request->new(POST => $url);
-    $req->header('content-type' => 'application/json');
-
-    if ($domainName eq "" && $domainType eq "") {
-        $post_data = qq({ "userName": "$username", "password": "$password" });
-    }
-    else {
-        $post_data = qq({ "domainType": "$domainType", "domainName": "$domainName", "userName": "$username", "password": "$password" });
-    }
-    $req->content($post_data);
-
-
-    print "\n\n**************************************************************";
-    print "\n\n Making POST Request to login to get token \n\n";
-
-    my $resp = $ua->request($req);
-    if ($resp->is_success) {
-        my $message = decode_json($resp->content);
-        $token = $message->{"token"};
-        print "Login succeeded with status code: ", $resp->code, "\n";
-    }
-    else {
-        print "Request failed with status code: ", $resp->code, "\n";
-    }
-    return $token;
-}
-
-# subroutine to get assets
+# subroutine to Create Asset Group
 sub create_assetGroup {
     my $url = "$base_url/asset-service/queries";
 
@@ -124,15 +88,15 @@ sub create_assetGroup {
       "parameters": {
         "objectList": [
         {
-            "correlationId": "cor-7890",
+            "correlationId": "cor-123",
             "type": "vmwareGroupAsset",
             "assetGroup": {
               "description": "sampleDescription",
               "assetType": "vmGroup",
               "filterConstraint": "sampleFilterConstaint",
-              "oDataQueryFilter": "commonAssetAttributes/displayName eq 'testing7890'",
+              "oDataQueryFilter": "commonAssetAttributes/displayName eq 'testing123'",
               "commonAssetAttributes": {
-                "displayName": "sampleGroup7890",
+                "displayName": "sampleGroup123",
                 "workloadType": "vmware",
                 "protectionCapabilities": {
                   "isProtectable": "YES",
@@ -189,7 +153,7 @@ sub create_assetGroup {
             my @workitems = @{$response->{'attributes'}->{'workItemResponses'}};
             for my $workItem (@workitems) {
                 my $status = $workItem->{'statusDetails'}->{'message'};
-                if ($status eq 'CREATED') {
+                if ($status eq 'Created') {
                     print "VMware Asset Group : ", $status ,"\n";
                 } else {
                    print "VMware Asset Group Not Created due to: ", $status ,"\n";
@@ -202,6 +166,6 @@ print_disclaimer();
 
 user_input();
 
-$token = login($base_url, $username, $password, $domain_name, $domain_type);
+$token = perform_login($base_url, $username, $password, $domain_name, $domain_type);
 
 create_assetGroup();
