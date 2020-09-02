@@ -114,8 +114,8 @@ def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_na
 
     cur_dir = os.path.dirname(os.path.abspath(__file__))
     file_name = os.path.join(cur_dir, "create_protection_plan_template.json")
-    file_handle = open(file_name)
-    data = json.load(file_handle)
+    with open(file_name, 'r') as file_handle:
+        data = json.load(file_handle)
     data['data']['attributes']['name'] = protection_plan_name
     data['data']['attributes']['policyNamePrefix'] = protection_plan_name
     data['data']['attributes']['schedules'][0]['backupStorageUnit'] = storage_unit_name

@@ -1,4 +1,4 @@
-# Netbackup VmWare agentless single and group VM backup and restore APIs code samples
+# NetBackup VmWare agentless single and group VM backup and restore APIs code samples
 
 ## Executing the scripts:
 
