@@ -1,6 +1,6 @@
 ### NetBackup API Code Samples for perl
 
-This directory contains code samples to invoke NetBackup VMware GET ASSETS APIs using perl.
+This directory contains code samples to invoke NetBackup VMware Assets API using perl.
 
 #### Disclaimer
 
@@ -13,16 +13,15 @@ These scripts are only meant to be used as a reference. If you intend to use the
 
 #### Executing the recipes in perl
 
-Use the following commands to run the perl samples.
+Use the following commands to run the scripts.
 
 - `perl get_vmware_assets.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 
-The script uses the NetBackup Asset Service API to get the VMware workload assets along with Id's configured in the system.
+The script uses the NetBackup Asset Service API to get VMware assets (first page of records) and prints the assetIDs.
 
 - `perl create_assetGroup.pl -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>]`
 
-The script creates a VMware Asset Group by using Netabckup Asset Service API.
-
+The script creates a sample VMware asset group in NetBackup by using the asset service API.
 
 Examples: 
 - perl get_vmware_assets.pl -nbmaster localhost -username user -password password -domainName domain -domainType NT
