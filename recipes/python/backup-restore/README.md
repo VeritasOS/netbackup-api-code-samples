@@ -3,14 +3,14 @@
 ## Executing the scripts:
 
 Pre-requisites:
-- NetBackup 8.2.1 or higher      
+- NetBackup 8.3 or higher
 - Python 3.6 or higher
 - Python modules: `requests`
 
 Use the following commands to run the scripts.
 ### - Single VM backup and restore
 
-This single_vm_backup_restore.py script describes how to backup VM using protection plan and restore the single VMware virtual machine that were backuped with NetBackup for VMware.
+This single_vm_backup_restore.py script demonstrates how to backup a VM (VMware virtual machine) using a protection plan and restore it using NetBackup APIs.
 
 `python single_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --protection_plan_name <protection_plan_name> --clientvm <client_vm_name> --restore_vmname <restore_vm_name>`
 
@@ -69,7 +69,7 @@ Execution flow of single VM backup and restore script:
 
 ### - Group VM backup and restore
 
-This group_vm_backup_restore.py script describes how to backup multiple VMs using protection plan and perform bulk restore of VMware virtual machines that were backuped with NetBackup for VMware.
+This group_vm_backup_restore.py script demonstrates how to backup multiple VMs (VMware virtual machines) using a protection plan and perform bulk restore of the VMs using NetBackup APIs.
 
 `python group_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --protection_plan_name <protection_plan_name> --querystring <Query_string> --vip_group_name <group_name> --restore_vmname_prefix <restore_vmname_prefix>`
 
