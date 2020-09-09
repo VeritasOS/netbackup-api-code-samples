@@ -88,14 +88,13 @@ def get_asset_info(baseurl, token, workload_type, client):
     print(f"Client exsi host:[{exsi_host}]")
     return asset_id, uuid, exsi_host
 
-# Get StorageUnits
-def get_storage_units(baseurl, token):
-    """ This function return the storage unit name """
+# Verify the storage unit is supported for instant access
+def verify_stu_instant_access_enable(baseurl, token, storage_unit_name):
+    """ Verify the storage unit is supported for instant access """
     headers.update({'Authorization': token})
-    url = f"{baseurl}storage/storage-units"
+    url = f"{baseurl}storage/storage-units/?filter=name eq '{storage_unit_name}'"
     status_code, response_text = rest_request('GET', url, headers)
     validate_response(status_code, 200, response_text)
-    storage_unit_name = response_text['data'][0]['id']
     is_instant_access_enable = response_text['data'][0]['attributes']['instantAccessEnabled']
 
     if is_instant_access_enable:
@@ -103,7 +102,6 @@ def get_storage_units(baseurl, token):
     else:
         print(f"Storage unit:[{storage_unit_name}] disable for instant access")
         raise Exception(f"Storage unit:[{storage_unit_name}] disabled for instant access")
-    return storage_unit_name
 
 # Create protection plan
 def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_name):

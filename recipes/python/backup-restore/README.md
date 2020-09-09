@@ -1,4 +1,4 @@
-# NetBackup VmWare agentless single and group VM backup and restore APIs code samples
+# NetBackup VMware agentless single and group VM backup and restore APIs code samples
 
 ## Executing the scripts:
 
@@ -6,13 +6,14 @@ Pre-requisites:
 - NetBackup 8.3 or higher
 - Python 3.6 or higher
 - Python modules: `requests`
+- create_protection_plan_template.json template file. This template contain the required payload which is used to create the protection plan.
 
 Use the following commands to run the scripts.
 ### - Single VM backup and restore
 
-This single_vm_backup_restore.py script demonstrates how to backup a VM (VMware virtual machine) using a protection plan and restore it using NetBackup APIs.
+This single_vm_backup_restore.py script demonstrates how to backup a VM (VMware virtual machine) using a protection plan and instant access restore of VM using NetBackup APIs.
 
-`python single_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --protection_plan_name <protection_plan_name> --clientvm <client_vm_name> --restore_vmname <restore_vm_name>`
+`python single_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --stu_name <stu_name> --protection_plan_name <protection_plan_name> --clientvm <client_vm_name> --restore_vmname <restore_vm_name>`
 
 All parameters can also be passed as command line arguments.
 - `python single_vm_backup_restore.py --help`
@@ -25,6 +26,7 @@ usage: single_vm_backup_restore.py [-h] [--master_server MASTER_SERVER]
                                    [--vcenter_username VCENTER_USERNAME]
                                    [--vcenter_password VCENTER_PASSWORD]
                                    [--vcenter_port VCENTER_PORT]
+                                   [--stu_name STU_NAME]
                                    [--protection_plan_name PROTECTION_PLAN_NAME]
                                    [--clientvm CLIENTVM]
                                    [--restore_vmname RESTORE_VMNAME]
@@ -42,13 +44,15 @@ Arguments:
   --master_password MASTER_PASSWORD
                         NetBackup master server password
   --vcenter_name VCENTER_NAME
-                        Vcenter name
+                        vCenter name
   --vcenter_username VCENTER_USERNAME
-                        Vcenter username
+                        vCenter username
   --vcenter_password VCENTER_PASSWORD
-                        Vcenter password
+                        vCenter password
   --vcenter_port VCENTER_PORT
-                        Vcenter port
+                        vCenter port
+  --stu_name STU_NAME
+                        Storage unit name
   --protection_plan_name PROTECTION_PLAN_NAME
                         Protection plan name
   --clientvm CLIENTVM   Client VM name
@@ -69,9 +73,9 @@ Execution flow of single VM backup and restore script:
 
 ### - Group VM backup and restore
 
-This group_vm_backup_restore.py script demonstrates how to backup multiple VMs (VMware virtual machines) using a protection plan and perform bulk restore of the VMs using NetBackup APIs.
+This group_vm_backup_restore.py script demonstrates how to backup multiple VMs (VMware virtual machines) using a protection plan and perform bulk instant access restore of the VMs using NetBackup APIs.
 
-`python group_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --protection_plan_name <protection_plan_name> --querystring <Query_string> --vip_group_name <group_name> --restore_vmname_prefix <restore_vmname_prefix>`
+`python group_vm_backup_restore.py --master_server <master_server> --master_username <master_username> --master_password <master_password> --vcenter_name <vcenter_name> --vcenter_username <vcenter_username> --vcenter_password <vcenter_password> --stu_name <stu_name> --protection_plan_name <protection_plan_name> --querystring <Query_string> --vip_group_name <group_name> --restore_vmname_prefix <restore_vmname_prefix>`
 
 All parameters can also be passed as command line arguments.
 - `python group_vm_backup_restore.py --help`
@@ -84,6 +88,7 @@ usage: group_vm_backup_restore.py [-h] [--master_server MASTER_SERVER]
                                   [--vcenter_username VCENTER_USERNAME]
                                   [--vcenter_password VCENTER_PASSWORD]
                                   [--vcenter_port VCENTER_PORT]
+                                  [--stu_name STU_NAME]
                                   [--protection_plan_name PROTECTION_PLAN_NAME]
                                   [--querystring QUERYSTRING]
                                   [--vip_group_name VIP_GROUP_NAME]
@@ -109,6 +114,8 @@ Arguments:
                         Vcenter password
   --vcenter_port VCENTER_PORT
                         Vcenter port
+  --stu_name STU_NAME
+                        Storage unit name
   --protection_plan_name PROTECTION_PLAN_NAME
                         Protection plan name
   --querystring QUERYSTRING
