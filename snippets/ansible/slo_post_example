@@ -1,0 +1,147 @@
+---
+  ### Requirements
+  # inputs from parent - {{login_token}},
+  # inputs from inventory - {{baseurl}}, {{master}}, {{vcenter}}
+  # outputs {{slo_create}}
+  - name: SLO Create
+    uri:
+      url: "{{baseurl}}servicecatalog/slos"
+      method: POST
+      body_format: json
+      status_code: 201
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+      body:
+        data:
+          type: slov3
+          attributes:
+            name: "ams03_{{item.seg}}v_{{item.type}}_fr_{{item.time}}_{{item.ret}}_ansible_test"
+            description: "ansible testing protection plans"
+            policyNamePrefix: "dc01_{{item.seg}}v_{{item.type}}_fr_{{item.time}}_{{item.ret}}_ansible_test"
+            workloadType: VMWARE
+            schedules:
+            - scheduleType: FULL
+              frequencySeconds: 604800
+              retention:
+                value: 30
+                unit: DAYS
+              backupStorageUnit: dc01nbumed01_dpm_su
+              backupWindows:
+              - dayOfWeek: 6
+                durationSeconds: 28800
+                startSeconds: 64800
+            - scheduleType: DIFFERENTIAL_INCREMENTAL
+              frequencySeconds: 86400
+              retention:
+                value: 30
+                unit: DAYS
+              backupStorageUnit: dc01nbumed01_dpm_su
+              backupWindows:
+              - dayOfWeek: 1
+                durationSeconds: 28800
+                startSeconds: 64800
+              - dayOfWeek: 2
+                durationSeconds: 28800
+                startSeconds: 64800
+              - dayOfWeek: 3
+                durationSeconds: 28800
+                startSeconds: 64800
+              - dayOfWeek: 4
+                durationSeconds: 28800
+                startSeconds: 64800
+              - dayOfWeek: 5
+                durationSeconds: 28800
+                startSeconds: 64800
+              - dayOfWeek: 7
+                durationSeconds: 28800
+                startSeconds: 64800
+            policyDefinition:
+              policy:
+                policyName: "dc1_{{item.seg}}v_{{item.type}}_fr_{{item.time}}_{{item.ret}}_ansible_test"
+                policyType: VMware
+                policyAttributes:
+                  active: false
+                  jobLimit: 2147483647
+                  snapshotMethodArgs: "skipnodisk=0,post_events=1,multi_org=0,Virtual_machine_backup=2,continue_discovery=1,nameuse=4,exclude_swap=1,tags_unset=0,ignore_irvm=1,rLim=10,snapact=2,enable_quiesce_failover=1,file_system_optimization=1,drive_selection=0,disable_quiesce=0,enable_vCloud=0,trantype=nbdssl,rHz=10,rTO=0"
+                  useAccelerator: true
+                  autoManagedType: 2
+                  backupHost: MEDIA_SERVER
+                  blockIncremental: true
+                  dataClassification:
+                  disableClientSideDeduplication: false
+                  discoveryLifetime: 28800
+                  mediaOwner: "*ANY*"
+                  priority: 0
+                  storage:
+                  storageIsSLP: false
+                  useReplicationDirector: false
+                  volumePool: NetBackup
+                schedules:
+                - backupType: Full Backup
+                  backupCopies:
+                    copies:
+                    - retentionPeriod:
+                        value: 1
+                        unit: DAYS
+                      storage: SLO_UUID_bd72e69e-c3d4-4446-8273-4646b1f5d614_Backup_Only_29d7ad56-1ab7-4876-a00f-4868433ea149
+                    priority: -1
+                  frequencySeconds: 604800
+                  mediaMultiplexing: 1
+                  retriesAllowedAfterRunDay: false
+                  scheduleName: Full
+                  scheduleType: Frequency
+                  snapshotOnly: false
+                  storageIsSLP: true
+                  startWindow:
+                  - dayOfWeek: 6
+                    durationSeconds: 28000
+                    startSeconds: 64800
+                - backupType: "Differential Incremental Backup"
+                  backupCopies:
+                    copies:
+                    - retentionPeriod:
+                        value: 1
+                        unit: DAYS
+                      storage: SLO_UUID_bd72e69e-c3d4-4446-8273-4646b1f5d614_Backup_Only_29d7ad56-1ab7-4876-a00f-4868433ea149
+                    priority: -1
+                  frequencySeconds: 86400
+                  mediaMultiplexing: 1
+                  retriesAllowedAfterRunDay: false
+                  scheduleName: DIFF_INC
+                  scheduleType: Frequency
+                  snapshotOnly: false
+                  storageIsSLP: true
+                  startWindow:
+                  - dayOfWeek: 1
+                    durationSeconds: 28800
+                    startSeconds: 64800
+                  - dayOfWeek: 2
+                    durationSeconds: 28800
+                    startSeconds: 64800
+                  - dayOfWeek: 3
+                    durationSeconds: 28800
+                    startSeconds: 64800
+                  - dayOfWeek: 4
+                    durationSeconds: 28800
+                    startSeconds: 64800
+                  - dayOfWeek: 5
+                    durationSeconds: 28800
+                    startSeconds: 64800
+                  - dayOfWeek: 7
+                    durationSeconds: 28800
+                    startSeconds: 64800
+      validate_certs: no
+      return_content: yes
+
+    with_items:
+      - { seg: 'e', time: '1800', type: 'wi', ret: '30'  }
+      - { seg: 'i', time: '1800', type: 'wi', ret: '30'  }
+      - { seg: 's', time: '1800', type: 'wi', ret: '30'  }
+
+#      validate_certs: no
+#      return_content: yes
+    register: slo_create
+  - name: debug vmware_resource
+    debug:
+      msg:  "{{slo_create}}"
