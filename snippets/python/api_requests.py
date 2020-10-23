@@ -87,9 +87,9 @@ def apikey_create(jwt, base_url, expiryindays, description, apikey_username, api
 	url = base_url + "/security/api-keys"
 
 	if apikey_username == "":
-		print "Creating API key for self user"
+		print("Creating API key for self user")
 	else:
-		print "Creating API key for user [" + apikey_username + ":" + apikey_domainname + ":" + apikey_domaintype + "]"
+		print("Creating API key for user [" + apikey_username + ":" + apikey_domainname + ":" + apikey_domaintype + "]")
 	
 	if apikey_username != "" and apikey_domaintype != "":
 		req_body = { "data" : { "type":"apiKeyCreationRequest", "attributes": { "description":description,	"expireAfterDays":"P" + expiryindays + "D", "userName":apikey_username,	"userDomain":apikey_domainname, "userDomainType":apikey_domaintype} } }
