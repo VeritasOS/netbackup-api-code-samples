@@ -33,7 +33,7 @@ Requirements and comments for running this script
 
 
 param (
-    [string]$p = $(throw "Please speicfy the policy name using -p parameter."),
+    [string]$p = $(throw "Please specify the policy name using -p parameter."),
     [string]$k = $(throw "Please specify the password using -k parameter."),
     [switch]$v = $false,
     [switch]$t = $false
@@ -106,6 +106,8 @@ $port = 1556
 $basepath = "https://" + $nbmaster + ":" + $port + "/netbackup"
 $content_type = "application/vnd.netbackup+json;version=4.0"
 $days2lookback = 30
+$fullname = "FULL"
+$incrname = "INCR"
 if ( $verbose ) {
     Write-Host "Base URI = $basepath"
     Write-Host "Looking back $days2lookback days for previous backups"
@@ -144,11 +146,11 @@ $content = (ConvertFrom-Json -InputObject $response)
 # Determining backup frequency for full backup and getting
 # the full and incr schedule names
 for ( $i=0; $i -lt $content.data.attributes.policy.schedules.count; $i++ ) {
-    if ( $content.data.attributes.policy.schedules[$i].schedulename -eq "FULL" ) {
+    if ( $content.data.attributes.policy.schedules[$i].schedulename -eq $fullname ) {
         $fullfrequency = $content.data.attributes.policy.schedules[$i].frequencyseconds
         $fullschedule = $content.data.attributes.policy.schedules[$i].schedulename
     }
-    if ( $content.data.attributes.policy.schedules[$i].schedulename -like "INCR" ) {
+    if ( $content.data.attributes.policy.schedules[$i].schedulename -like $incrname ) {
         $incrfrequency = $content.data.attributes.policy.schedules[$i].frequencyseconds
         $incrschedule = $content.data.attributes.policy.schedules[$i].schedulename
     }
@@ -180,8 +182,6 @@ $headers = @{
 # Getting current date
 $a = Get-Date
 $currentDate=$a.ToUniversalTime()
-$backupTimeEnd = (Get-Date -format s -date $currentDate) + "Z"
-
 # Set starting date to 30 days from current date
 $lookbackDate = (Get-Date).AddDays(-$days2lookback)
 $backupTimeStart = (Get-Date -format s -date $lookbackDate) + "Z"
@@ -189,11 +189,9 @@ $backupTimeStart = (Get-Date -format s -date $lookbackDate) + "Z"
 $query_params = @{
   "page[limit]" = 50 # This changes the default page size to 50
   # The following filter variable adds a filter to only show for this client in past 30 days
-  #"filter" = "clientName eq '$clientname' and backupTime ge $backupTimeStart and backupTime le $backupTimeEnd"
-  "filter" = "clientName eq '$clientname'"
+  "filter" = "clientName eq '$clientname' and backupTime ge $backupTimeStart"
 }
 if ( $verbose ) {
-    Write-Host "backupTimeEnd   = $backupTimeEnd"
     Write-Host "backupTimeStart = $backupTimeStart"
 }
 
@@ -209,48 +207,45 @@ if ($response.StatusCode -ne 200)
     throw "Unable to get the list of Netbackup images!"
 }
 
-#Write-Host "response=$response"
-#Write-Host "Response JSON"
-#$response | ConvertFrom-Json | ConvertTo-Json
-
 # Convert the JSON output into PowerShell object format
 $content = (ConvertFrom-Json -InputObject $response)
 
 # Converting the JSON data for the image attributes into an array for looping through
 $imageinfo = %{$content.data.attributes}
-#Write-Host "Image info JSON"
-#$imageinfo | ConvertTo-Json
-#Get-Member -InputObject $imageinfo
 
 # Setting values to validation variables
 $schedulerun = "none"
-$fulltime = "no"
-$incrtime = "no"
+$fulltime = 0
+$incrtime = 0
 
 # Looping through all the images found for this client looking for most recent
-# full and incr backup image.  Image data is listed in date descending order, i.e.,
-# newest to oldest.  We just need to capture the first instance of either backup type
+# full and incr backup image.  We just need to capture the first instance of either backup type
 # Handling 3 scenarios of returned images counts:
 # 1 image doesn't create an array of objects so need to process
 # 2 or more images create array of objects to process in a loop
 if ( $content.meta.pagination.count -eq 1 ) {
-    if ( $imageinfo.scheduleName -eq "FULL" ) {
-        $fulltime= [datetime]::Parse($imageinfo.backuptime)
-    } else {
-        $incrtime= [datetime]::Parse($imageinfo.backuptime)
+    if ( $imageinfo.scheduleName -eq $fullname ) {
+        $fulltime = (Get-Date $imageinfo.backuptime)
+    } elseif ( $imageinfo.scheduleName -eq $incrname ) {
+        $incrtime= (Get-Date $imageinfo.backuptime)
     }
 } else {
     for ( $i=0; $i -lt $content.meta.pagination.count; $i++ ) {
-        # Can skip if we've identified that we don't need to run any backups
-        if ( $fulltime -ne "no" -AND $incrtime -ne "no" ) {
-            continue
-        } elseif ( $imageinfo[$i].scheduleName -eq "FULL" ) {
-            $fulltime = [datetime]::Parse($imageinfo[$i].backuptime)
-        } elseif ( $imageinfo[$i].scheduleName -eq "INCR" ) {
-            $incrtime = [datetime]::Parse($imageinfo[$i].backuptime)
+        # Depending upon the schedule name, what to perform
+        if ( $imageinfo[$i].schedulename -eq $fullname ) {
+            $a = Get-Date $imageinfo[$i].backuptime
+            if ( $a -gt $fulltime ) {
+                $fulltime=$a
+            }
+        } elseif ( $imageinfo[$i].schedulename -eq $incrname ) {
+            $a = Get-Date $imageinfo[$i].backuptime
+            if ( $a -gt $incrtime ) {
+                $incrtime=$a
+            }
         }
     }
 }
+
 
 # Define the full and incr window by subtracting the schedule frequency from
 #   the current time.
@@ -258,18 +253,18 @@ $fullwindow=$currentDate.AddSeconds(-$fullfrequency)
 $incrwindow=$currentDate.AddSeconds(-$incrfrequency)
 
 # Now, run through the logic to determine what kind of backup to run
-if ( $fulltime -eq "no" ) {
+if ( $fulltime -eq 0 ) {
     # No recent backup images found for this client, run full backup
-    $schedulerun = "FULL"
+    $schedulerun = $fullname
 } elseif ( $fullwindow -ge $fulltime ) {
     # Found a FULL backup older than current full window
-    $schedulerun = "FULL"
-} elseif ( $fulltime -ne "no" -AND $incrtime -eq "no" ) {
+    $schedulerun = $fullname
+} elseif ( $fulltime -ne 0 -AND $incrtime -eq 0 ) {
     # Full backup found but less than window and no incremental
-    $schedulerun = "INCR"
+    $schedulerun = $incrname
 } elseif ( $incrwindow -ge $incrtime ) {
     # Full backup less than window and incremental older than window
-    $schedulerun = "INCR"
+    $schedulerun = $incrname
 } else {
     $schedulerun = "none"
 }
