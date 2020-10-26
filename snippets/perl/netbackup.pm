@@ -906,7 +906,7 @@ sub displayAssets {
 
 #
 ## This function create the Json payload for the Asset Cleanup API
-## It receives 2 paramters, the Json response from the GetAssetByFilter
+## It receives 2 parameters, the Json response from the GetAssetByFilter
 ## and the cleanupTime. The response of this function is a proper payload
 ## with all Assets from the filter.
 ##

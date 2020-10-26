@@ -15,3 +15,4 @@ These scripts are only meant to be used as a reference. If you intend to use the
 
 Use the following commands to run the go samples.
 - `go run ./get_set_host_config.go -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>] -client <client>`
+- `go run ./manage_access_hosts.go -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName>] [-domainType <domainType>] [-accessHost <accessHost>]`

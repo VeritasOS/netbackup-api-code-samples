@@ -1,0 +1,22 @@
+---
+  - name: login
+    uri:
+      url: "{{baseurl}}login"
+      method: POST
+      body_format: json
+      status_code: 201
+      headers:
+        content-type: application/vnd.netbackup+json;version=3.0
+      body:
+        userName: "{{username}}"
+        password: "{{password}}"
+      validate_certs: no
+      return_content: yes
+    register: login
+
+  - name: set facts
+    set_fact:
+      login_token: "{{login.json.token}}"
+  - name: debug token
+    debug:
+      msg:  "{{login_token}}"
