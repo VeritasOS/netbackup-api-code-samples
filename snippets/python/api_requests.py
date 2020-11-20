@@ -75,6 +75,26 @@ def get_netbackup_alerts(jwt, base_url):
 	
 	return resp.json()
 
+def get_netbackup_mssql_rps(jwt, base_url):
+	from datetime import datetime
+	my_date = datetime.now()
+	today = my_date.strftime('%Y-%m-%dT%H:%M:%SZ')
+	url = base_url + "/recovery-point-service/workloads/mssql/recovery-points/"
+	headers = {'Content-Type': content_type, 'Authorization': jwt}
+	query_params = {
+		"page[limit]": 100, 				#This changes the default page size to 100
+		"filter": "backupTime le '" + today + "' and backupType eq 1"  # This filter will fetch FULL backups
+	}
+
+	print("performing GET  on {}\n".format(url))
+
+	resp = requests.get(url, headers=headers, params=query_params, verify=False)
+
+	if resp.status_code != 200:
+		raise Exception('Images API failed with status code {} and {}'.format(resp.status_code, resp.json()))
+
+	return resp.json()
+
 # Create NetBackup API key
 # jwt - JWT fetched after triggering /login REST API
 # base_usrl - NetBackup REST API base URL

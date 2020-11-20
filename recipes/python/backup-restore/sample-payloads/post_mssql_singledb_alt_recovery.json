@@ -1,0 +1,29 @@
+{
+  "data": {
+         "type":"recoveryRequest",
+         "attributes": {
+            "recoveryPoint":"recoverypointid-uuid",
+            "recoveryObject" : {
+                "assetId" : "assetid-uuid",
+                 "credentials" : {
+                  "domain" : "domain",
+                  "userName" : "administrator",
+                  "password" : "password"
+                 }
+            },
+            "recoveryOptions" :
+            {
+                "replaceDatabase" : false
+            },
+            "alternateRecoveryOptions":
+            {
+                "databaseName": "python_test_db",
+                "instanceName": "SQL2K14",
+                "client": "client.veritas.com",
+                "alternateFileLocation": {
+                  "renameAllFilesToSameLocation": "c:\\temp\\"
+                }
+            }
+       }
+    }
+}

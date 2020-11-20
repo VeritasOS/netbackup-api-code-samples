@@ -1,0 +1,29 @@
+{
+    "data":{
+        "type":"query",
+        "attributes":{
+            "queryName":"create-assets",
+            "workloads":["mssql"],
+            "parameters":{"objectList":[
+                {
+                    "correlationId":"1",
+                    "asset":{
+                        "commonAssetAttributes": {
+                            "displayName": "AGdemo",
+                            "detection": {
+                                "detectionMethod": "MANUAL"
+                            }
+                         },
+                        "assetType": "AVAILABILITY_GROUP",
+                        "clusterName": "AGclusterdemo"
+                    },
+                    "relationship": {
+                        "instances": {
+                            "data": ["instanceid-uuid"]
+                        }
+                    }
+                }
+            ]}
+        }
+    }
+}

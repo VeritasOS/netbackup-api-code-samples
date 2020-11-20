@@ -135,3 +135,80 @@ Execution flow of group VM backup and restore script:
 - Verify the status of jobs
 - Perform bulk restore
 - Perform the cleanup(e.g. remove bulk instant access VMs, subscription, protection plan, VM group and vcenter)
+
+#### - Microsoft SQL Server Protection and Recovery workflow
+
+This mssql_db_backup_restore.py script demonstrates how to Protect a MSSQL Database or Instance using a protection plan, and perform a alternate database recovery using NetBackup APIs.
+
+`python -W ignore recipes/python/backup-restore/mssql_db_backup_restore.py --master_server <master_server> --master_server_port 1556 --master_username <master_username> --master_password <master_password> --mssql_instance <mssql_instance_name> --mssql_database <mssql_database_name> --mssql_server_name <mssql_server_name> --mssql_use_localcreds 0 --mssql_domain <mssql_domain> --mssql_username <mssql_sysadmin_user> --mssql_password <mssql_sysadmin_pwd> --stu_name <storage_unit_used_in_protection_plan> --protection_plan_name <protection_plan_name> --asset_type <mssql_asset_type> --restore_db_prefix <mssql_restore_database_name_prefix> --restore_db_path <mssql_restore_database_path> --recoveralluserdbs <0|1>`
+
+All parameters can also be passed as command line arguments.
+- `python mssql_db_backup_restore.py -h`
+```
+usage: mssql_db_backup_restore.py [-h] [--master_server MASTER_SERVER]
+                                  [--master_server_port MASTER_SERVER_PORT]
+                                  [--master_username MASTER_USERNAME]
+                                  [--master_password MASTER_PASSWORD]
+                                  [--mssql_instance MSSQL_INSTANCE]
+                                  [--mssql_database MSSQL_DATABASE]
+                                  [--mssql_server_name MSSQL_SERVER_NAME]
+                                  [--mssql_use_localcreds MSSQL_USE_LOCALCREDS]
+                                  [--mssql_domain MSSQL_DOMAIN]
+                                  [--mssql_username MSSQL_USERNAME]
+                                  [--mssql_password MSSQL_PASSWORD]
+                                  [--stu_name STU_NAME]
+                                  [--protection_plan_name PROTECTION_PLAN_NAME]
+                                  [--asset_type ASSET_TYPE]
+                                  [--restore_db_prefix RESTORE_DB_PREFIX]
+                                  [--restore_db_path RESTORE_DB_PATH]
+                                  [--recoveralluserdbs RECOVERALLUSERDBS]
+Mssql backup and alternate database recovery scenario
+
+Arguments:
+  -h, --help            show this help message and exit
+  --master_server MASTER_SERVER
+                        NetBackup master server name
+  --master_server_port MASTER_SERVER_PORT
+                        NetBackup master server port
+  --master_username MASTER_USERNAME
+                        NetBackup master server username
+  --master_password MASTER_PASSWORD
+                        NetBackup master server password
+  --mssql_instance MSSQL_INSTANCE
+                        MSSQL Instance name
+  --mssql_database MSSQL_DATABASE
+                        MSSQL Database name
+  --mssql_server_name MSSQL_SERVER_NAME
+                        MSSQL server name, this is used in the filter for GET assets API.
+  --mssql_use_localcreds MSSQL_USE_LOCALCREDS
+                        MSSQL server use locally defined creds
+  --mssql_domain MSSQL_DOMAIN
+                        MSSQL server domain
+  --mssql_username MSSQL_USERNAME
+                        MSSQL sysadmin username
+  --mssql_password MSSQL_PASSWORD
+                        MSSQL sysadmin user password
+  --stu_name STU_NAME   Storage Unit name
+  --protection_plan_name PROTECTION_PLAN_NAME
+                        Protection plan name
+  --asset_type ASSET_TYPE
+                        MSSQL asset type (AvailabilityGroup, Instance, Database)
+  --restore_db_prefix RESTORE_DB_PREFIX
+                        Restore database name prefix
+  --restore_db_path RESTORE_DB_PATH
+                        Restore database path
+  --recover_alluserdbs RECOVERALLUSERDBS
+                        Recover all User databases to the mssql_instance specfied with a database name prefix.
+
+Execution flow of a Single MSSQL database protection and alternate database recovery workflow:
+- Login to Master Server get authorization token for API use
+- Add Credential with Credential Management API
+- Create a MSSQL Instance Asset and associate Credential 
+- Asset API to find the MSSQL Instance asset id for subscription in a Protection Plan
+- Create MSSQL Protection Plan and configure MSSQL database policy attribute to SkipOffline databases
+- Subscribe the MSSQL Instance Assset in Protection Plan
+- Fetch Asset id for database for alternate recovery
+- Get recoverypoint for the database asset using its asset id
+- Perform alternate database recovery of the database and report recovery job id or Perfrom alternate recovery of all user databases, if recover_alluserdbs is specified.
+- Cleanup by removing subscription of Instance in Protection Plan, Remove Protection Plan and remove Mssql Credential
+

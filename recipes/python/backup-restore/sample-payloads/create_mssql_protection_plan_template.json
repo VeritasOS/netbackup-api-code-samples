@@ -1,0 +1,29 @@
+{
+   "data": {
+      "type": "slov3",
+      "attributes": {
+         "description": "Protection Plan for MSSQL workload",
+         "name": "",
+         "schedules": [
+            {
+               "backupStorageUnit": "",
+               "backupWindows": [
+                  {
+                     "dayOfWeek": 1,
+                     "startSeconds": 0,
+                     "durationSeconds": 86400
+                  }
+               ],
+               "frequencySeconds": 86400,
+               "retention": {
+                  "value": 2,
+                  "unit": "WEEKS"
+               }
+            }
+         ],
+         "allowSubscriptionEdit": "False",
+         "workloadType": "MSSQL",
+         "policyNamePrefix": ""
+      }
+   }
+}

@@ -1,0 +1,28 @@
+{
+    "data":{
+        "type":"query",
+        "attributes":{
+            "queryName":"create-assets",
+            "workloads":["mssql"],
+            "parameters":{"objectList":[
+                {
+                    "correlationId":"1",
+                    "asset":{
+                        "commonAssetAttributes": {
+                            "displayName": "testDatabase12",
+                            "detection": {
+                                "detectionMethod": "MANUAL"
+                            }
+                         },
+                        "assetType": "DATABASE"
+                    },
+                    "relationship": {
+                        "instances": {
+                            "data": ["instanceid-uuid"]
+                        }
+                    }
+                }
+            ]}
+        }
+    }
+}
