@@ -51,7 +51,6 @@ def get_mssql_alldbs(baseurl, token, host_name, instance_name='MSSQLSERVER'):
         print(f"status code is [{status_code}]")
         if (status_code == 200):
             limit = len(response_text['data'])
-            limit = limit - 1
             for i in range(0,limit,1):
                 attr = response_text['data'][i]['attributes']
                 assetid = response_text['data'][i]['id']
