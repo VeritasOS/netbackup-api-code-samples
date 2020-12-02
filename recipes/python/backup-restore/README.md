@@ -1,4 +1,4 @@
-# NetBackup VMware agentless single and group VM backup and restore APIs code samples
+# NetBackup backup and restore APIs code samples of VMware agentless single and group VM and Microsoft SQL Server 
 
 ## Executing the scripts:
 
@@ -136,10 +136,9 @@ Execution flow of group VM backup and restore script:
 - Perform bulk restore
 - Perform the cleanup(e.g. remove bulk instant access VMs, subscription, protection plan, VM group and vcenter)
 
-# - Microsoft SQL Server Protection and Recovery workflow
+### - Microsoft SQL Server Protection and Recovery workflow
 
-Use the following commands to run the scripts.
-### This mssql_db_backup_restore.py script demonstrates how to Protect a MSSQL Database or Instance using a protection plan, and perform a alternate recovery of a single database or all user databases using NetBackup APIs.
+This mssql_db_backup_restore.py script demonstrates how to Protect a MSSQL Database or Instance using a protection plan, and perform a alternate recovery of a single database or all user databases using NetBackup APIs.
 
 `python -W ignore recipes/python/backup-restore/mssql_db_backup_restore.py --master_server <master_server> --master_server_port 1556 --master_username <master_username> --master_password <master_password> --mssql_instance <mssql_instance_name> --mssql_database <mssql_database_name> --mssql_server_name <mssql_server_name> --mssql_use_localcreds 0 --mssql_domain <mssql_domain> --mssql_username <mssql_sysadmin_user> --mssql_password <mssql_sysadmin_pwd> --stu_name <storage_unit_used_in_protection_plan> --protection_plan_name <protection_plan_name> --asset_type <mssql_asset_type> --restore_db_prefix <mssql_restore_database_name_prefix> --restore_db_path <mssql_restore_database_path> --recoveralluserdbs <0|1>`
 
