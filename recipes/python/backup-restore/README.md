@@ -1,4 +1,4 @@
-# NetBackup backup and restore APIs code samples of VMware agentless single and group VM and Microsoft SQL Server 
+# NetBackup backup and restore APIs code samples of VMware agentless single, group VM and Microsoft SQL Server 
 
 ## Executing the scripts:
 
