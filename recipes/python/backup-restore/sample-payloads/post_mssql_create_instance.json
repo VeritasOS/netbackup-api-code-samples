@@ -1,0 +1,28 @@
+{
+    "data":{
+        "type":"query",
+        "attributes":{
+            "queryName":"create-assets",
+            "workloads":["mssql"],
+            "parameters":{"objectList":[
+                {
+                    "correlationId":"822",
+                    "asset":{
+                        "commonAssetAttributes": {
+                            "displayName": "instance33",
+                            "detection": {
+                                "detectionMethod": "MANUAL"
+                            },
+                            "credentials": [{
+                                "credentialName": "sqlCreds1"
+                            }]
+                         },
+                        "clientName": "clientdemo62",
+                        "assetType": "INSTANCE",
+                        "managedBy": "NETBACKUP"
+                    }
+                }
+            ]}
+        }
+    }
+}

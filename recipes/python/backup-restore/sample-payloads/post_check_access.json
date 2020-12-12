@@ -1,0 +1,920 @@
+{
+    "data": {
+        "type": "checkAccess",
+        "attributes": {
+            "checkAccessPairs": [
+                {
+                    "objectId": "|MANAGE|ACCESSHOSTS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|ACCESSHOSTS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|ACCESSHOSTS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|PRINCIPALS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|PRINCIPALS|",
+                    "operationId": "|OPERATIONS|SECURITY|ACCESS-CONTROL|PRINCIPALS|ASSIGN-TO-ROLE|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|ROLES|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|ROLES|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|ROLES|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|ROLES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|ACCESS-CONTROL|ROLES|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|"
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|ASSETS|NUTANIX-AHV|PROTECT|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|",
+                    "operationId": "|OPERATIONS|ASSETS|NUTANIX-AHV|VM|RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|CLUSTER|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|CLUSTER|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|CLUSTER|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|CLUSTER|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|NUTANIX-AHV|CLUSTER|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|EXPIRE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|PROTECT|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|REPLICATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|UPDATE_CONFIGURATION|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|CLOUD|",
+                    "operationId": "|OPERATIONS|ASSETS|CLOUD|VIEW_CREDENTIALS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|ALT_RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|OVERWRITE_RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|INSTANT_ACCESS_RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|PROTECT|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|CLEANUP_ASSETS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|AVAILABILITY_GROUP|DISCOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|DATABASE|DISCOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|MSSQL|",
+                    "operationId": "|OPERATIONS|MSSQL|INSTANCE|VALIDATE_CREDENTIAL|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|PROTECTION|PROTECTION_PLAN|SUBSCRIBE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|ASSETS|RHV|PROTECT|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|",
+                    "operationId": "|OPERATIONS|ASSETS|RHV|VM|RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|RHVMGR|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|RHVMGR|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|RHVMGR|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|RHVMGR|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|RHV|RHVMGR|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|ASSETS|VMWARE|PROTECT|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|ASSETS|VMWARE|VM|RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|",
+                    "operationId": "|OPERATIONS|ASSETS|VMWARE|VM|INSTANT_ACCESS_RECOVER|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|ESX|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|ESX|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|ESX|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|ESX|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|ESX|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|RESTORE_ESX|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|RESTORE_ESX|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|RESTORE_ESX|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|RESTORE_ESX|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|RESTORE_ESX|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|VCENTER|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|VCENTER|",
+                    "operationId": "|OPERATIONS|ADD|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|VCENTER|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|VCENTER|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|ASSETS|VMWARE|VCENTER|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|MANAGE|EMAIL-NOTIFICATIONS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|EMAIL-NOTIFICATIONS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|EMAIL-NOTIFICATIONS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|DATA-CLASSIFICATIONS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|CDP-GATEWAY|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|CDP-GATEWAY|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|CDP-GATEWAY|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|STORAGE|DISK-POOLS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|EVENTLOGS|NOTIFICATIONS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|HOSTMAPPINGS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|COMMENT|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|RELOAD|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|HOSTMAPPINGS|SEARCH|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|HOSTMAPPINGS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|HOSTMAPPINGS|UPGRADE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|HOSTMAPPINGS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|",
+                    "operationId": "|OPERATIONS|MANAGE|HOSTS|VALIDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|HOST-PROPERTIES|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|HOST-PROPERTIES|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|HOST-PROPERTIES|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|HOST-PROPERTIES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|LICENSING|USAGE|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|PROTECTION|POLICIES|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|PROTECTION|POLICIES|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|PROTECTION|POLICIES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|PROTECTION|POLICIES|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|PROTECTION|PROTECTION_PLAN|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|PROTECTION|PROTECTION_PLAN|",
+                    "operationId": "|OPERATIONS|DELETE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|PROTECTION|PROTECTION_PLAN|",
+                    "operationId": "|OPERATIONS|UPDATE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|PROTECTION|PROTECTION_PLAN|",
+                    "operationId": "|OPERATIONS|PROTECTION|PROTECTION_PLAN|SUBSCRIBE|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|PROTECTION|PROTECTION_PLAN|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|PROTECTION|PROTECTION_PLAN|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|"
+                },
+                {
+                    "objectId": "|MANAGE|RESILIENCY|DOMAIN|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|RESILIENCY|DOMAIN|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|RESILIENCY|DOMAIN|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|RESILIENCY|DOMAIN|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|RESILIENCY|DOMAIN|",
+                    "operationId": "|OPERATIONS|MANAGE|RESILIENCY|DOMAIN|DISCOVER|"
+                },
+                {
+                    "objectId": "|MANAGE|RETENTION-LEVELS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|RESOURCELIMITS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|RESOURCELIMITS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|RESOURCELIMITS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|RESOURCELIMITS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|SECURITY|KMS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|API-KEYS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|API-KEYS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|API-KEYS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|API-KEYS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|SECURITY|AUDIT-LOGS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|CERTIFICATE-MANAGEMENT|NETBACKUP-CERTIFICATES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|CERTIFICATE-MANAGEMENT|NETBACKUP-CERTIFICATES|",
+                    "operationId": "|OPERATIONS|SECURITY|CERTIFICATE-MANAGEMENT|NETBACKUP-CERTIFICATES|REVOKE|"
+                },
+                {
+                    "objectId": "|SECURITY|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|SECURITY|CREDENTIALS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|SECURITY|CERTIFICATE-MANAGEMENT|TOKENS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|CERTIFICATE-MANAGEMENT|TOKENS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|SECURITY|CERTIFICATE-MANAGEMENT|TOKENS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|SECURITY|SETTINGS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|SECURITY|SETTINGS|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|CERTIFICATE-MANAGEMENT|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|CERTIFICATE-MANAGEMENT|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|CERTIFICATE-MANAGEMENT|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|CERTIFICATE-MANAGEMENT|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|",
+                    "operationId": "|OPERATIONS|SECURITY|USERS|USER-SESSIONS|UNLOCK|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|",
+                    "operationId": "|OPERATIONS|SECURITY|USERS|USER-SESSIONS|VIEW-LOCKED-USERS|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|",
+                    "operationId": "|OPERATIONS|SECURITY|USERS|USER-SESSIONS|CLOSE|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|",
+                    "operationId": "|OPERATIONS|SECURITY|USERS|USER-SESSIONS|CLOSE-ALL|"
+                },
+                {
+                    "objectId": "|SECURITY|USERS|USER-SESSIONS|CONFIG|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|STORAGE|",
+                    "operationId": "|OPERATIONS|VIEW|",
+                    "checkAllDescendants": true
+                },
+                {
+                    "objectId": "|STORAGE|DISK-POOLS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|STORAGE|DISK-POOLS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|STORAGE|DISK-POOLS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|STORAGE|DISK-POOLS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|UNIVERSAL-SHARES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|UNIVERSAL-SHARES|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|UNIVERSAL-SHARES|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-SERVERS|UNIVERSAL-SHARES|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|STORAGE|TAPE-MEDIA|SERVER-GROUPS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|STORAGE|TAPE-MEDIA|VOLUME-POOLS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-UNITS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-UNITS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-UNITS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|STORAGE|STORAGE-UNITS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|SERVERS|TRUSTED-MASTER-SERVERS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SERVERS|TRUSTED-MASTER-SERVERS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|SERVERS|TRUSTED-MASTER-SERVERS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|JOBS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|JOBS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|JOBS|",
+                    "operationId": "|OPERATIONS|DELETE|"
+                },
+                {
+                    "objectId": "|MANAGE|JOBS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|HOSTS|PROCESSES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|IMAGES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|IMAGES|",
+                    "operationId": "|OPERATIONS|MANAGE|IMAGES|VIEW-CONTENTS|"
+                },
+                {
+                    "objectId": "|MANAGE|IMAGE-SHARE|CLOUD-IMAGES|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|AWS|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|AWS|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|AWS|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|AZURE|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|AZURE|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|AZURE|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|GCP|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|GCP|",
+                    "operationId": "|OPERATIONS|ADD|"
+                },
+                {
+                    "objectId": "|MANAGE|SNAPSHOT-MGMT-SERVER-PLUGINS|GCP|",
+                    "operationId": "|OPERATIONS|UPDATE|"
+                },
+                {
+                    "objectId": "|SECURITY|IDP|",
+                    "operationId": "|OPERATIONS|VIEW|"
+                },
+                {
+                    "objectId": "|CREDENTIALS|sqlcred|",
+                    "operationId": "|OPERATIONS|MANAGE-ACCESS|"
+                }
+            ]
+        }
+    }
+}
+

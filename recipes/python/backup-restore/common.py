@@ -9,6 +9,7 @@ import os
 import sys
 import time
 import requests
+import uuid
 
 headers = {"Content-Type" : "application/vnd.netbackup+json;version=4.0"}
 
@@ -111,6 +112,7 @@ def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_na
     url = f"{baseurl}servicecatalog/slos?meta=accessControlId"
 
     cur_dir = os.path.dirname(os.path.abspath(__file__))
+    cur_dir = cur_dir + os.sep + "sample-payloads" + os.sep
     file_name = os.path.join(cur_dir, "create_protection_plan_template.json")
     with open(file_name, 'r') as file_handle:
         data = json.load(file_handle)
@@ -118,7 +120,7 @@ def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_na
     data['data']['attributes']['policyNamePrefix'] = protection_plan_name
     data['data']['attributes']['schedules'][0]['backupStorageUnit'] = storage_unit_name
     data['data']['attributes']['allowSubscriptionEdit'] = False
-
+ 
     status_code, response_text = rest_request('POST', url, headers, data=data)
     validate_response(status_code, 201, response_text)
     protection_plan_id = response_text['data']['id']
@@ -149,6 +151,20 @@ def get_subscription(baseurl, token, protection_plan_id, subscription_id):
     status_code, response_text = rest_request('GET', url, headers)
     validate_response(status_code, 200, response_text)
     print(f"Sucessfully fetched the subscription:[{subscription_id}] details.")
+
+def protection_plan_backupnow(baseurl, token, protection_plan_id, asset_id):
+    """ This function will trigger the backup of given asset using protection plan"""
+    headers.update({'Authorization': token})
+    url = f"{baseurl}servicecatalog/slos/{protection_plan_id}/backup-now"
+    selection_type = "ASSET"
+    payload = {"data": {"type": "backupNowRequest",
+                        "attributes": {"selectionType": selection_type, "selectionId": asset_id}}}
+
+    status_code, response_text = rest_request('POST', url, headers, data=payload)
+    validate_response(status_code, 202, response_text)
+    backup_job_id = response_text['data'][0]['id']
+    print(f"Started backup for asset:[{asset_id}] and backup id is:[{backup_job_id}]")
+    return backup_job_id
 
 # Get job details
 def get_job_details(baseurl, token, jobid):
@@ -257,13 +273,28 @@ def rest_request(request_type, uri, header=None, **kwargs):
     print(f"Response text:[{response.text}]")
     return response.status_code, response_text
 
+def get_recovery_points(baseurl, token, workload_type, asset_id):
+    """ This function return the recovery point of given asset """
+    print(f"Get the recovery points for asset:[{asset_id}]")
+    headers.update({'Authorization': token})
+    url = f"{baseurl}recovery-point-service/workloads/{workload_type}/"\
+                f"recovery-points?filter=assetId eq '{asset_id}'"
+    status_code, response_text = rest_request('GET', url, headers)
+    validate_response(status_code, 200, response_text)
+    if (len(response_text['data'])>0):
+        recoverypoint_id = response_text['data'][0]['id']
+    else:
+        recoverypoint_id = ""
+    return recoverypoint_id
+
 # Validate the response code of the request
 def validate_response(actual_status_code, expected_status_code, response_text):
     """ This function validate the response status code with expected response code """
     if actual_status_code == expected_status_code:
-        print(f"Successfully validate the response status code:[{expected_status_code}]")
+        print(f"Successfully validated the response status code:[{expected_status_code}]")
     else:
         print(f"Actual status code:[{actual_status_code}] not match "\
                 f"with expected status code:[{expected_status_code}]")
         raise Exception(f"Response Error:[{response_text['errorMessage']}] and "\
                             f"details:[{response_text['errorDetails']}]")
+
