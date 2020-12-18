@@ -127,6 +127,31 @@ def create_protection_plan(baseurl, token, protection_plan_name, storage_unit_na
     print(f"Protection plan created successfully:[{protection_plan_id}]")
     return protection_plan_id
 
+def run_netbackup_policy(base_url, token, policy_name):
+    print(f"Run policy:[{policy_name}]")
+    headers.update({'Authorization': token})
+    url = base_url + "/admin/manual-backup/"
+
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    cur_dir = cur_dir + os.sep + "sample-payloads" + os.sep
+    file_name = os.path.join(cur_dir, "post_manual_backup.json")
+    with open(file_name, 'r') as file_handle:
+        data = json.load(file_handle)
+    data['data']['attributes']['policyName'] = policy_name
+
+    status_code, response_text = rest_request('POST', url, headers, data=data)
+    validate_response(status_code, 202, response_text)
+    print(f"Policy run successfully:[{policy_name}]")
+    return response_text['data'][0]['id']
+
+def delete_netbackup_policy(base_url, token, policy_name):
+    print(f"Delete policy:[{policy_name}]")
+    headers.update({'Authorization': token})
+    url = base_url + f"/config/policies/{policy_name}"
+    status_code, response_text = rest_request('DELETE', url, headers, data='')
+    validate_response(status_code, 204, response_text)
+    print(f"Policy deleted successfully:[{policy_name}]")
+
 # Subscription asset to SLO
 def subscription_asset_to_slo(baseurl, token, protection_plan_id, asset_id, is_vm_group=0):
     """ This function subscribe the asset/group asset to protection plan """
@@ -286,6 +311,22 @@ def get_recovery_points(baseurl, token, workload_type, asset_id):
     else:
         recoverypoint_id = ""
     return recoverypoint_id
+
+def get_recovery_point_copy_info(baseurl, token, workload_type, recovery_point_id):
+    """ This function returns the optional information for a given recovery point"""
+    print(f"Get the recovery point optional info:[{recovery_point_id}]")
+    headers.update({'Authorization': token})
+    include = f"optional{workload_type.capitalize()}RecoveryPointInfo"
+    url = f"{baseurl}recovery-point-service/workloads/{workload_type}/"\
+                f"recovery-points/{recovery_point_id}?include={include}"
+    status_code, response_text = rest_request('GET', url, headers)
+    validate_response(status_code, 200, response_text)
+    if (len(response_text['included'])>0):
+        print(response_text)
+        copy_info = response_text['included'][0]['attributes']['backupImageCopyInfo']
+    else:
+        copy_info = []
+    return copy_info
 
 # Validate the response code of the request
 def validate_response(actual_status_code, expected_status_code, response_text):

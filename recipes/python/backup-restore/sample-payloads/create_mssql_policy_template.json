@@ -1,0 +1,71 @@
+{
+    "data": {
+        "type": "policy",
+        "id": "policy",
+        "attributes": {
+            "policy": {
+                "policyName": "policy",
+                "policyType": "MS-SQL-Server",
+                "policyAttributes": {},
+                "clients": [
+                    {
+                        "databaseName": "$ALL",
+                        "hostName": "host",
+                        "instanceName": "MSSQLSERVER"
+                    }
+                ],
+				"schedules": [
+					{
+						"backupCopies": {
+							"copies": [
+								{
+									"failStrategy": "Continue",
+									"mediaOwner": "*ANY*",
+									"retentionLevel": 1,
+									"retentionPeriod": {
+										"value": 2,
+										"unit": "WEEKS"
+                                    },
+                                    "storage": "storageUnit"
+								},
+								{
+									"failStrategy": "Continue",
+									"mediaOwner": "*ANY*",
+									"retentionLevel": 1,
+									"retentionPeriod": {
+										"value": 2,
+										"unit": "WEEKS"
+                                    },
+                                    "storage": "copyStorageUnit"
+								}
+							],
+							"priority": -1
+						},
+						"backupType": "Full Backup",
+						"frequencySeconds": 604800,
+						"mediaMultiplexing": 1,
+						"retriesAllowedAfterRunDay": false,
+						"scheduleName": "Full",
+						"scheduleType": "Frequency",
+						"snapshotOnly": false,
+						"startWindow": [
+							{
+								"dayOfWeek": 1,
+								"startSeconds": 21600,
+								"durationSeconds": 43200
+							}
+						],
+						"storageIsSLP": false,
+						"syntheticBackup": false
+					}
+				],
+                
+                "backupSelections": {
+                    "selections": [
+                        "WHOLE_DATABASE"
+                    ]
+                }
+            }
+        }
+    }
+}

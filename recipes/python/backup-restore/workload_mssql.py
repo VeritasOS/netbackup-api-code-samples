@@ -114,6 +114,27 @@ def create_mssql_protection_plan(baseurl, token, protection_plan_name, storage_u
     print(f"Protection plan created successfully:[{protection_plan_id}]")
     return protection_plan_id
 
+def create_netbackup_policy(base_url, token, policy_name, client, storage_unit_name, copy_storage_unit_name):
+    print(f"Create policy:[{policy_name}]")
+    headers.update({'Authorization': token})
+    url = base_url + "/config/policies/"
+
+    cur_dir = os.path.dirname(os.path.abspath(__file__))
+    cur_dir = cur_dir + os.sep + "sample-payloads" + os.sep
+    file_name = os.path.join(cur_dir, "create_mssql_policy_template.json")
+    with open(file_name, 'r') as file_handle:
+        data = json.load(file_handle)
+    data['data']['attributes']['policy']['policyName'] = policy_name
+    data['data']['id'] = policy_name
+    data['data']['attributes']['policy']['clients'][0]['hostName'] = client
+    data['data']['attributes']['policy']['policyAttributes']['storage'] = storage_unit_name
+    data['data']['attributes']['policy']['schedules'][0]['backupCopies']['copies'][0]['storage'] = storage_unit_name
+    data['data']['attributes']['policy']['schedules'][0]['backupCopies']['copies'][1]['storage'] = copy_storage_unit_name
+
+    status_code, response_text = common.rest_request('POST', url, headers, data=data)
+    common.validate_response(status_code, 204, response_text)
+    print(f"Policy created successfully:[{policy_name}]")
+
 # Update SLO Mssql attributes
 def update_protection_plan_mssql_attr(baseurl, token, protection_plan_name, protection_plan_id, skip_offline_db=0):
     """ Update SLO with mssql attributes """
@@ -244,7 +265,7 @@ def create_and_register_mssql_instance(baseurl, token, instance_name, server_nam
     status_code, response_text = common.rest_request('GET', url, headers)
 
 # Create mssql recovery request
-def create_mssql_recovery_request(baseurl, token, mssql_recovery_input, rp_id, asset_id, mssql_sysadm_user, mssql_sysadm_domain, mssql_sysadm_pwd, mssql_alt_db_name, mssql_alt_db_path, mssql_instance_name, mssql_server_name):
+def create_mssql_recovery_request(baseurl, token, mssql_recovery_input, rp_id, asset_id, mssql_sysadm_user, mssql_sysadm_domain, mssql_sysadm_pwd, mssql_alt_db_name, mssql_alt_db_path, mssql_instance_name, mssql_server_name, recover_from_copy):
     """ This function is for mssql recovery request"""
     print(f"create mssql recovery request:[{mssql_recovery_input}]")
     headers.update({'Authorization': token})
@@ -264,7 +285,16 @@ def create_mssql_recovery_request(baseurl, token, mssql_recovery_input, rp_id, a
     data['data']['attributes']['alternateRecoveryOptions']['instanceName'] = mssql_instance_name
     data['data']['attributes']['alternateRecoveryOptions']['client'] = mssql_server_name
     data['data']['attributes']['alternateRecoveryOptions']['alternateFileLocation']['renameAllFilesToSameLocation'] = mssql_alt_db_path
-
+    if(recover_from_copy):
+        info = common.get_recovery_point_copy_info(baseurl, token, 'mssql', rp_id)
+        if(len(info)>0):
+            data['data']['attributes']['recoveryOptions']['mssqlRecoveryCopyInfo'] = {}
+            data['data']['attributes']['recoveryOptions']['mssqlRecoveryCopyInfo']['fullRecoveryCollection'] = [{}]
+            for copy in info[0]['copies']:
+                if(copy['copyNumber'] == recover_from_copy):
+                    copy['storage'].pop('sType',None)
+                    data['data']['attributes']['recoveryOptions']['mssqlRecoveryCopyInfo']['fullRecoveryCollection'][0]['backupId'] = info[0]['backupId']
+                    data['data']['attributes']['recoveryOptions']['mssqlRecoveryCopyInfo']['fullRecoveryCollection'][0]['storage'] = copy['storage']
     status_code, response_text = common.rest_request('POST', url, headers, data=data)
     common.validate_response(status_code, 201, response_text)
     recovery_job_id = response_text['data']['id']
