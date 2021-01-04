@@ -240,5 +240,149 @@ sub post_disk_pool {
     }
 }
 
+# Add a replication target on a disk volume
+sub post_add_replication_target_on_dv {
+    my $arguments_count = scalar(@_);
+    if ($arguments_count != 5) {
+        print "ERROR :: Incorrect number of arguments passed to post_add_replication_target_on_dv()\n";
+        print "Usage : post_add_replication_target_on_dv( <Master Server Hostname>, <Token>, <StorageServerId> <DiskVolumeId> <Payload>) \n";
+        return;
+    }
+
+    my $master_server = $_[0];
+    my $token = $_[1];
+    my $stsid = $_[2];
+    my $dvid  = $_[3];
+    my $filename = $_[4];
+    
+    my @dvid_split = @split /:/, $dvid
+    my $dvid_hex = sprintf "0x%02x", hex $dvid_hex[0];
+    my $url = "$PROTOCOL$master_server:$NB_PORT/netbackup/storage/storage-servers/".$stsid."/disk-volumes/".$dvid_hex."/replication-targets";
+    open(my $fh, '<:encoding(UTF-8)', $filename)
+            or die "Could not open file '$filename' $!";
+
+    my $payload = "";
+    while (my $row = <$fh>) {
+            chomp $row;
+            $payload .= $row;
+    }
+    print "payload: $payload\n";
+
+    my $json = send_http_request($url, "POST", $token, $payload, undef, $CONTENT_TYPE);
+
+    if (defined $json) {
+        print "Successfully completed POST Storage Server Request.\n";
+
+        my $pretty = JSON->new->pretty->encode($json);
+        return $pretty;
+    }
+    else {
+        print "ERROR :: Add replication target Request Failed!\n";
+    }
+}
+
+# Delete a replication target on a disk volume
+sub post_delete_replication_target_on_dv {
+    my $arguments_count = scalar(@_);
+    if ($arguments_count != 5) {
+        print "ERROR :: Incorrect number of arguments passed to post_delete_replication_target_on_dv()\n";
+        print "Usage : post_delete_replication_target_on_dv( <Master Server Hostname>, <Token>, <StorageServerId> <DiskVolumeId> <Payload>) \n";
+        return;
+    }
+
+    my $master_server = $_[0];
+    my $token = $_[1];
+    my $stsid = $_[2];
+    my $dvid  = $_[3];
+    my $filename = $_[4];
+    
+    my @dvid_split = @split /:/, $dvid
+    my $dvid_hex = sprintf "0x%02x", hex $dvid_hex[0];
+    my $url = "$PROTOCOL$master_server:$NB_PORT/netbackup/storage/storage-servers/".$stsid."/disk-volumes/".$dvid_hex."/replication-targets";
+    open(my $fh, '<:encoding(UTF-8)', $filename)
+            or die "Could not open file '$filename' $!";
+
+    my $payload = "";
+    while (my $row = <$fh>) {
+            chomp $row;
+            $payload .= $row;
+    }
+    print "payload: $payload\n";
+
+    my $json = send_http_request($url, "POST", $token, $payload, undef, $CONTENT_TYPE);
+
+    if (defined $json) {
+        print "Successfully completed POST Storage Server Request.\n";
+
+        my $pretty = JSON->new->pretty->encode($json);
+        return $pretty;
+    }
+    else {
+        print "ERROR :: Delete replication target Request Failed!\n";
+    }
+}
+
+sub get_replication_targets_by_id {
+    my $arguments_count = scalar(@_);
+    if ($arguments_count != 5) {
+        print "ERROR :: Incorrect number of arguments passed to get_replication_targets_by_id()\n";
+        print "Usage : get_replication_targets_by_id( <Master Server Hostname>, <Token>, <StorageServerId> <DiskVolumeId> <ReplicationTargetId>) \n";
+        return;
+    }
+
+    my $master_server = $_[0];
+    my $token = $_[1];
+    my $stsid = $_[2];
+    my $dvid  = $_[3];
+    my $reptargetid = $_[4];
+    
+    my @dvid_split = @split /:/, $dvid
+    my $dvid_hex = sprintf "0x%02x", hex $dvid_hex[0];
+    my $url = "$PROTOCOL$master_server:$NB_PORT/netbackup/storage/storage-servers/".$stsid."/disk-volumes/".$dvid_hex."/replication-targetsi/".$reptargetid;
+
+    my $json = send_http_request($url, "GET", $token, undef, undef, $CONTENT_TYPE);
+
+    if (defined $json) {
+         print "Successfully completed GET replication target by id Request.\n";
+
+        my $pretty = JSON->new->pretty->encode($json);
+        return $pretty;
+    }
+    else {
+        print "ERROR :: GET replication target by id Request Failed!\n";
+    }
+}
+
+sub get_all_replication_targets {
+    my $arguments_count = scalar(@_);
+    if ($arguments_count != 4) {
+        print "ERROR :: Incorrect number of arguments passed to get_all_replication_targets()\n";
+        print "Usage : post_add_replication_target_on_dv( <Master Server Hostname>, <Token>, <StorageServerId> <DiskVolumeId>) \n";
+        return;
+    }
+
+    my $master_server = $_[0];
+    my $token = $_[1];
+    my $stsid = $_[2];
+    my $dvid  = $_[3];
+    
+    my @dvid_split = @split /:/, $dvid
+    my $dvid_hex = sprintf "0x%02x", hex $dvid_hex[0];
+    my $url = "$PROTOCOL$master_server:$NB_PORT/netbackup/storage/storage-servers/".$stsid."/disk-volumes/".$dvid_hex."/replication-targets";
+
+    my $json = send_http_request($url, "GET", $token, undef, undef, $CONTENT_TYPE);
+
+    if (defined $json) {
+         print "Successfully completed GET all replication targets Request.\n";
+
+        my $pretty = JSON->new->pretty->encode($json);
+        return $pretty;
+    }
+    else {
+        print "ERROR :: GET all replication targets Request Failed!\n";
+    }
+}
+
+
 1;
 
