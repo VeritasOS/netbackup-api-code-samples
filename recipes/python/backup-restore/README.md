@@ -199,7 +199,7 @@ Arguments:
                         Restore database name prefix
   --restore_db_path RESTORE_DB_PATH
                         Restore database path
-  --recover_alluserdbs recover_all_user_dbs
+  --recover_all_user_dbs recover_all_user_dbs
                         Recover all User databases to the mssql_instance specfied with a database name prefix
   --recover_from_copy RECOVER_FROM_COPY
                         Create a policy with a copy and then recover using the specified copy of the backup
