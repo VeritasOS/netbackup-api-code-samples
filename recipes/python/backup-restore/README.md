@@ -4,6 +4,7 @@
 
 Pre-requisites:
 - NetBackup 8.3 or higher
+- NetBackup 9.0.1 or higher for using recover from copy mssql sample
 - Python 3.6 or higher
 - Python modules: `requests`
 - create_protection_plan_template.json template file. This template contain the required payload which is used to create the protection plan.
