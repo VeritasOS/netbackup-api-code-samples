@@ -1,0 +1,66 @@
+---
+### Requirements
+# inputs from parent - {{login_token}},
+# inputs from inventory - {{master}}, {{vcenter}}, {{baseurl}}, {{contenttype}}, {{sitecode}}
+# outputs {{protectionplan}}, {{assetgroup_id}}
+
+  - name: set fullprod var based on prod value to Equal
+    set_fact:
+      prodfull: Equal
+      prodname: Prod
+    when: item.prod == "eq"
+  - name: set fullprod var based on prod value to NotEqual
+    set_fact:
+      prodfull: NotEqual
+      prodname: NonProd
+    when: item.prod == "ne"
+
+  - name: set fact for assetgroupname
+    set_fact:
+      AssetGroupName: "{{sitecode}}-{{item.segname}}-{{item.btype}}-{{item.tagtime}}-{{prodname}}-{{item_vcenter}}-tags"
+
+  - name: set fact for urlencode
+    set_fact:
+      url_parms: "{{ AssetGroupName | urlencode }}"
+
+
+  - name: adds asset-group for item.segname
+    uri:
+      url: "{{baseurl}}asset-service/queries"
+      method: POST
+      body_format: json
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+      body:
+        data:
+          type: query
+          attributes:
+            queryName: create-or-update-assets
+            workloads:
+            - vmware
+            parameters:
+              objectList:
+              - correlationId: '1'
+                type: vmwareGroupAsset
+                assetGroup:
+                  commonAssetAttributes:
+                    detection:
+                      detectionMethod: MANUAL
+                    displayName: "{{AssetGroupName}}"
+                    protectionCapabilities:
+                      isProtectable: 'YES'
+                      isRecoverable: 'NO'
+                  assetType: vmGroup
+                  description: "selects all {{item.segname}} for {{item_vcenter}} with tags {{item.tagtime}}, {{item.tagtype}}, {{item.tagbg}}, {{prodname}} created by ansible, do NOT update."
+                  filterConstraint: "{{item_vcenter}}"
+                  oDataQueryFilter: tolower(tag/tagName) eq tolower('{{sitetag}}') and tolower(tag/tagName) eq tolower('{{item.tagtime}}') and tolower(tag/tagName) eq tolower('{{item.tagtype}}') and tolower(tag/tagName) eq tolower('{{item.tagbg}}') and tolower(tag/tagName) {{item.prod}} tolower('Production')
+      status_code:
+        - 201
+        - 409
+      validate_certs: no
+      return_content: yes
+    register: assetgroup
+
+  - name: AssetGroup Post Folder Defaults - Include task
+    include_tasks: tasks/vmworkflow_assetgroup_jobstatus.yml
