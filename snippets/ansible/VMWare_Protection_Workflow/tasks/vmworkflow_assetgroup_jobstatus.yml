@@ -1,0 +1,57 @@
+---
+  ### Requirements
+  # Takes inputs to check job status
+  # inputs from parent - {{login_token}},{{url_parms}}
+  # inputs from inventory - {{master}}, {{vcenter}}, {{baseurl}}, {{contenttype}}, {{sitecode}}
+  # outputs {{protectionplan}}, {{assetgroup_id}}
+
+    - name: debug uri for query results on the task creating the assetgroup
+      debug:
+        msg:
+          - "{{assetgroup.location}}"
+
+    - name: Get the task status for the creation of the assetgroup
+      uri:
+        url: "{{assetgroup.location}}"
+        method: GET
+        body_format: json
+        status_code: 200
+        headers:
+          authorization: "{{login_token}}"
+          content-type: "{{contenttype}}"
+        validate_certs: no
+        return_content: yes
+      register: taskstatus
+      until: taskstatus.json.data[0].attributes.status != "IN_PROGRESS"
+      retries: 6
+      delay: 10
+
+
+    - name: debug results of the task creation
+      debug:
+        msg:
+          - "{{taskstatus.json.data[0].attributes.status}}"
+          - "{{taskstatus.json.data[0].attributes.workItemResponses}}"
+
+
+
+    - name: get assetgroup by query of assetgroup name
+      uri:
+        url:  "{{baseurl}}asset-service/workloads/vmware/assets?filter=assetType%20eq%20%27vmGroup%27%20and%20commonAssetAttributes%2FdisplayName%20eq%20%27{{url_parms}}%27"
+        method: GET
+        body_format: json
+        status_code: 200
+        headers:
+          authorization: "{{login_token}}"
+          content-type: "{{contenttype}}"
+        validate_certs: no
+        return_content: yes
+      register: assetgroup
+
+    - name: debug assetgroup
+      debug:
+        msg: "{{assetgroup.json.data[0].id}}"
+
+    - name: Set Fact - Asset Group ID
+      set_fact:
+        assetgroup_id: "{{assetgroup.json.data[0].id}}"

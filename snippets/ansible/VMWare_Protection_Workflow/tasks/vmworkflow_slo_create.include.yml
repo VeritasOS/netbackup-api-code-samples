@@ -1,0 +1,232 @@
+---
+  ### Requirements
+  # inputs from parent - {{login_token}}
+  # inputs from inventory - {{baseurl}}, {{master}}, {{vcenter}}, {{sitecode}}, {{vm_slo_storage_id}}, {{vm_backup_storageunit}}
+  # outputs {{slo_create}}, {{slo_id}}
+
+  - name: set time if item.time is definded -- folders
+    set_fact:
+      time: "{{item.time}}"
+    when: item.time is defined
+
+  - name: set time if item.tagtime is definded -- tags
+    set_fact:
+      time: "{{item.tagtime}}"
+    when: item.tagtime is defined
+
+  - name: debug time
+    debug: var=time
+
+  - name: set startsec var based on time value - 1800
+    set_fact:
+      startsec: 64800
+    when: time == "1800"
+  - name: set startsec var based on time value - 2200
+    set_fact:
+      startsec: 79200
+    when: time == "2200"
+  - name: set startsec var based on time value - 0200
+    set_fact:
+      startsec: 7200
+    when: time == "0200"
+  - name: set startsec var based on time value - 0400
+    set_fact:
+      startsec: 14400
+    when: time == "0400"
+
+  - name: set priority var based on prod value to Eq
+    set_fact:
+      priority: 60000
+    when: item.prod == "eq"
+  - name: set fullprod var based on prod value to Ne
+    set_fact:
+      priority: 50000
+    when: item.prod == "ne"
+
+  - name: debug policy name use
+    debug:
+      msg: "{{sitecode}}_{{item.segabv}}v_{{item.ptype}}_fr_{{time}}_{{item.ret}}"
+
+
+  - name: SLO Create
+    uri:
+      url: "{{baseurl}}servicecatalog/slos"
+      method: POST
+      body_format: json
+      status_code:
+        - 201
+        - 409
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+      body:
+        data:
+          type: "slov3"
+          attributes:
+            name: "{{sitecode}}_{{item.segabv}}v_{{item.ptype}}_fr_{{time}}_{{item.ret}}"
+            description: "ansible defined SLO Default configurations. Changes should be made in ansible"
+            policyNamePrefix: "{{sitecode}}_{{item.segabv}}v_{{item.ptype}}_fr_{{time}}_{{item.ret}}"
+            workloadType: VMWARE
+            schedules:
+            - scheduleType: FULL
+              frequencySeconds: 604800
+              retention:
+                value: "{{item.ret}}"
+                unit: DAYS
+              backupStorageUnit: "{{vm_backup_storageunit}}"
+              backupWindows:
+              - dayOfWeek: 6
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+            - scheduleType: DIFFERENTIAL_INCREMENTAL
+              frequencySeconds: 86400
+              retention:
+                value: "{{item.ret}}"
+                unit: DAYS
+              backupStorageUnit: "{{vm_backup_storageunit}}"
+              backupWindows:
+              - dayOfWeek: 1
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+              - dayOfWeek: 2
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+              - dayOfWeek: 3
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+              - dayOfWeek: 4
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+              - dayOfWeek: 5
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+              - dayOfWeek: 7
+                durationSeconds: 28800
+                startSeconds: "{{startsec}}"
+            policyDefinition:
+              policy:
+                policyName: "{{sitecode}}_{{item.segabv}}v_{{item.ptype}}_fr_{{time}}_{{item.ret}}"
+                policyType: VMware
+                policyAttributes:
+                  active: false
+                  jobLimit: 2147483647
+                  snapshotMethodArgs: "skipnodisk=0,post_events=1,multi_org=0,Virtual_machine_backup=2,continue_discovery=1,nameuse=4,exclude_swap=1,tags_unset=0,ignore_irvm=1,rLim=10,snapact=2,enable_quiesce_failover=1,file_system_optimization=1,drive_selection={{item.driveselect}},disable_quiesce=0,enable_vCloud=0,trantype=nbdssl,rHz=10,rTO=0"
+                  useAccelerator: true
+                  autoManagedType: 2
+                  backupHost: MEDIA_SERVER
+                  blockIncremental: true
+                  dataClassification:
+                  disableClientSideDeduplication: false
+                  discoveryLifetime: 28800
+                  mediaOwner: "*ANY*"
+                  priority: "{{priority}}"
+                  storage:
+                  storageIsSLP: false
+                  useReplicationDirector: false
+                  volumePool: NetBackup
+                schedules:
+                - backupType: Full Backup
+                  backupCopies:
+                    copies:
+                    - retentionPeriod:
+                        value: "{{item.ret}}"
+                        unit: DAYS
+                      storage: "{{vm_backup_storageunit}}"
+                    priority: -1
+                  frequencySeconds: 604800
+                  mediaMultiplexing: 1
+                  retriesAllowedAfterRunDay: false
+                  scheduleName: Full
+                  scheduleType: Frequency
+                  snapshotOnly: false
+                  storageIsSLP: true
+                  startWindow:
+                  - dayOfWeek: 6
+                    durationSeconds: 28000
+                    startSeconds: "{{startsec}}"
+                - backupType: "Differential Incremental Backup"
+                  backupCopies:
+                    copies:
+                    - retentionPeriod:
+                        value: "{{item.ret}}"
+                        unit: DAYS
+                      storage: "{{vm_backup_storageunit}}"
+                    priority: -1
+                  frequencySeconds: 86400
+                  mediaMultiplexing: 1
+                  retriesAllowedAfterRunDay: false
+                  scheduleName: DIFF_INC
+                  scheduleType: Frequency
+                  snapshotOnly: false
+                  storageIsSLP: true
+                  startWindow:
+                  - dayOfWeek: 1
+                    durationSeconds: 28800
+                    startSeconds: "{{startsec}}"
+                  - dayOfWeek: 2
+                    durationSeconds: 28800
+                    startSeconds: "{{startsec}}"
+                  - dayOfWeek: 3
+                    durationSeconds: 28800
+                    startSeconds: "{{startsec}}"
+                  - dayOfWeek: 4
+                    durationSeconds: 28800
+                    startSeconds: "{{startsec}}"
+                  - dayOfWeek: 5
+                    durationSeconds: 28800
+                    startSeconds: "{{startsec}}"
+                  - dayOfWeek: 7
+                    durationSeconds: 28800
+                    startSeconds: "{{startsec}}"
+      validate_certs: no
+      return_content: yes
+    register: slo_create
+
+  - name: debug vmware_resource
+    debug:
+      msg:  "{{slo_create.status}}"
+
+  - name: set uri status to var
+    set_fact:
+      uristat:  "{{slo_create.status}}"
+
+  - name: debug uristat
+    debug:
+      var: uristat
+
+  - name: get slo object if create exit with 409
+    uri:
+      url: "{{baseurl}}servicecatalog/slos?filter=name%20eq%20%27{{sitecode}}_{{item.segabv}}v_{{item.ptype}}_fr_{{time}}_{{item.ret}}%27"
+      method: GET
+      body_format: json
+      status_code:
+        - 200
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+#      queries:
+#        filter: name eq "{{sitecode}}_{{item.segabv}}v_{{item.ptype}}_fr_{{time}}_{{item.ret}}"
+      validate_certs: no
+      return_content: yes
+    register: slo_get
+    when: uristat == "409"
+
+
+#  - name: debug slo get
+#    debug:
+#      msg: "{{slo_get.json.data[0].id}}"
+#    when: slo_get is defined
+
+#  - name: debug slo_id
+#    debug:
+#      msg: "{{slo_create.json.data.id}}"
+#
+  - name: set slo_id if create was sucess
+    set_fact:
+      slo_id: "{{slo_create.json.data.id}}"
+    when: uristat == "201"
+
+  - name: set slo_id if create failed
+    set_fact:
+      slo_id: "{{slo_get.json.data[0].id}}"
+    when: uristat == "409"

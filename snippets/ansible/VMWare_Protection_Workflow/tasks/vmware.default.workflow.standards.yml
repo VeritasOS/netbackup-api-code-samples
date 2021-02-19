@@ -1,0 +1,51 @@
+---
+#No inputs
+#Sets policies template vars, and is looped for each vcenter from previous.
+      #segname = segment name, segabv = segment abriviation, vmfolder = folder search string, pi = policy type such as image or image for DBs
+      #driveselect = parm for drive selection, ret = retention for policy, time = start time, prod = is it prod or not
+
+  - name: Include vmware workflow for Folder Setups
+    include_tasks: tasks/vmware.default.include.yml
+    with_items:
+      - {segname: 'BU1', segabv: '1', vmfolder: 'Bu1', btype: '\Image Backup', ptype: 'wi', driveselect: '0', ret: '30', time: '1800', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', vmfolder: 'Bu2', btype: '\Image Backup', ptype: 'wi', driveselect: '0', ret: '30', time: '1800', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', vmfolder: 'Bu1',  btype: 'Image with DB Backup', ptype: 'wd', driveselect: '2', ret: '30', time: '1800', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', vmfolder: 'Bu2', btype: 'Image with DB Backup', ptype: 'wd', driveselect: '2', ret: '30', time: '1800', prod: 'eq' }
+
+
+
+  - name: Include vmware workflow for Tag Setups
+    include_tasks: tasks/vmware.default.tags.include.yml
+    with_items:
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '1800', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '2200', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '0200', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '0400', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '1800', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '2200', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '0200', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'pi', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '0400', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '1800', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '2200', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '0200', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '0400', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '1800', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '2200', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '0200', prod: 'eq' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'pd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '0400', prod: 'eq' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '1800', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '2200', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '0200', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30', tagtype: 'Image Only', tagbg: 'BU1', tagtime: '0400', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '1800', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '2200', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '0200', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image Backup', ptype: 'ni', driveselect: '0', ret: '30',  tagtype: 'Image Only', tagbg: 'BU2', tagtime: '0400', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '1800', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '2200', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '0200', prod: 'ne' }
+      - {segname: 'BU1', segabv: '1', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU1', tagtime: '0400', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '1800', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '2200', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '0200', prod: 'ne' }
+      - {segname: 'BU2', segabv: '2', btype: 'Image with DB Backup', ptype: 'nd', driveselect: '2', ret: '30', tagtype: 'DB Backup', tagbg: 'BU2', tagtime: '0400', prod: 'ne' }

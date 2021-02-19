@@ -1,0 +1,27 @@
+---
+### Requirements
+# inputs from inventory- {{contenttype}}, {{baseurl}}
+# inputs from parent - none
+# outputs Login_token
+  - name: login
+    uri:
+      url: "{{baseurl}}login"
+      method: POST
+      body_format: json
+      status_code: 201
+      timeout: 300
+      headers:
+        content-type: "{{contenttype}}"
+      body:
+        userName: "{{username}}"
+        password: "{{password}}"
+      validate_certs: no
+      return_content: yes
+    register: login
+
+  - name: set facts
+    set_fact:
+      login_token: "{{login.json.token}}"
+  - name: debug token
+    debug:
+      msg:  "{{login_token}}"
