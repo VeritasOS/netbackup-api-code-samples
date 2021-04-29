@@ -1,0 +1,9 @@
+{
+	"data": {
+		"attributes": {
+			"policyName": "policy",
+			"scheduleName": "Full"
+		},
+		"type": "backupRequest"
+	}
+}

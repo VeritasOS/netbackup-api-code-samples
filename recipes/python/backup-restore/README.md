@@ -4,6 +4,7 @@
 
 Pre-requisites:
 - NetBackup 8.3 or higher
+- NetBackup 9.0.1 or higher for using recover from copy mssql sample
 - Python 3.6 or higher
 - Python modules: `requests`
 - create_protection_plan_template.json template file. This template contain the required payload which is used to create the protection plan.
@@ -140,7 +141,7 @@ Execution flow of group VM backup and restore script:
 
 This mssql_db_backup_restore.py script demonstrates how to Protect a MSSQL Database or Instance using a protection plan, and perform a alternate recovery of a single database or all user databases using NetBackup APIs.
 
-`python -W ignore recipes/python/backup-restore/mssql_db_backup_restore.py --master_server <master_server> --master_server_port 1556 --master_username <master_username> --master_password <master_password> --mssql_instance <mssql_instance_name> --mssql_database <mssql_database_name> --mssql_server_name <mssql_server_name> --mssql_use_localcreds 0 --mssql_domain <mssql_domain> --mssql_username <mssql_sysadmin_user> --mssql_password <mssql_sysadmin_pwd> --stu_name <storage_unit_used_in_protection_plan> --protection_plan_name <protection_plan_name> --asset_type <mssql_asset_type> --restore_db_prefix <mssql_restore_database_name_prefix> --restore_db_path <mssql_restore_database_path> --recoveralluserdbs <0|1>`
+`python -W ignore recipes/python/backup-restore/mssql_db_backup_restore.py --master_server <master_server> --master_server_port 1556 --master_username <master_username> --master_password <master_password> --mssql_instance <mssql_instance_name> --mssql_database <mssql_database_name> --mssql_server_name <mssql_server_name> --mssql_use_localcreds 0 --mssql_domain <mssql_domain> --mssql_username <mssql_sysadmin_user> --mssql_password <mssql_sysadmin_pwd> --stu_name <storage_unit_used_in_protection_plan> --protection_plan_name <protection_plan_name> --asset_type <mssql_asset_type> --restore_db_prefix <mssql_restore_database_name_prefix> --restore_db_path <mssql_restore_database_path> --recover_all_user_dbs <0|1> --recover_from_copy <1|2> --copy_stu_name <storage_unit_used_for_copy>`
 
 All parameters can also be passed as command line arguments.
 - `python mssql_db_backup_restore.py -h`
@@ -161,7 +162,9 @@ usage: mssql_db_backup_restore.py [-h] [--master_server MASTER_SERVER]
                                   [--asset_type ASSET_TYPE]
                                   [--restore_db_prefix RESTORE_DB_PREFIX]
                                   [--restore_db_path RESTORE_DB_PATH]
-                                  [--recoveralluserdbs RECOVERALLUSERDBS]
+                                  [--recover_all_user_dbs RECOVER_ALL_USER_DBS]
+                                  [--recover_from_copy RECOVER_FROM_COPY]
+                                  [--copy_stu_name COPY_STU_NAME]
 Mssql backup and alternate database recovery scenario
 
 Arguments:
@@ -197,8 +200,12 @@ Arguments:
                         Restore database name prefix
   --restore_db_path RESTORE_DB_PATH
                         Restore database path
-  --recover_alluserdbs RECOVERALLUSERDBS
-                        Recover all User databases to the mssql_instance specfied with a database name prefix.
+  --recover_all_user_dbs recover_all_user_dbs
+                        Recover all User databases to the mssql_instance specfied with a database name prefix
+  --recover_from_copy RECOVER_FROM_COPY
+                        Create a policy with a copy and then recover using the specified copy of the backup
+  --copy_stu_name COPY_STU_NAME
+                        Storage Unit name for the copy
 
 Execution flow of a Single MSSQL database protection and alternate database recovery workflow:
 - Login to Master Server get authorization token for API use

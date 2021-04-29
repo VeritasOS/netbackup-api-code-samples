@@ -27,7 +27,9 @@ PARSER.add_argument("--protection_plan_name", type=str, help="Protection plan na
 PARSER.add_argument("--asset_type", type=str, help="MSSQL asset type (AvailabilityGroup, Instance, Database)", required=False)
 PARSER.add_argument("--restore_db_prefix", type=str, help="Restore database name prefix", required=True)
 PARSER.add_argument("--restore_db_path", type=str, help="Restore database path", required=True)
-PARSER.add_argument("--recoveralluserdbs", type=int, help="Recover all user databases", required=False, default=0)
+PARSER.add_argument("--recover_all_user_dbs", type=int, help="Recover all user databases", required=False, default=0)
+PARSER.add_argument("--recover_from_copy", type=int, help="Recover from the copy number specified", choices=[1,2])
+PARSER.add_argument("--copy_stu_name", type=str, help="Storage Unit name for copies", required=False)
 
 ARGS = PARSER.parse_args()
 
@@ -66,27 +68,32 @@ if __name__ == '__main__':
 
         print(f"Start Discovery on the instance [{INSTANCE_NAME}] on the host [{ARGS.mssql_server_name}]")
         workload_mssql.mssql_instance_deepdiscovery(BASEURL, TOKEN, INSTANCE_ID)
-        # create protection plan and subscribe the assettype to it
-        PROTECTION_PLAN_ID = workload_mssql.create_mssql_protection_plan(BASEURL, TOKEN, ARGS.protection_plan_name, ARGS.stu_name, "SQL_SERVER")
-        # update protection plan to set MSSQL policy settings to skip offline databases
-        workload_mssql.update_protection_plan_mssql_attr(BASEURL, TOKEN, ARGS.protection_plan_name, PROTECTION_PLAN_ID, skip_offline_db=1)
-        SUBSCRIPTION_ID = common.subscription_asset_to_slo(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ASSET_ID)
+        if(ARGS.recover_from_copy):
+            workload_mssql.create_netbackup_policy(BASEURL, TOKEN, ARGS.protection_plan_name, ARGS.mssql_server_name, ARGS.stu_name, ARGS.copy_stu_name)
+            BACKUP_JOB_ID = common.run_netbackup_policy(BASEURL, TOKEN, ARGS.protection_plan_name)
 
-        # MSSQL backup restore
-        print("Start MSSQL backup")
-        BACKUP_JOB_ID = common.protection_plan_backupnow(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ASSET_ID)
+        else:
+            # create protection plan and subscribe the assettype to it
+            PROTECTION_PLAN_ID = workload_mssql.create_mssql_protection_plan(BASEURL, TOKEN, ARGS.protection_plan_name, ARGS.stu_name, "SQL_SERVER")
+            # update protection plan to set MSSQL policy settings to skip offline databases
+            workload_mssql.update_protection_plan_mssql_attr(BASEURL, TOKEN, ARGS.protection_plan_name, PROTECTION_PLAN_ID, skip_offline_db=1)
+            SUBSCRIPTION_ID = common.subscription_asset_to_slo(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ASSET_ID)
+
+            # MSSQL backup restore
+            print("Start MSSQL backup")
+            BACKUP_JOB_ID = common.protection_plan_backupnow(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ASSET_ID)
         #timeout is set at 300 seconds (5 mins to keep looking if the backups are complete)
         common.verify_job_state(BASEURL, TOKEN, BACKUP_JOB_ID, 'DONE', timeout=300)
 
         # give nbwebservice 30 seconds to service any queued tasks, before launching recoveries
         time.sleep(30)
-        if (ARGS.recoveralluserdbs != 1):
+        if (ARGS.recover_all_user_dbs != 1):
             # fetch the asset
             RECOVERY_ASSET_ID = workload_mssql.get_mssql_asset_info(BASEURL, TOKEN, "database", ARGS.mssql_server_name, DATABASE_NAME, INSTANCE_NAME)
             RECOVERY_POINT = common.get_recovery_points(BASEURL, TOKEN, WORKLOAD_TYPE, RECOVERY_ASSET_ID)
             print(f"Perform Mssql single database [{DATABASE_NAME}] alternate recovery:[{ARGS.mssql_server_name}]")
             ALT_DB = ALT_DB + DATABASE_NAME
-            RECOVERY_JOB_ID = workload_mssql.create_mssql_recovery_request(BASEURL, TOKEN, "post_mssql_singledb_alt_recovery.json", RECOVERY_POINT, RECOVERY_ASSET_ID, ARGS.mssql_username, ARGS.mssql_domain, ARGS.mssql_password, ALT_DB, ALT_DB_PATH, INSTANCE_NAME, ARGS.mssql_server_name)
+            RECOVERY_JOB_ID = workload_mssql.create_mssql_recovery_request(BASEURL, TOKEN, "post_mssql_singledb_alt_recovery.json", RECOVERY_POINT, RECOVERY_ASSET_ID, ARGS.mssql_username, ARGS.mssql_domain, ARGS.mssql_password, ALT_DB, ALT_DB_PATH, INSTANCE_NAME, ARGS.mssql_server_name, ARGS.recover_from_copy)
             print(f"Recovery initiated , follow Job #: [{RECOVERY_JOB_ID}]")
         else:
             print(f"Perform alternate recovery of all databases")
@@ -104,13 +111,17 @@ if __name__ == '__main__':
                     if (RECOVERY_POINT != ""):
                         print(f"Perform Mssql database [{DATABASE_NAME}] alternate recovery:[{ARGS.mssql_server_name}]")
                         ALT_DB = ARGS.restore_db_prefix + DATABASE_NAME
-                        RECOVERY_JOB_ID = workload_mssql.create_mssql_recovery_request(BASEURL, TOKEN, "post_mssql_singledb_alt_recovery.json", RECOVERY_POINT, RECOVERY_ASSET_ID, ARGS.mssql_username, ARGS.mssql_domain, ARGS.mssql_password, ALT_DB, ALT_DB_PATH, INSTANCE_NAME, ARGS.mssql_server_name)
+                        RECOVERY_JOB_ID = workload_mssql.create_mssql_recovery_request(BASEURL, TOKEN, "post_mssql_singledb_alt_recovery.json", RECOVERY_POINT, RECOVERY_ASSET_ID, ARGS.mssql_username, ARGS.mssql_domain, ARGS.mssql_password, ALT_DB, ALT_DB_PATH, INSTANCE_NAME, ARGS.mssql_server_name, ARGS.recover_from_copy)
                     else:
                         print(f"Skipping recovery, could not find RecoveryPoint for [{DATABASE_NAME}] assetid [{RECOVERY_ASSET_ID}]")
 
     finally:
         print("Start cleanup")
-        # Cleanup the created protection plan
-        common.remove_subscription(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ID)
-        common.remove_protectionplan(BASEURL, TOKEN, PROTECTION_PLAN_ID)
+        if(ARGS.recover_from_copy):
+            # Cleanup the created policy
+            common.delete_netbackup_policy(BASEURL, TOKEN, ARGS.protection_plan_name)
+        else:
+            # Cleanup the created protection plan
+            common.remove_subscription(BASEURL, TOKEN, PROTECTION_PLAN_ID, SUBSCRIPTION_ID)
+            common.remove_protectionplan(BASEURL, TOKEN, PROTECTION_PLAN_ID)
         workload_mssql.remove_mssql_credential(BASEURL, TOKEN, CREDENTIAL_ID)
