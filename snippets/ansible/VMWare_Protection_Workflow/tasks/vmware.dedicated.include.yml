@@ -1,5 +1,5 @@
 ---
-  ## For dedicated enviornments such as MagneticNorth
+  ## For dedicated enviornments such as dedicated segment protection
   - name: AssetGroup Post Folder Defaults - Include task
     include_tasks: tasks/vmworkflow_assetgroup_create_include.yml
 
