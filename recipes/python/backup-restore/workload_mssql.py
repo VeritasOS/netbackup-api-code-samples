@@ -166,7 +166,7 @@ def mssql_instance_deepdiscovery(baseurl, token, mssql_instance_id):
     print(f"MSSQL deep discovery for databases started successfully")
 
 def add_mssql_credential(baseurl, token, mssql_use_localcreds, mssql_domain, mssql_username, mssql_password):
-    """ This function add the MSSQL into NBU master server """
+    """ This function add the MSSQL into NBU primary server """
     print(f"Add MSSQL credential")
     x = uuid.uuid1()
     headers.update({'Authorization': token})

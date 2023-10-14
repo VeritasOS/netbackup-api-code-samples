@@ -11,10 +11,10 @@ import time
 import workload_mssql
 
 PARSER = argparse.ArgumentParser(description="MSSQL Instance backup and Database restore scenario")
-PARSER.add_argument("--master_server", type=str, help="NetBackup master server name")
-PARSER.add_argument("--master_server_port", type=int, help="NetBackup master server port", required=False)
-PARSER.add_argument("--master_username", type=str, help="NetBackup master server username")
-PARSER.add_argument("--master_password", type=str, help="NetBackup master server password")
+PARSER.add_argument("--primary_server", type=str, help="NetBackup primary server name")
+PARSER.add_argument("--primary_server_port", type=int, help="NetBackup primary server port", required=False)
+PARSER.add_argument("--primary_username", type=str, help="NetBackup primary server username")
+PARSER.add_argument("--primary_password", type=str, help="NetBackup primary server password")
 PARSER.add_argument("--mssql_instance", type=str, help="MSSQL Instance name")
 PARSER.add_argument("--mssql_database", type=str, help="MSSQL Database name")
 PARSER.add_argument("--mssql_server_name", type=str, help="MSSQL server name")
@@ -40,13 +40,13 @@ if __name__ == '__main__':
     ASSET_TYPE = ARGS.asset_type if ARGS.asset_type else 'instance'
     ALT_DB = ARGS.restore_db_prefix
 
-    BASEURL = common.get_nbu_base_url(ARGS.master_server, ARGS.master_server_port)
-    TOKEN = common.get_authenticate_token(BASEURL, ARGS.master_username, ARGS.master_password)
+    BASEURL = common.get_nbu_base_url(ARGS.primary_server, ARGS.primary_server_port)
+    TOKEN = common.get_authenticate_token(BASEURL, ARGS.primary_username, ARGS.primary_password)
     INSTANCE_NAME = ARGS.mssql_instance
     DATABASE_NAME = ARGS.mssql_database
     ALT_DB_PATH = ARGS.restore_db_path
     ALLDATABASES=[]
-    print(f"User authentication completed for master server:[{ARGS.master_server}]")
+    print(f"User authentication completed for primary server:[{ARGS.primary_server}]")
 
     try:
         print(f"Setup the environment for Mssql Server:[{ARGS.mssql_server_name}]")

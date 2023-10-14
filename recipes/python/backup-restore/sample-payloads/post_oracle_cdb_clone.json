@@ -1,0 +1,47 @@
+{
+  "data": {
+    "type":"recoveryRequest",
+    "attributes": {
+      "recoveryPoint": "recoverypointid-uuid",
+      "recoveryObject": {
+        "instanceCredentials": {
+          "credentialType": "CREDENTIAL_DETAILS",
+          "domain": "domain",
+          "username": "administrator",
+          "password": "password"
+        }
+      },
+      "alternateRecoveryOptions": {
+        "client": "alternateClientName",
+        "oracleSID": "clonedInstanceName",
+        "oracleHome": "C:\\oracleHome",
+        "oracleBaseConfig" : "C:\\oracleBase",
+        "databaseName": "clonedDb",
+        "controlFilePaths": {
+          "renameAllFilesToSameLocation": {
+            "destination" : "c:\\temp\\"
+            }
+        },
+        "databaseFilePaths": {
+          "renameAllFilesToSameLocation": {
+            "destination" : "c:\\temp\\"
+            }
+        }, 
+        "tempFilePaths": {
+          "renameAllFilesToSameLocation": {
+            "destination" : "c:\\temp\\"
+            }
+        }, 
+        "redoFilePaths": {
+          "renameAllFilesToSameLocation" : {
+            "destination": "c:\\temp\\"
+          }
+        }
+      },
+      "recoveryOptions": {
+        "streams": 4,
+        "createDirectories": true
+      }
+    }
+  }
+}
