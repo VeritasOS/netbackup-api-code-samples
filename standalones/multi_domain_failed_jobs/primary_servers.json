@@ -1,0 +1,12 @@
+{
+    "primaryServers": [
+        {
+            "name": "nbu-master01.tcdemolab.ros2100.veritas.com",
+            "apikey": "AyFSuBOtjYIiUi3yhF5NznXPfjYkpmn_cfSskWrJ7g_tfnIhePsbTgphgF7K5yWM"
+        },
+        {
+            "name": "nbu-master02.tcdemolab.ros2100.veritas.com",
+            "apikey": "A6XhWkpsHmaI-0C6hymo4R31CB_dRO4MQeT5ZzPMdidBw8_j_TupbSxHXtdCEN5L"
+        }
+    ]
+}
