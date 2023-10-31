@@ -41,13 +41,16 @@ type DataArray struct {
 
 var mediaServerName string
 const (
-    port              = "1556"
-    storageUri        = "storage/"
+	port              = "1556"
+	storageUri        = "storage/"
 	storageServerUri  = "storage-servers/"
-	storageUnitUri	  = "storage-units"
-    contentType       = "application/vnd.netbackup+json;version=3.0"
+	storageUnitUri    = "storage-units"
+	diskPoolUri       = "disk-pools"
+	contentType       = "application/vnd.netbackup+json;version=4.0"
 	replicationTargetsUri = "/replication-targets"
 	replicationCandidatesUri = "/target-storage-servers"
+	diskVolumeUri = "disk-volumes/"
+
 )
 
 //##############################################################
@@ -379,3 +382,351 @@ func DeleteReplicationTargets(nbmaster string, httpClient *http.Client, jwt stri
     }
 	return response.StatusCode;
 }
+
+//#######################################################################
+// Create a MSDP Disk Pool 
+//#######################################################################
+func CreateMSDPDiskPool(nbmaster string, httpClient *http.Client, jwt string)(int, string) {
+	fmt.Printf("\nSending a POST request to create with defaults...\n")	
+		if strings.Compare(apiUtil.TakeInput("Want to create new MSDP storage Pool?(Or you can use existing)(Yes/No):"), "Yes") != 0 {
+			dpName := apiUtil.TakeInput("Enter MSDP Disk Pool Name for other operations:")
+		 	return 201, dpName;
+		}
+
+	dpName := apiUtil.TakeInput("Enter Disk Pool Name:")
+
+	// Creating Disl Pool with rest of the parameters with default settings, you may choose to change them as per use.
+
+	 MSDPstorageUnit := map[string]interface{}{
+		"data": map[string]interface{}{
+			"type": "diskPool",
+			"attributes": map[string]interface{}{
+				"name":dpName,
+				"diskVolumes":map[string]interface{}[,
+				{
+					"name":"PureDiskVolume"
+				}
+				],
+				"maximumIoStreams": map[string]interface{}{
+			        	"limitIoStreams": true,
+				        "streamsPerVolume": 2
+        			}
+			},
+			"relationships": map[string]interface{}{
+				"storageServers": map[string]interface{}{
+					"data": map[string]interface{}{
+							"type": "storageServer",
+							"id": "PureDisk" + ":" + stsName
+						}
+					}
+				}
+			}
+		}
+
+
+	stsRequest, _ := json.Marshal(MSDPstorageUnit)
+
+	uri := "https://" + nbmaster + ":" + port + "/netbackup/" + storageUri + diskPoolUri
+
+		request, _ := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(stsRequest))
+		request.Header.Add("Content-Type", contentType);
+	request.Header.Add("Authorization", jwt);
+
+	response, err := httpClient.Do(request)
+
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error: %s\n", err)
+		panic("Unable to create storage unit.\n")
+	} else {
+		if response.StatusCode != 201 {
+			responseBody, _ := ioutil.ReadAll(response.Body)
+			fmt.Printf("%s\n", responseBody)
+			panic("Unable to create MSDP storage unit.\n")
+		} else {
+			fmt.Printf("%s created successfully.\n", stuName);
+			//responseDetails, _ := httputil.DumpResponse(response, true);
+			apiUtil.AskForResponseDisplay(response.Body)
+		}
+	}
+
+	return response.StatusCode, stuName;
+}
+
+
+//#######################################################################
+// Create a MSDP Storage Unit
+//#######################################################################
+func CreateMSDPStorageUnit(nbmaster string, httpClient *http.Client, jwt string)(int, string) {
+	fmt.Printf("\nSending a POST request to create with defaults...\n")	
+		if strings.Compare(apiUtil.TakeInput("Want to create new MSDP storage Unit?(Or you can use existing)(Yes/No):"), "Yes") != 0 {
+			stuName := apiUtil.TakeInput("Enter MSDP/CloudCatalyst Storage Unit Name for other operations:")
+		 	return 201, stuName;
+		}
+
+	stuName := apiUtil.TakeInput("Enter Storage Unit Name:")
+	if strings.Compare(apiUtil.TakeInput("Want to create new MSDP Disk Pool?(Or you can use existing)(Yes/No):"), "Yes") != 0 {
+		dpName := apiUtil.TakeInput("Enter MSDP/CloudCatalyst Disk Pool Name for other operations:")
+	} else {
+		dpName := apiUtil.TakeInput("Enter Disk Pool Name:")
+		CreateMSDPDiskPool();
+	}
+
+	// Creating Storage Unit with rest of the parameters with default settings, you may choose to change them as per use.
+
+	 MSDPstorageUnit := map[string]interface{}{
+		"data": map[string]interface{}{
+			"type": "storageUnit",
+			"id": stuName,
+			"attributes": map[string]interface{}{
+				"name":stuName,
+				"useAnyAvailableMediaServer": true,
+				"maxFragmentSizeMegabytes": 50000,
+				"maxConcurrentJobs": 10,
+				"onDemandOnly": true
+			},
+			"relationships": map[string]interface{}{
+				"diskPool": map[string]interface{}{
+					"data": map[string]interface{}{
+						"type": "diskPool",
+						"id": "PureDisk" + ":" + dpName
+						}
+					}
+				}
+			}
+		}
+
+
+	stsRequest, _ := json.Marshal(MSDPstorageUnit)
+
+	uri := "https://" + nbmaster + ":" + port + "/netbackup/" + storageUri + storageUnitUri
+
+		request, _ := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(stsRequest))
+		request.Header.Add("Content-Type", contentType);
+	request.Header.Add("Authorization", jwt);
+
+	response, err := httpClient.Do(request)
+
+	if err != nil {
+		fmt.Printf("The HTTP request failed with error: %s\n", err)
+		panic("Unable to create storage unit.\n")
+	} else {
+		if response.StatusCode != 201 {
+			responseBody, _ := ioutil.ReadAll(response.Body)
+			fmt.Printf("%s\n", responseBody)
+			panic("Unable to create MSDP storage unit.\n")
+		} else {
+			fmt.Printf("%s created successfully.\n", stuName);
+			//responseDetails, _ := httputil.DumpResponse(response, true);
+			apiUtil.AskForResponseDisplay(response.Body)
+		}
+	}
+
+	return response.StatusCode, stuName;
+}
+
+
+//#######################################################################
+// Add replication target to MSDP Disk Volume
+//#######################################################################
+func AddReplicationTargetToDV(nbmaster string, httpClient *http.Client, jwt string, stsName string)(int) {
+    fmt.Printf("\nSending a POST request to create with defaults...\n")
+
+	
+	candId := apiUtil.TakeInput("Enter target storage server Id:")
+	IdSlice := strings.Split(candId, ":")
+
+	candId := apiUtil.TakeInput("Enter target storage disk volume name:")
+	dvName := strings.Split(diskVolumeId, ":");
+	username := apiUtil.TakeInput("Enter target storage server username:")
+	password := apiUtil.TakeInput("Enter target storage server password:")
+
+	replicationtarget := map[string]interface{}{
+	"data": map[string]interface{}{
+		"type": "volumeReplicationTarget",
+		"attributes": map[string]interface{}{
+				"operationType": "SET_REPLICATION",
+				"targetVolumeName": dvName,
+				"targetStorageServerDetails": map[string]interface{}{
+					"masterServerName": IdSlice[3],
+					"storageServerName": IdSlice[1],
+					"storageServerType": IdSlice[0],
+					"mediaServerName": IdSlice[2]},
+					"credentials": map[string]interface{}{
+						"userName": username,
+						"password": password
+					}}}}
+				
+
+
+    stsRequest, _ := json.Marshal(replicationtarget)
+
+    uri := "https://" + nbmaster + ":" + port + "/netbackup/" + storageUri + storageServerUri + "PureDisk:" + stsName + diskVolumeUri + diskVolumeId + replicationTargetsUri
+
+    request, _ := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(stsRequest))
+    request.Header.Add("Content-Type", contentType);
+    request.Header.Add("Authorization", jwt);
+
+    fmt.Println ("Firing request: POST: " + uri)
+    response, err := httpClient.Do(request)
+
+    if err != nil {
+        fmt.Printf("The HTTP request failed with error: %s\n", err)
+        panic("Unable to add replication target.\n")
+    } else {
+        if response.StatusCode != 204 {
+            responseBody, _ := ioutil.ReadAll(response.Body)
+            fmt.Printf("%s\n", responseBody)
+            panic("Unable to add replication target.\n")
+        } else {
+            fmt.Printf("%s created successfully.\n", "");
+            //responseDetails, _ := httputil.DumpResponse(response, true);
+            apiUtil.AskForResponseDisplay(response.Body)
+        }
+    }
+	
+	return response.StatusCode;
+}
+
+//#######################################################################
+// Get all replication targets on MSDP Disk Volume
+//#######################################################################
+func GetAllReplicationTargetsToDV(nbmaster string, httpClient *http.Client, jwt string, stsName string)(int) {
+    fmt.Printf("\nSending a POST request to delete with defaults...\n")
+
+
+    candId := apiUtil.TakeInput("Enter target storage server Id:")
+    IdSlice := strings.Split(candId, ":")
+
+    candId := apiUtil.TakeInput("Enter target storage disk volume name:")
+    dvName := strings.Split(diskVolumeId, ":");
+username := apiUtil.TakeInput("Enter target storage server username:")
+    password := apiUtil.TakeInput("Enter target storage server password:")
+
+
+    stsRequest, _ := json.Marshal(replicationtarget)
+
+    uri := "https://" + nbmaster + ":" + port + "/netbackup/" + storageUri + storageServerUri + "PureDisk:" + stsName + diskVolumeUri + diskVolumeId + replicationTargetsUri
+
+    request, _ := http.NewRequest(http.MethodGet, uri, nil)
+    request.Header.Add("Content-Type", contentType);
+    request.Header.Add("Authorization", jwt);
+
+    fmt.Println ("Firing request: GET: " + uri)
+    response, err := httpClient.Do(request)
+
+    if err != nil {
+        fmt.Printf("The HTTP request failed with error: %s\n", err)
+        panic("Unable to get replication targets for disk volume.\n")
+    } else {
+        if response.StatusCode == 200 {
+            responseBody, _ := ioutil.ReadAll(response.Body)
+            fmt.Printf("%s\n", responseBody)
+        }
+    }
+
+    return response.StatusCode;
+}
+
+//#######################################################################
+// Get replication target by ID on MSDP Disk Volume
+//#######################################################################
+func GetReplicationTargetByIdToDV(nbmaster string, httpClient *http.Client, jwt string, stsName string)(int) {
+    fmt.Printf("\nSending a POST request to delete with defaults...\n")
+
+    candId := apiUtil.TakeInput("Enter target storage server Id:")
+    IdSlice := strings.Split(candId, ":")
+
+    candId := apiUtil.TakeInput("Enter target storage disk volume name:")
+    dvName := strings.Split(diskVolumeId, ":");
+    username := apiUtil.TakeInput("Enter target storage server username:")
+    password := apiUtil.TakeInput("Enter target storage server password:")
+
+    repTargetId := apiUtil.TakeInput("Enter replication target ID:")
+
+    stsRequest, _ := json.Marshal(replicationtarget)
+
+    uri := "https://" + nbmaster + ":" + port + "/netbackup/" + storageUri + storageServerUri + "PureDisk:" + stsName + 
+                    diskVolumeUri + diskVolumeId + replicationTargetsUri + repTargetId
+
+    request, _ := http.NewRequest(http.MethodGet, uri, nil)
+    request.Header.Add("Content-Type", contentType);
+    request.Header.Add("Authorization", jwt);
+
+    fmt.Println ("Firing request: GET: " + uri)
+    response, err := httpClient.Do(request)
+
+    if err != nil {
+        fmt.Printf("The HTTP request failed with error: %s\n", err)
+        panic("Unable to get replication targets for disk volume.\n")
+    } else {
+        if response.StatusCode == 200 {
+            responseBody, _ := ioutil.ReadAll(response.Body)
+            fmt.Printf("%s\n", responseBody)
+        }
+    }
+    return response.StatusCode;
+}
+
+//#######################################################################
+// Delete replication target on MSDP Disk Volume
+//#######################################################################
+func DeleteReplicationTargetToDV(nbmaster string, httpClient *http.Client, jwt string, stsName string)(int) {
+    fmt.Printf("\nSending a POST request to delete with defaults...\n")
+
+	
+	candId := apiUtil.TakeInput("Enter target storage server Id:")
+	IdSlice := strings.Split(candId, ":")
+
+	candId := apiUtil.TakeInput("Enter target storage disk volume name:")
+	dvName := strings.Split(diskVolumeId, ":");
+	username := apiUtil.TakeInput("Enter target storage server username:")
+	password := apiUtil.TakeInput("Enter target storage server password:")
+
+	replicationtarget := map[string]interface{}{
+	"data": map[string]interface{}{
+		"type": "volumeReplicationTarget",
+		"attributes": map[string]interface{}{
+				"operationType": "DELETE_REPLICATION",
+				"targetVolumeName": dvName,
+				"targetStorageServerDetails": map[string]interface{}{
+					"masterServerName": IdSlice[3],
+					"storageServerName": IdSlice[1],
+					"storageServerType": IdSlice[0],
+					"mediaServerName": IdSlice[2]},
+					"credentials": map[string]interface{}{
+						"userName": username,
+						"password": password
+					}}}}
+				
+
+
+    stsRequest, _ := json.Marshal(replicationtarget)
+
+    uri := "https://" + nbmaster + ":" + port + "/netbackup/" + storageUri + storageServerUri + "PureDisk:" + stsName + diskVolumeUri + diskVolumeId + replicationTargetsUri
+
+    request, _ := http.NewRequest(http.MethodPost, uri, bytes.NewBuffer(stsRequest))
+    request.Header.Add("Content-Type", contentType);
+    request.Header.Add("Authorization", jwt);
+
+    fmt.Println ("Firing request: POST: " + uri)
+    response, err := httpClient.Do(request)
+
+    if err != nil {
+        fmt.Printf("The HTTP request failed with error: %s\n", err)
+        panic("Unable to delete replication target.\n")
+    } else {
+        if response.StatusCode != 204 {
+            responseBody, _ := ioutil.ReadAll(response.Body)
+            fmt.Printf("%s\n", responseBody)
+            panic("Unable to add replication target.\n")
+        } else {
+            fmt.Printf("%s deleted successfully.\n", "");
+            //responseDetails, _ := httputil.DumpResponse(response, true);
+            apiUtil.AskForResponseDisplay(response.Body)
+        }
+    }
+	
+	return response.StatusCode;
+}
+
+

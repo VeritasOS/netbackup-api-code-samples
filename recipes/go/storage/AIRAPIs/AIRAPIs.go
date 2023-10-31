@@ -67,4 +67,19 @@ func main() {
 		os.Exit(0)
     }
 	storageHelper.DeleteReplicationTargets(*nbmaster, httpClient, jwt, stsName, tarId)
+
+
+	// TODO: (KEEP THIS OR NOT) Create Storage Unit and DP/DV
+	//if ( storageHelper.CreateMSDPDiskPool(*nbmaster, httpClient, jwt) != 201 ) {
+	//	panic("CreateMSDPDiskPool Failed. Exiting.\n")
+	//}
+
+	// TODO: (KEEP THIS OR NOT) Create Storage Unit and DP/DV
+	//if ( storageHelper.CreateMSDPStorageUnit(*nbmaster, httpClient, jwt) != 201 ) {
+	//	panic("CreateMSDPStorageUnit Failed. Exiting.\n")
+	//}
+
+	if ( storageHelper.AddReplicationTargetToDV(*nbmaster, httpClient, jwt, stsName) != 201 ) {
+		panic("AddReplicationTarget Failed. Exiting.\n")
+	}
 }

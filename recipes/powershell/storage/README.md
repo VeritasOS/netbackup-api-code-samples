@@ -15,3 +15,4 @@ Pre-requisites:
 
 Use the following commands to run the PowerShell samples.
 - `.\configure_storage_unit_end_to_end.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName> -domainType <domainType>]`
+- `.\replication_target_on_dv_operations_end_to_end.ps1 -nbmaster <masterServer> -username <username> -password <password> [-domainName <domainName> -domainType <domainType>]`
