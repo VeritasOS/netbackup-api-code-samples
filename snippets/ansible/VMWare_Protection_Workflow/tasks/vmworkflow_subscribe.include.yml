@@ -1,0 +1,35 @@
+---
+
+  - name: debug required vars
+    debug:
+      msg:
+        - "slo id is {{slo_id}}"
+        - "assetgroup_id is {{assetgroup_id}}"
+
+  - name: Subscribe AssetGroup to SLO
+    uri:
+      url: "{{baseurl}}servicecatalog/slos/{{slo_id}}/subscriptions"
+      method: POST
+      body_format: json
+      status_code:
+        - 201
+        - 409
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+      body:
+        data:
+          type: subscription
+          attributes:
+            selectionType: ASSETGROUP
+            selectionId: "{{assetgroup_id}}"
+            isCustomized: false
+      validate_certs: no
+      return_content: yes
+    register: subscribe_create
+
+
+
+  - name: debug Subscribe create
+    debug:
+      msg: "{{subscribe_create.status:}}"

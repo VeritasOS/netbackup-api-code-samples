@@ -1,0 +1,22 @@
+---
+
+  - name: AssetGroup Post tag Defaults - Include task
+    include_tasks: tasks/vmworkflow_assetgroup_create_tags_include.yml
+
+  - name: debug asset group  id var from include task
+    debug:
+      msg: "{{assetgroup_id}}"
+    when: assetgroup_id is defined
+
+  - name: SLO Post Folder Default Protection Plan
+    include_tasks: tasks/vmworkflow_slo_create.include.yml
+    when: assetgroup_id is defined
+
+  - name: debug SLO id var from include task
+    debug:
+      msg: "{{slo_id}}"
+    when: assetgroup_id is defined
+
+  - name: AssetGroup Subscribe to SLO Post
+    include_tasks: tasks/vmworkflow_subscribe.include.yml
+    when: assetgroup_id is defined
