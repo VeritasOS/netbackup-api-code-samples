@@ -1,0 +1,41 @@
+{
+    "data": {
+        "type": "query",
+        "attributes": {
+            "queryName": "create-assets",
+            "workloads": [
+                "oracle"
+            ],
+            "parameters": {
+                "objectList": [
+                    {
+                        "correlationId": "1234",
+                        "asset": {
+                            "commonAssetAttributes": {
+                                "detection": {
+                                    "detectionMethod": "MANUAL"
+                                }
+                            },
+                            "assetType": "RMAN_CATALOG",
+                            "tnsName": "TNSName",
+                            "rmanCatalogName": "CatalogName"
+                        },
+                        "relationship": {
+                            "rmanCatalog": {
+                                "data": [
+                                    null
+                                ]
+                            },
+                            "database": {
+                                "data": [
+                                    null,
+                                    null
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

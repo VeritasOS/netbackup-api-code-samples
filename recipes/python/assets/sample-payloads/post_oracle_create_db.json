@@ -1,0 +1,30 @@
+{
+    "data": {
+        "type": "query",
+        "attributes": {
+            "queryName": "create-assets",
+            "workloads": [
+                "oracle"
+            ],
+            "parameters": {
+                "objectList": [
+                    {
+                        "correlationId": "1234",
+                        "asset": {
+                            "commonAssetAttributes": {
+                                "detection": {
+                                    "detectionMethod": "MANUAL"
+                                }
+                            },
+                            "assetType": "DATABASE",
+                            "databaseUniqueName": "sampleDatabaseUniqueName",
+                            "databaseName": "sampleDatabaseName",
+                            "databaseId": 234,
+                            "databaseType": "SINGLE_INSTANCE"
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}
