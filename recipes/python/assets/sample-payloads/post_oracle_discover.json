@@ -1,0 +1,18 @@
+{
+    "data": {
+        "type": "query",
+        "attributes": {
+            "queryName": "oracle-discover-database",
+            "workloads": [
+                "oracle"
+            ],
+            "parameters": {
+                "objectList": [
+                    {
+                        "clientName": "example.client.com"
+                    }
+                ]
+            }
+        }
+    }
+}
