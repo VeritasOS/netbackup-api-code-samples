@@ -9,6 +9,7 @@ These scripts are only meant to be used as a reference. If you intend to use the
 #### Pre-requisites:
 
 - NetBackup 8.1.1 or higher
+- NetBackup 8.2 or higher for using API keys related APIs and samples
 - Perl v5.18.2
 - Perl modules Text::Table, JSON and LWP
 
@@ -80,3 +81,58 @@ no a subscription associated with this asset.
 
   - Example: perl post_nb_asset_cleanup.pl -nbmaster <master_server> -username <username> -password <pass> -filter "workloadType eq 'VMware'" -cleanuptime 2018-06-29T15:58:45.678Z
 
+#### Scripts for NetBackup 8.2 or higher
+
+VM Servers Details:
+
+- Use the following command to obtain the list of all VM servers details from your NetBackup Master server:
+  - `perl get_vm_servers.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+VM Server Details:
+
+- Use the following command to obtain the VM server details from your NetBackup Master server:
+  - `perl get_vm_server.pl -nbmaster <master_server> -username <username> -password <password> -servername <servername> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup All Resource Limits:
+
+- Use the following command to obtain the list of all NetBackup resource limits from your NetBackup Master server:
+  - `perl get_all_resource_limits.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup Resource Limits:
+
+- Use the following command to obtain the NetBackup resource limits from your NetBackup Master server:
+  - `perl get_resource_limits.pl -nbmaster <master_server> -username <username> -password <password> -workloadtype <workloadtype> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup All Resource Limits Templates:
+
+- Use the following command to obtain the list of all NetBackup resource limits templates from your NetBackup Master server:
+  - `perl get_all_resource_limits_templates.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+NetBackup Resource Limits Template:
+
+- Use the following command to obtain the NetBackup resource limits template from your NetBackup Master server:
+  - `perl get_resource_limits_template.pl -nbmaster <master_server> -username <username> -password <password> -workloadtype <workloadtype> [-domainname <domain_name>] [-domaintype <domain_type>] [--verbose]`
+
+API key Details:
+
+- Use the following command to create an API key for yourself on your NetBackup Master server:
+  - `perl apikey_create.pl -nbmaster <master_server> -login_username <username> -login_password <password> [-login_domainname <domain_name> -login_domaintype <domain_type>] -expiryindays <expiryindays> -description <description> [--verbose]`
+  
+- Use the following command to create an API key for other user on your NetBackup Master server:
+  - `perl apikey_create.pl -nbmaster <master_server> -login_username <login_username> -login_password <login_password> [-login_domainname <login_domainname> -login_domaintype <login_domaintype>] -apikey_username <apikey_username> -apikey_domainname <apikey_domainname> -apikey_domaintype <apikey_domaintype> -expiryindays <expiryindays> -description <description> [--verbose]`
+  
+- Use the following command to delete an API key on your NetBackup Master server with apikey tag provided:
+  - `perl apikey_delete.pl -nbmaster <master_server> -login_username <username> -login_password <password> [-login_domainname <domain_name> -login_domaintype <domain_type>] -apikey_tag <apikey_tag> [--verbose]`
+  
+- Use the following command to use API key instead of JWT to trigger a NetBackup REST API on your NetBackup Master server:
+  - `perl apikey_usage.pl -nbmaster <master_server> -apikey <apikey> [--verbose]`
+
+#### Scripts for NetBackup 8.3 or higher
+
+NetBackup Event Log Notifications:
+
+- Use the following command to obtain the top 10 NetBackup notifications in descending order of their creation time.  
+  - `perl get_notifications.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [-filter <filter>] [--verbose]`
+
+- Use the following command to post notifications to the event log database.
+  - `perl post_notifications.pl -nbmaster <master_server> -username <username> -password <password> [-domainname <domain_name>] [-domaintype <domain_type>] [-payload <payload file name>] [--verbose]`

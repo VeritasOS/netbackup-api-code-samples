@@ -1,0 +1,13 @@
+{
+   "data": {
+     "type": "storageServer",
+     "attributes": {
+       "msdpAttributes": {
+         "credentials": {
+           "userName": "USER_NAME",
+           "password": "PASSWORD"
+         }
+       }
+     }
+   }
+}

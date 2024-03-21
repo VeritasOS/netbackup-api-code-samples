@@ -1,0 +1,44 @@
+{
+    "data": {
+        "type": "query",
+        "attributes": {
+            "queryName": "create-assets",
+            "workloads": [
+                "oracle"
+            ],
+            "parameters": {
+                "objectList": [
+                    {
+                        "correlationId": "22",
+                        "asset": {
+                            "commonAssetAttributes": {
+                                "detection": {
+                                    "detectionMethod": "MANUAL"
+                                }
+                            },
+                            "assetType": "INSTANCE",
+                            "instanceName": "sampleInstanceName",
+                            "clientName": "example.client.com",
+                            "backupClientName": null,
+                            "oracleHome": "/oracleHome",
+                            "overrideTnsAdmin": null,
+                            "baseHome": null,
+                            "baseConfig": null
+                        },
+                        "relationship": {
+                            "rmanCatalog": {
+                                "data": [
+                                    null
+                                ]
+                            },
+                            "database": {
+                                "data": [
+                                ]
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

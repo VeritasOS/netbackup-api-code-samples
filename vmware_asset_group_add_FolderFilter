@@ -1,0 +1,44 @@
+---
+### Requirements
+# inputs from parent - {{login_token}},
+# inputs from inventory - {{master}}, {{vcenter}}, {{baseurl}}, {{contenttype}}
+# outputs {{protectionplan}}, {{pp_id}}
+
+  - name: add corp folder protection plan
+    uri:
+      url: "{{baseurl}}asset-groups"
+      method: post
+      body_format: json
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+      body:
+        data:
+          attributes:
+            displayName: "{{item.seg}}-folder-test"
+            description: "selects all {{item.seg}} folders for all vcenters in region"
+            oDataQueryFilter: "contains(extendedAttributes/vmFolder, '{{item.seg}}') or (contains(extendedAttributes/vmFolder, '{{item.type}}'))"
+            vipQueryFilter: "((VMFolder Contains '{{item.seg}}') OR (VMFolder Contains '{{item.type}}')) AND ((vCenter Equal '{{vcenter}}') OR (ESXserver Equal '{{vcenter}}'))"
+            assetType: "Virtual Machine"
+            workloadType: VMware
+            filterConstraint: "{{vcenter}}"
+          type: assetGroup
+        port: 0
+        validate: true
+      status_code: 201
+      validate_certs: no
+      return_content: yes
+    with_items:
+      - {seg: 'BU1', type: 'Image Backup' }
+      - {seg: 'BU2', type: 'Image Backup' }
+      - {seg: 'BU3', type: 'Image Backup' }
+    register: protectionplan
+    ignore_errors: true
+
+  - name : debug protectionplan var
+    debug:
+      msg: "{{protectionplan}}"
+
+  - name: Set Fact - Protection Plan ID
+    set_fact:
+      pp_id: "{{protectionplan.json.data.id}}"

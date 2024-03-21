@@ -1,0 +1,11 @@
+{
+  "data": {
+    "type": "storageUnit",
+    "attributes": {
+      "useAnyAvailableMediaServer": true,
+      "maxFragmentSizeMegabytes": 50100,
+      "maxConcurrentJobs": 8,
+      "onDemandOnly": true
+    }
+  }
+}

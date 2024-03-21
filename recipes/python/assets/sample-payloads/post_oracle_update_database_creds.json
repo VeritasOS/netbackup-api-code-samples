@@ -1,0 +1,21 @@
+{
+    "data": {
+      "type": "query",
+      "attributes": {
+        "queryName": "oracle-validate-update-database-credentials",
+        "workloads": [
+          "oracle"
+        ],
+        "parameters": {
+          "objectList": [
+            {
+              "correlationId": "1234",
+              "databaseAssetId": null,
+              "credentialName": "SampleCredName",
+              "databaseUniqueName": null
+            }
+          ]
+        }
+      }
+    }
+  }

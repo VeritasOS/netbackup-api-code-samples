@@ -67,6 +67,11 @@ parseArguments()
 	fi
 }
 
+uriencode()
+{ 
+	jq -nr --arg v "$1" '$v|@uri'; 
+}
+
 ###############main#############
 
 parseArguments "$@"
@@ -84,7 +89,10 @@ data=$(jq --arg name $username --arg pass $password --arg dname $domainname --ar
 jwt=$(curl -k -X POST $uri -H $content_header -d "$data" | jq --raw-output '.token')
 
 param1="filter=jobType eq 'BACKUP'"
-param2="page[limit]=10"
+
+### To use filter page[limit] in URI, The key 'page[limit]' must be url encoded already. ###
+### Curl --data-urlencode encodes only the content part of the data of the form 'name=content' ###
+param2="$(uriencode 'page[limit]')=10" #op: page%5Blimit%5D=10
 
 ##############jobs##############
 

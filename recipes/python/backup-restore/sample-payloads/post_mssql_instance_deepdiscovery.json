@@ -1,0 +1,19 @@
+{
+    "data": {
+        "type": "query",
+        "attributes": {
+            "queryName": "mssql-discover-database",
+            "workloads": [
+                "mssql"
+            ],
+            "parameters": {
+                "objectList": [
+                    {
+                        "correlationId": "5465",
+                        "instanceId": "instanceuuid"
+                    }
+                ]
+            }
+        }
+    }
+}

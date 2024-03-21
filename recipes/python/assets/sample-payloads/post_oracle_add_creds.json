@@ -1,0 +1,13 @@
+{
+    "data": {
+      "type": "credentialRequest",
+      "attributes": {
+        "name": "CredName",
+        "tag": null,
+        "category": "Oracle",
+        "description": "Script generated credentials",
+        "contents":{
+        }
+      }
+    }
+  }

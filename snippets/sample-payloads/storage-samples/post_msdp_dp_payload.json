@@ -1,0 +1,27 @@
+{
+  "data": {
+    "type": "diskPool",
+    "attributes": {
+        "name": "msdp-dp1",
+        "diskVolumes": [
+        {
+            "name":"PureDiskVolume"
+        }
+        ],
+        "maximumIoStreams": {
+          "limitIoStreams": true,
+          "streamsPerVolume": 2
+        }
+       },
+       "relationships":{
+       "storageServers": {
+        "data": [
+          {
+            "type": "storageServer",
+            "id": "STORAGE_SERVER_ID"
+          }
+        ]
+      }
+       }
+    }
+  }
