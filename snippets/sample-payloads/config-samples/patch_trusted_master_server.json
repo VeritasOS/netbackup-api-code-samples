@@ -1,0 +1,9 @@
+{
+  "data": {
+    "type": "trustedMasterServer",
+    "attributes": {
+      "trustedMasterServerName": "TRUSTED_MASTER_SERVER_NAME",
+      "rootCAType": "ECA"
+    }
+  }
+}
