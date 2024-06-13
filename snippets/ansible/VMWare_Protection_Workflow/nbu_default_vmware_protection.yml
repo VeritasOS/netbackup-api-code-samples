@@ -1,0 +1,18 @@
+---
+  ### Requirements
+  # inputs from inventory- {{contenttype}}, {{baseurl}}, {{username}}, {{password}}
+  # Notes -- Base script that calls everything else.
+- hosts: all
+  gather_facts: false
+  connection: local
+
+  tasks:
+
+  - name: Login - Include task
+    include_tasks: tasks/login.include.yml
+
+  - name: Include vmware workflow for Folder Setups
+    include_tasks: tasks/vmware.default.workflow.standards.yml
+    with_items: "{{vcenters}}"
+    loop_control:
+      loop_var: item_vcenter

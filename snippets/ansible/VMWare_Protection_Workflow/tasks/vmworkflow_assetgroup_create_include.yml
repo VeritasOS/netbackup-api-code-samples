@@ -1,0 +1,55 @@
+---
+### Requirements
+# Requires a set of esxi hosts in a group var
+# inputs from parent - {{login_token}},
+# inputs from inventory - {{master}}, {{vcenter}}, {{baseurl}}, {{contenttype}}, {{sitecode}}
+# outputs {{protectionplan}}, {{assetgroup_id}}
+
+  - name: set fact for assetgroupname
+    set_fact:
+      AssetGroupName: "{{sitecode}}-{{item.segname}}-{{item.btype}}-{{item_vcenter}}-folders"
+
+  - name: set fact for urlencode
+    set_fact:
+      url_parms: "{{ AssetGroupName | urlencode }}"
+
+  - name: adds asset-group for item.segname
+    uri:
+      url: "{{baseurl}}asset-service/queries"
+      method: POST
+      body_format: json
+      headers:
+        authorization: "{{login_token}}"
+        content-type: "{{contenttype}}"
+      body:
+        data:
+          type: query
+          attributes:
+            queryName: create-or-update-assets
+            workloads:
+            - vmware
+            parameters:
+              objectList:
+              - correlationId: '1'
+                type: vmwareGroupAsset
+                assetGroup:
+                  commonAssetAttributes:
+                    detection:
+                      detectionMethod: MANUAL
+                    displayName: "{{AssetGroupName}}"
+                    protectionCapabilities:
+                      isProtectable: 'YES'
+                      isRecoverable: 'NO'
+                  assetType: vmGroup
+                  description: "selects all {{item.vmfolder}} folders for {{item_vcenter}}  created by ansible do NOT update."
+                  filterConstraint: "{{item_vcenter}}"
+                  oDataQueryFilter: contains(vmFolder, '{{item.vmfolder}}') and endswith(vmFolder, '{{item.btype}}') and contains(datacenter, '{{datacenter}}')
+      status_code:
+        - 201
+        - 409
+      validate_certs: no
+      return_content: yes
+    register: assetgroup
+
+  - name: AssetGroup Post Folder Defaults - Include task
+    include_tasks: tasks/vmworkflow_assetgroup_jobstatus.yml

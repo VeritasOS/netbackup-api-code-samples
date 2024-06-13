@@ -1,0 +1,37 @@
+---
+all:
+  hosts:
+
+  vars:
+    baseurl: https://{{master}}:1556/netbackup/
+    username: user
+    password: pass
+    contenttype: application/vnd.netbackup+json;version=4.0
+    ldapcon: domain.com
+
+site01:
+  hosts:
+    site01nbumst01.svc.domain.com:
+  vars:
+    master: site01nbumst01.svc.domain.com
+    vcenters:
+     - site01vircen01.domain.com
+    sitecode: site01
+    sitetag: site01
+    datacenter: dc1
+    vm_backup_storageunit: site01nbumed01_dpm_su
+
+
+site02:
+  hosts:
+    site02nbucormst01.svc.domain.com:
+  vars:
+    master: site02nbucormst01.svc.domain.com
+    vcenters:
+     - site02cvircenprod01.domain.com
+    sitecode: site02
+    sitetag: site02
+    datacenter: site02
+    username: user
+    password: password
+    vm_backup_storageunit: site02acw00016_dpm_su
