@@ -12,4 +12,5 @@ The script can also create new MSDP storage server (with creds as a/a) depending
 Further lists the replication candidates based on the no of trusted master servers and storage server (MSDP and CC) on them.
 User need to select one of the replication candidate to create AIR relationship on the earlier created MSDP/CC sts or existing one.
 User can delete any existing AIR relationship as well.
+User can also add replication targets on diskvolume level and manage the entitiy with desired ADD/GET/GET ALL/DELETE operations.
 

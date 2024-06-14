@@ -77,4 +77,14 @@ Delete Disk Pool:
 Use the following command to create the disk pool on NetBackup Master server:
   - perl delete_storage_unit.pl -nbmaster <master_server> -username <username> -password <password> -dpid <disk pool id> [-domainname <domain_name>] [-domaintype <domain_type>]
 
+Add replication target on diskvolume
+  - perl post_add_replication_target_on_dv.pl -nbmaster <master_server> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>]
 
+Get all replication targets on diskvolume
+  - perl get_all_replication_targets_on_dv.pl -nbmaster <master_server> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>];
+
+Get replication target on diskvolume with specific replication target id
+  - perl get_replication_target_by_id_on_dv.pl -nbmaster <master_server> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>];
+
+Delete replication target on diskvolume
+  - perl post_delete_replication_target_on_dv.pl -nbmaster <master_server> -username <username> -password <password> -stsid <storage server id> -dvid <diskvolume id> -payload <payload file path> [-domainname <domain_name>] [-domaintype <domain_type>];
